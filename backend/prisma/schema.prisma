@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                  Int            @id @default(autoincrement())
+  first_name          String
+  last_name           String
+  email               String         @unique
+  phone               String?
+  license_plate       String?
+  password_hash       String
+  subscription_status String         @default("inactive")
+  created_at          DateTime       @default(now())
+
+  orders              Order[]
+  subscriptions       Subscription[]
+}
+
+model Order {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  items        Json                           // JSONB in PostgreSQL
+  total_amount Decimal   @db.Decimal(10, 2)
+  status       String    @default("pending")  // pending | ready | completed
+  created_at   DateTime  @default(now())
+  ready_time   DateTime?
+
+  user         User      @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+  @@index([status])
+}
+
+model Subscription {
+  id               Int      @id @default(autoincrement())
+  user_id          Int
+  start_date       DateTime
+  end_date         DateTime
+  weekly_allowance Decimal  @db.Decimal(10, 2)
+  used_amount      Decimal  @db.Decimal(10, 2) @default(0)
+  default_items    Json?    // For automated daily order generation
+
+  user             User     @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id])
+  @@index([end_date])
+}
+
+model MenuItem {
+  id          Int     @id @default(autoincrement())
+  name        String
+  price       Decimal @db.Decimal(10, 2)
+  description String?
+  image_url   String?
+}
