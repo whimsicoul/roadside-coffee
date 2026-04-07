@@ -15,64 +15,66 @@
   }
 
   body {
-    background-color: var(--color-cream);
+    background-color: #E8DED2;
     background-image:
-      /* Noise texture - visible grain */
-      repeating-linear-gradient(0deg, transparent 0px, rgba(157, 138, 124, 0.15) 1px, transparent 2px),
-      repeating-linear-gradient(90deg, transparent 0px, rgba(121, 98, 84, 0.12) 1px, transparent 2px),
-      /* Paper fiber texture - horizontal lines */
+      /* Strong random noise - high opacity */
+      repeating-linear-gradient(0deg, transparent 0px, rgba(139, 115, 85, 0.4) 1px, transparent 2px),
+      repeating-linear-gradient(90deg, transparent 0px, rgba(120, 95, 70, 0.4) 1px, transparent 2px),
+      repeating-linear-gradient(45deg, transparent 0px, rgba(139, 115, 85, 0.35) 1px, transparent 2px),
+      repeating-linear-gradient(-45deg, transparent 0px, rgba(120, 95, 70, 0.35) 1px, transparent 2px),
+      /* Paper fiber texture - heavy horizontal */
       repeating-linear-gradient(
         90deg,
         transparent 0px,
-        rgba(157, 138, 124, 0.25) 0.5px,
-        transparent 1px,
-        transparent 2px,
-        rgba(121, 98, 84, 0.15) 2.5px,
-        transparent 3px
+        rgba(139, 115, 85, 0.5) 1px,
+        rgba(130, 105, 75, 0.3) 2px,
+        transparent 4px,
+        rgba(120, 95, 70, 0.35) 5px,
+        transparent 7px
       ),
-      /* Paper fiber texture - vertical lines */
+      /* Paper fiber texture - heavy vertical */
       repeating-linear-gradient(
         0deg,
         transparent 0px,
-        rgba(121, 98, 84, 0.25) 0.5px,
-        transparent 1px,
-        transparent 2px,
-        rgba(157, 138, 124, 0.15) 2.5px,
-        transparent 3px
+        rgba(120, 95, 70, 0.5) 1px,
+        rgba(110, 85, 60, 0.3) 2px,
+        transparent 4px,
+        rgba(139, 115, 85, 0.35) 5px,
+        transparent 7px
       ),
-      /* Paper grain - diagonal weave at 45° */
+      /* Large paper grain at 45° */
       repeating-linear-gradient(
         45deg,
         transparent 0px,
-        rgba(157, 138, 124, 0.12) 1px,
-        transparent 2px
+        rgba(139, 115, 85, 0.4) 2px,
+        transparent 4px
       ),
-      /* Paper grain - diagonal weave at -45° */
+      /* Large paper grain at -45° */
       repeating-linear-gradient(
         -45deg,
         transparent 0px,
-        rgba(121, 98, 84, 0.12) 1px,
-        transparent 2px
+        rgba(120, 95, 70, 0.4) 2px,
+        transparent 4px
       ),
-      /* Large organic variations - warm spots */
-      radial-gradient(ellipse 500px 400px at 15% 25%, rgba(82, 63, 49, 0.15) 0%, transparent 60%),
-      radial-gradient(ellipse 550px 450px at 80% 35%, rgba(121, 98, 84, 0.12) 0%, transparent 65%),
-      radial-gradient(ellipse 480px 520px at 45% 75%, rgba(157, 138, 124, 0.14) 0%, transparent 60%),
-      radial-gradient(ellipse 520px 400px at 70% 85%, rgba(82, 63, 49, 0.1) 0%, transparent 65%),
-      /* Paper wrinkles and age marks */
-      radial-gradient(ellipse 250px 180px at 25% 50%, rgba(157, 138, 124, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse 300px 200px at 75% 20%, rgba(121, 98, 84, 0.09) 0%, transparent 55%),
-      radial-gradient(ellipse 280px 250px at 35% 80%, rgba(82, 63, 49, 0.07) 0%, transparent 50%),
-      /* Subtle vignette */
-      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.08) 100%);
+      /* Large organic color variations - very visible */
+      radial-gradient(ellipse 600px 500px at 10% 20%, rgba(82, 63, 49, 0.4) 0%, transparent 70%),
+      radial-gradient(ellipse 700px 550px at 85% 40%, rgba(120, 95, 70, 0.35) 0%, transparent 75%),
+      radial-gradient(ellipse 650px 600px at 50% 70%, rgba(139, 115, 85, 0.38) 0%, transparent 70%),
+      radial-gradient(ellipse 550px 480px at 25% 50%, rgba(82, 63, 49, 0.3) 0%, transparent 65%),
+      /* Paper wrinkles - visible creases */
+      radial-gradient(ellipse 400px 300px at 70% 25%, rgba(100, 75, 50, 0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 350px 280px at 30% 75%, rgba(120, 95, 70, 0.28) 0%, transparent 55%),
+      /* Vignette darkening at edges */
+      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.15) 100%);
     background-size:
-      100% 2px,
-      2px 100%,
-      8px 8px,
-      8px 8px,
+      100% 3px,
+      3px 100%,
       4px 4px,
       4px 4px,
-      100% 100%,
+      12px 12px,
+      12px 12px,
+      6px 6px,
+      6px 6px,
       100% 100%,
       100% 100%,
       100% 100%,
@@ -98,62 +100,64 @@
 @layer utilities {
   .paper-texture-bg {
     background-image:
-      /* Noise texture - visible grain */
-      repeating-linear-gradient(0deg, transparent 0px, rgba(157, 138, 124, 0.15) 1px, transparent 2px),
-      repeating-linear-gradient(90deg, transparent 0px, rgba(121, 98, 84, 0.12) 1px, transparent 2px),
-      /* Paper fiber texture - horizontal lines */
+      /* Strong random noise - high opacity */
+      repeating-linear-gradient(0deg, transparent 0px, rgba(139, 115, 85, 0.4) 1px, transparent 2px),
+      repeating-linear-gradient(90deg, transparent 0px, rgba(120, 95, 70, 0.4) 1px, transparent 2px),
+      repeating-linear-gradient(45deg, transparent 0px, rgba(139, 115, 85, 0.35) 1px, transparent 2px),
+      repeating-linear-gradient(-45deg, transparent 0px, rgba(120, 95, 70, 0.35) 1px, transparent 2px),
+      /* Paper fiber texture - heavy horizontal */
       repeating-linear-gradient(
         90deg,
         transparent 0px,
-        rgba(157, 138, 124, 0.25) 0.5px,
-        transparent 1px,
-        transparent 2px,
-        rgba(121, 98, 84, 0.15) 2.5px,
-        transparent 3px
+        rgba(139, 115, 85, 0.5) 1px,
+        rgba(130, 105, 75, 0.3) 2px,
+        transparent 4px,
+        rgba(120, 95, 70, 0.35) 5px,
+        transparent 7px
       ),
-      /* Paper fiber texture - vertical lines */
+      /* Paper fiber texture - heavy vertical */
       repeating-linear-gradient(
         0deg,
         transparent 0px,
-        rgba(121, 98, 84, 0.25) 0.5px,
-        transparent 1px,
-        transparent 2px,
-        rgba(157, 138, 124, 0.15) 2.5px,
-        transparent 3px
+        rgba(120, 95, 70, 0.5) 1px,
+        rgba(110, 85, 60, 0.3) 2px,
+        transparent 4px,
+        rgba(139, 115, 85, 0.35) 5px,
+        transparent 7px
       ),
-      /* Paper grain - diagonal weave at 45° */
+      /* Large paper grain at 45° */
       repeating-linear-gradient(
         45deg,
         transparent 0px,
-        rgba(157, 138, 124, 0.12) 1px,
-        transparent 2px
+        rgba(139, 115, 85, 0.4) 2px,
+        transparent 4px
       ),
-      /* Paper grain - diagonal weave at -45° */
+      /* Large paper grain at -45° */
       repeating-linear-gradient(
         -45deg,
         transparent 0px,
-        rgba(121, 98, 84, 0.12) 1px,
-        transparent 2px
+        rgba(120, 95, 70, 0.4) 2px,
+        transparent 4px
       ),
-      /* Large organic variations */
-      radial-gradient(ellipse 500px 400px at 15% 25%, rgba(82, 63, 49, 0.15) 0%, transparent 60%),
-      radial-gradient(ellipse 550px 450px at 80% 35%, rgba(121, 98, 84, 0.12) 0%, transparent 65%),
-      radial-gradient(ellipse 480px 520px at 45% 75%, rgba(157, 138, 124, 0.14) 0%, transparent 60%),
-      radial-gradient(ellipse 520px 400px at 70% 85%, rgba(82, 63, 49, 0.1) 0%, transparent 65%),
-      /* Paper wrinkles and age marks */
-      radial-gradient(ellipse 250px 180px at 25% 50%, rgba(157, 138, 124, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse 300px 200px at 75% 20%, rgba(121, 98, 84, 0.09) 0%, transparent 55%),
-      radial-gradient(ellipse 280px 250px at 35% 80%, rgba(82, 63, 49, 0.07) 0%, transparent 50%),
-      /* Subtle vignette */
-      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.08) 100%) !important;
+      /* Large organic color variations - very visible */
+      radial-gradient(ellipse 600px 500px at 10% 20%, rgba(82, 63, 49, 0.4) 0%, transparent 70%),
+      radial-gradient(ellipse 700px 550px at 85% 40%, rgba(120, 95, 70, 0.35) 0%, transparent 75%),
+      radial-gradient(ellipse 650px 600px at 50% 70%, rgba(139, 115, 85, 0.38) 0%, transparent 70%),
+      radial-gradient(ellipse 550px 480px at 25% 50%, rgba(82, 63, 49, 0.3) 0%, transparent 65%),
+      /* Paper wrinkles - visible creases */
+      radial-gradient(ellipse 400px 300px at 70% 25%, rgba(100, 75, 50, 0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 350px 280px at 30% 75%, rgba(120, 95, 70, 0.28) 0%, transparent 55%),
+      /* Vignette darkening at edges */
+      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.15) 100%) !important;
     background-size:
-      100% 2px,
-      2px 100%,
-      8px 8px,
-      8px 8px,
+      100% 3px,
+      3px 100%,
       4px 4px,
       4px 4px,
-      100% 100%,
+      12px 12px,
+      12px 12px,
+      6px 6px,
+      6px 6px,
       100% 100%,
       100% 100%,
       100% 100%,
@@ -175,55 +179,55 @@
 
   /* Section backgrounds with paper texture */
   .section-paper-bg {
-    background-color: var(--color-cream);
+    background-color: #E8DED2;
     background-image:
-      /* Noise texture */
-      repeating-linear-gradient(0deg, transparent 0px, rgba(157, 138, 124, 0.1) 1px, transparent 2px),
-      repeating-linear-gradient(90deg, transparent 0px, rgba(121, 98, 84, 0.08) 1px, transparent 2px),
-      /* Paper fiber texture - horizontal lines */
+      /* Strong random noise */
+      repeating-linear-gradient(0deg, transparent 0px, rgba(139, 115, 85, 0.35) 1px, transparent 2px),
+      repeating-linear-gradient(90deg, transparent 0px, rgba(120, 95, 70, 0.35) 1px, transparent 2px),
+      /* Paper fiber texture - horizontal */
       repeating-linear-gradient(
         90deg,
         transparent 0px,
-        rgba(157, 138, 124, 0.18) 0.5px,
-        transparent 1px,
-        transparent 2px,
-        rgba(121, 98, 84, 0.1) 2.5px,
-        transparent 3px
+        rgba(139, 115, 85, 0.45) 1px,
+        rgba(130, 105, 75, 0.25) 2px,
+        transparent 4px,
+        rgba(120, 95, 70, 0.3) 5px,
+        transparent 7px
       ),
-      /* Paper fiber texture - vertical lines */
+      /* Paper fiber texture - vertical */
       repeating-linear-gradient(
         0deg,
         transparent 0px,
-        rgba(121, 98, 84, 0.18) 0.5px,
-        transparent 1px,
-        transparent 2px,
-        rgba(157, 138, 124, 0.1) 2.5px,
-        transparent 3px
+        rgba(120, 95, 70, 0.45) 1px,
+        rgba(110, 85, 60, 0.25) 2px,
+        transparent 4px,
+        rgba(139, 115, 85, 0.3) 5px,
+        transparent 7px
       ),
-      /* Paper grain - diagonal weave at 45° */
+      /* Paper grain at 45° */
       repeating-linear-gradient(
         45deg,
         transparent 0px,
-        rgba(157, 138, 124, 0.08) 1px,
-        transparent 2px
+        rgba(139, 115, 85, 0.35) 2px,
+        transparent 4px
       ),
-      /* Paper grain - diagonal weave at -45° */
+      /* Paper grain at -45° */
       repeating-linear-gradient(
         -45deg,
         transparent 0px,
-        rgba(121, 98, 84, 0.08) 1px,
-        transparent 2px
+        rgba(120, 95, 70, 0.35) 2px,
+        transparent 4px
       ),
       /* Large organic variations */
-      radial-gradient(ellipse 500px 400px at 15% 25%, rgba(82, 63, 49, 0.1) 0%, transparent 60%),
-      radial-gradient(ellipse 550px 450px at 80% 35%, rgba(121, 98, 84, 0.08) 0%, transparent 65%);
+      radial-gradient(ellipse 600px 500px at 10% 20%, rgba(82, 63, 49, 0.3) 0%, transparent 70%),
+      radial-gradient(ellipse 700px 550px at 85% 40%, rgba(120, 95, 70, 0.25) 0%, transparent 75%);
     background-size:
-      100% 2px,
-      2px 100%,
-      8px 8px,
-      8px 8px,
-      4px 4px,
-      4px 4px,
+      100% 3px,
+      3px 100%,
+      12px 12px,
+      12px 12px,
+      6px 6px,
+      6px 6px,
       100% 100%,
       100% 100%;
     background-attachment: fixed;
@@ -231,44 +235,44 @@
 
   /* Card backgrounds with paper texture */
   .card-paper-bg {
-    background-color: var(--color-cream);
+    background-color: #EFEFEF;
     background-image:
       /* Noise texture */
-      repeating-linear-gradient(0deg, transparent 0px, rgba(157, 138, 124, 0.08) 1px, transparent 2px),
-      repeating-linear-gradient(90deg, transparent 0px, rgba(121, 98, 84, 0.06) 1px, transparent 2px),
-      /* Paper fiber texture - horizontal lines */
+      repeating-linear-gradient(0deg, transparent 0px, rgba(139, 115, 85, 0.3) 1px, transparent 2px),
+      repeating-linear-gradient(90deg, transparent 0px, rgba(120, 95, 70, 0.3) 1px, transparent 2px),
+      /* Paper fiber texture - horizontal */
       repeating-linear-gradient(
         90deg,
         transparent 0px,
-        rgba(157, 138, 124, 0.15) 0.5px,
-        transparent 1px,
-        transparent 2px,
-        rgba(121, 98, 84, 0.08) 2.5px,
-        transparent 3px
+        rgba(139, 115, 85, 0.4) 1px,
+        rgba(130, 105, 75, 0.2) 2px,
+        transparent 4px,
+        rgba(120, 95, 70, 0.25) 5px,
+        transparent 7px
       ),
-      /* Paper fiber texture - vertical lines */
+      /* Paper fiber texture - vertical */
       repeating-linear-gradient(
         0deg,
         transparent 0px,
-        rgba(121, 98, 84, 0.15) 0.5px,
-        transparent 1px,
-        transparent 2px,
-        rgba(157, 138, 124, 0.08) 2.5px,
-        transparent 3px
+        rgba(120, 95, 70, 0.4) 1px,
+        rgba(110, 85, 60, 0.2) 2px,
+        transparent 4px,
+        rgba(139, 115, 85, 0.25) 5px,
+        transparent 7px
       ),
-      /* Paper grain - diagonal weave */
+      /* Paper grain at 45° */
       repeating-linear-gradient(
         45deg,
         transparent 0px,
-        rgba(157, 138, 124, 0.06) 1px,
-        transparent 2px
+        rgba(139, 115, 85, 0.3) 2px,
+        transparent 4px
       );
     background-size:
-      100% 2px,
-      2px 100%,
-      8px 8px,
-      8px 8px,
-      4px 4px;
+      100% 3px,
+      3px 100%,
+      12px 12px,
+      12px 12px,
+      6px 6px;
     background-attachment: fixed;
   }
 
