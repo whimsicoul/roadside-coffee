@@ -20,7 +20,14 @@ const updateProfileSchema = z.object({
   license_plate: z.string().optional().nullable(),
 });
 
+const subscriptionFormSchema = z.object({
+  start_date: z.string().min(1, 'Start date is required'),
+  end_date: z.string().min(1, 'End date is required'),
+  weekly_allowance: z.coerce.number().positive('Allowance must be positive'),
+});
+
 type UpdateProfileData = z.infer<typeof updateProfileSchema>;
+type SubscriptionFormData = z.infer<typeof subscriptionFormSchema>;
 
 function SettingsContent() {
   const { data: user, isLoading: userLoading } = useUser();
@@ -50,6 +57,15 @@ function SettingsContent() {
       : undefined,
   });
 
+  const {
+    register: registerSub,
+    handleSubmit: handleSubSubmit,
+    reset: resetSub,
+    formState: { errors: subErrors },
+  } = useForm<SubscriptionFormData>({
+    resolver: zodResolver(subscriptionFormSchema),
+  });
+
   const onUpdateProfile = async (data: UpdateProfileData) => {
     try {
       await updateUser.mutateAsync(data);
@@ -59,29 +75,16 @@ function SettingsContent() {
     }
   };
 
-  const handleCreateSubscription = async () => {
+  const onCreateSubscription = async (data: SubscriptionFormData) => {
     setSubError(null);
-    const startDate = (
-      document.getElementById('startDate') as HTMLInputElement
-    )?.value;
-    const endDate = (document.getElementById('endDate') as HTMLInputElement)
-      ?.value;
-    const allowance = (
-      document.getElementById('allowance') as HTMLInputElement
-    )?.value;
-
-    if (!startDate || !endDate || !allowance) {
-      setSubError('All fields are required');
-      return;
-    }
-
     try {
       await createSubscription.mutateAsync({
-        start_date: startDate,
-        end_date: endDate,
-        weekly_allowance: parseFloat(allowance),
+        start_date: data.start_date,
+        end_date: data.end_date,
+        weekly_allowance: data.weekly_allowance,
       });
       setShowSubForm(false);
+      resetSub();
       alert('Subscription created successfully');
     } catch (error: any) {
       setSubError(
@@ -114,99 +117,114 @@ function SettingsContent() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-stone-900 mb-8">Settings</h1>
+    <div className="min-h-screen bg-amber-50">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="font-serif text-4xl font-bold text-stone-900 mb-2">Settings</h1>
+          <p className="text-stone-600">Manage your account and preferences</p>
+        </div>
 
-      {/* Account Summary */}
-      {user && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-          <h2 className="text-lg font-bold text-blue-900 mb-4">Account Info</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-blue-700">Email</p>
-              <p className="font-medium text-blue-900">{user.email}</p>
-            </div>
-            <div>
-              <p className="text-sm text-blue-700">Phone</p>
-              <p className="font-medium text-blue-900">
-                {user.phone || 'Not set'}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-blue-700">License Plate</p>
-              <p className="font-medium text-blue-900">
-                {user.license_plate || 'Not set'}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-blue-700">Member Since</p>
-              <p className="font-medium text-blue-900">
-                {new Date(user.created_at).toLocaleDateString()}
-              </p>
+        {/* Account Summary */}
+        {user && (
+          <div className="bg-gradient-to-r from-amber-50 to-stone-100 border border-amber-200 rounded-2xl p-6 mb-8">
+            <h2 className="text-lg font-bold text-amber-900 mb-4">Account Overview</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <p className="text-xs text-amber-700 font-semibold uppercase tracking-wide">Email</p>
+                <p className="font-medium text-amber-900 truncate">{user.email}</p>
+              </div>
+              <div>
+                <p className="text-xs text-amber-700 font-semibold uppercase tracking-wide">Phone</p>
+                <p className="font-medium text-amber-900">
+                  {user.phone || <span className="text-amber-600">Not set</span>}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-amber-700 font-semibold uppercase tracking-wide">License Plate</p>
+                <p className="font-medium text-amber-900">
+                  {user.license_plate || <span className="text-amber-600">Not set</span>}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-amber-700 font-semibold uppercase tracking-wide">Member Since</p>
+                <p className="font-medium text-amber-900">
+                  {new Date(user.created_at).toLocaleDateString()}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Profile Section */}
-      <div className="bg-white rounded-lg shadow p-6 mb-8">
-        <h2 className="text-2xl font-bold text-stone-900 mb-6">
+      <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-6 mb-8">
+        <h2 className="font-serif text-2xl font-bold text-stone-900 mb-1">
           Profile Information
         </h2>
+        <p className="text-sm text-stone-600 mb-6">
+          Update your personal details
+        </p>
 
-        <form onSubmit={handleSubmit(onUpdateProfile)} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit(onUpdateProfile)} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                First Name
+              <label htmlFor="first_name" className="block text-sm font-semibold text-stone-900 mb-2">
+                First Name *
               </label>
               <input
+                id="first_name"
                 {...register('first_name')}
                 type="text"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800"
+                placeholder="Enter your first name"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
               />
               {errors.first_name && (
-                <p className="text-red-600 text-sm mt-1">
-                  {errors.first_name.message}
+                <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                  <span className="text-lg">⚠</span> {errors.first_name.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                Last Name
+              <label htmlFor="last_name" className="block text-sm font-semibold text-stone-900 mb-2">
+                Last Name *
               </label>
               <input
+                id="last_name"
                 {...register('last_name')}
                 type="text"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800"
+                placeholder="Enter your last name"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
               />
               {errors.last_name && (
-                <p className="text-red-600 text-sm mt-1">
-                  {errors.last_name.message}
+                <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                  <span className="text-lg">⚠</span> {errors.last_name.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                Phone
+              <label htmlFor="phone" className="block text-sm font-semibold text-stone-900 mb-2">
+                Phone <span className="text-stone-500 font-normal">(optional)</span>
               </label>
               <input
+                id="phone"
                 {...register('phone')}
                 type="tel"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800"
+                placeholder="e.g., +1 (555) 000-0000"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                License Plate
+              <label htmlFor="license_plate" className="block text-sm font-semibold text-stone-900 mb-2">
+                License Plate <span className="text-stone-500 font-normal">(optional)</span>
               </label>
               <input
+                id="license_plate"
                 {...register('license_plate')}
                 type="text"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800"
+                placeholder="e.g., ABC-1234"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent uppercase"
               />
             </div>
           </div>
@@ -214,135 +232,199 @@ function SettingsContent() {
           <button
             type="submit"
             disabled={isSubmitting || updateUser.isPending}
-            className="bg-amber-800 hover:bg-amber-900 disabled:bg-stone-300 text-white font-bold py-2 px-6 rounded-lg transition"
+            className="bg-amber-800 hover:bg-amber-900 disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg transition"
           >
-            {updateUser.isPending ? 'Updating...' : 'Update Profile'}
+            {updateUser.isPending ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="animate-spin inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                Updating Profile...
+              </span>
+            ) : (
+              'Update Profile'
+            )}
           </button>
         </form>
       </div>
 
       {/* Subscription Section */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-stone-900 mb-6">Subscription</h2>
+      <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-6">
+        <h2 className="font-serif text-2xl font-bold text-stone-900 mb-1">Subscription</h2>
+        <p className="text-sm text-stone-600 mb-6">
+          Manage your daily coffee subscription
+        </p>
 
         {subLoading ? (
-          <p className="text-stone-600">Loading subscription...</p>
+          <div className="animate-pulse space-y-4">
+            <div className="h-4 bg-stone-200 rounded w-1/4"></div>
+            <div className="h-4 bg-stone-200 rounded w-1/3"></div>
+          </div>
         ) : subscription ? (
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-stone-600">Start Date</p>
-                <p className="font-medium text-stone-900">
-                  {new Date(subscription.start_date).toLocaleDateString()}
-                </p>
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-6">
+              <p className="text-xs text-emerald-700 font-semibold uppercase tracking-wide mb-4">
+                ✓ Active Subscription
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <p className="text-xs text-emerald-700 font-semibold uppercase tracking-wide">Start Date</p>
+                  <p className="font-medium text-emerald-900 text-lg">
+                    {new Date(subscription.start_date).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-emerald-700 font-semibold uppercase tracking-wide">End Date</p>
+                  <p className="font-medium text-emerald-900 text-lg">
+                    {new Date(subscription.end_date).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-emerald-700 font-semibold uppercase tracking-wide">Weekly Allowance</p>
+                  <p className="font-medium text-emerald-900 text-lg">
+                    ${parseFloat(subscription.weekly_allowance).toFixed(2)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-emerald-700 font-semibold uppercase tracking-wide">Used Amount</p>
+                  <p className="font-medium text-emerald-900 text-lg">
+                    ${parseFloat(subscription.used_amount).toFixed(2)}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-stone-600">End Date</p>
-                <p className="font-medium text-stone-900">
-                  {new Date(subscription.end_date).toLocaleDateString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-stone-600">Weekly Allowance</p>
-                <p className="font-medium text-stone-900">
-                  ${parseFloat(subscription.weekly_allowance).toFixed(2)}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-stone-600">Used Amount</p>
-                <p className="font-medium text-stone-900">
-                  ${parseFloat(subscription.used_amount).toFixed(2)}
-                </p>
+
+              {/* Usage bar */}
+              <div className="mt-6">
+                <div className="flex justify-between text-xs text-emerald-700 mb-2">
+                  <span>Weekly Usage</span>
+                  <span>{((parseFloat(subscription.used_amount) / parseFloat(subscription.weekly_allowance)) * 100).toFixed(0)}%</span>
+                </div>
+                <div className="w-full bg-amber-200 rounded-full h-2">
+                  <div
+                    className="bg-amber-700 h-2 rounded-full"
+                    style={{
+                      width: `${Math.min((parseFloat(subscription.used_amount) / parseFloat(subscription.weekly_allowance)) * 100, 100)}%`,
+                    }}
+                  ></div>
+                </div>
               </div>
             </div>
 
             <button
               onClick={handleCancelSubscription}
               disabled={cancelSubscription.isPending}
-              className="mt-4 bg-red-600 hover:bg-red-700 disabled:bg-stone-300 text-white font-bold py-2 px-6 rounded-lg transition"
+              className="w-full bg-red-600 hover:bg-red-700 disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition"
             >
-              {cancelSubscription.isPending
-                ? 'Cancelling...'
-                : 'Cancel Subscription'}
+              {cancelSubscription.isPending ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="animate-spin inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                  Cancelling Subscription...
+                </span>
+              ) : (
+                'Cancel Subscription'
+              )}
             </button>
           </div>
         ) : (
           <div>
-            <p className="text-stone-600 mb-4">
-              You don't have an active subscription yet.
-            </p>
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
+              <p className="text-amber-900 text-sm">
+                Create a subscription to get daily coffee delivered with a weekly spending allowance.
+              </p>
+            </div>
 
             {!showSubForm ? (
               <button
                 onClick={() => setShowSubForm(true)}
-                className="bg-amber-800 hover:bg-amber-900 text-white font-bold py-2 px-6 rounded-lg transition"
+                className="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 rounded-lg transition"
               >
                 Create Subscription
               </button>
             ) : (
-              <div className="space-y-4 border-t pt-4">
+              <form onSubmit={handleSubSubmit(onCreateSubscription)} className="space-y-6 border-t pt-6">
                 {subError && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded text-red-800 text-sm">
-                    {subError}
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                    <span className="text-red-600 text-lg">⚠</span>
+                    <p className="text-red-800 text-sm">{subError}</p>
                   </div>
                 )}
 
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">
-                    Start Date
-                  </label>
-                  <input
-                    id="startDate"
-                    type="date"
-                    className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <label htmlFor="start_date" className="block text-sm font-semibold text-stone-900 mb-2">
+                      Start Date *
+                    </label>
+                    <input
+                      id="start_date"
+                      type="date"
+                      {...registerSub('start_date')}
+                      className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                    />
+                    {subErrors.start_date && (
+                      <p className="text-red-600 text-sm mt-2">{subErrors.start_date.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="end_date" className="block text-sm font-semibold text-stone-900 mb-2">
+                      End Date *
+                    </label>
+                    <input
+                      id="end_date"
+                      type="date"
+                      {...registerSub('end_date')}
+                      className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                    />
+                    {subErrors.end_date && (
+                      <p className="text-red-600 text-sm mt-2">{subErrors.end_date.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="weekly_allowance" className="block text-sm font-semibold text-stone-900 mb-2">
+                      Weekly Allowance ($) *
+                    </label>
+                    <input
+                      id="weekly_allowance"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="50.00"
+                      {...registerSub('weekly_allowance')}
+                      className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                    />
+                    {subErrors.weekly_allowance && (
+                      <p className="text-red-600 text-sm mt-2">{subErrors.weekly_allowance.message}</p>
+                    )}
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">
-                    End Date
-                  </label>
-                  <input
-                    id="endDate"
-                    type="date"
-                    className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">
-                    Weekly Allowance ($)
-                  </label>
-                  <input
-                    id="allowance"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800"
-                  />
-                </div>
-
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <button
-                    onClick={handleCreateSubscription}
+                    type="submit"
                     disabled={createSubscription.isPending}
-                    className="flex-1 bg-amber-800 hover:bg-amber-900 disabled:bg-stone-300 text-white font-bold py-2 rounded-lg transition"
+                    className="flex-1 bg-amber-800 hover:bg-amber-900 disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition"
                   >
-                    {createSubscription.isPending
-                      ? 'Creating...'
-                      : 'Create Subscription'}
+                    {createSubscription.isPending ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <span className="animate-spin inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                        Creating...
+                      </span>
+                    ) : (
+                      'Create Subscription'
+                    )}
                   </button>
                   <button
+                    type="button"
                     onClick={() => {
                       setShowSubForm(false);
                       setSubError(null);
+                      resetSub();
                     }}
-                    className="flex-1 bg-stone-300 hover:bg-stone-400 text-stone-900 font-bold py-2 rounded-lg transition"
+                    className="flex-1 bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 rounded-lg transition"
                   >
                     Cancel
                   </button>
                 </div>
-              </div>
+              </form>
             )}
           </div>
         )}

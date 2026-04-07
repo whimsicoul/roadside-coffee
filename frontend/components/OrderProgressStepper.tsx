@@ -27,7 +27,7 @@ export function OrderProgressStepper({ status }: OrderProgressStepperProps) {
               index <= currentIndex
                 ? index === currentIndex
                   ? 'bg-amber-500 text-white'
-                  : 'bg-green-500 text-white'
+                  : 'bg-amber-700 text-white'
                 : 'bg-stone-200 text-stone-600'
             }`}
           >
@@ -43,7 +43,7 @@ export function OrderProgressStepper({ status }: OrderProgressStepperProps) {
           {index < steps.length - 1 && (
             <div
               className={`flex-1 h-1 mx-2 ${
-                index < currentIndex ? 'bg-green-500' : 'bg-stone-200'
+                index < currentIndex ? 'bg-amber-700' : 'bg-stone-200'
               }`}
             />
           )}

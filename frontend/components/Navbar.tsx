@@ -2,15 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useUser } from '@/lib/hooks/useUser';
 import { authStorage } from '@/lib/auth';
 import { queryClient } from '@/lib/queryClient';
 
 export function Navbar() {
   const router = useRouter();
-  const { data: user } = useUser();
+  const pathname = usePathname();
+  const { data: user, isLoading } = useUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isActive = (path: string) => pathname === path;
 
   const handleLogout = () => {
     authStorage.clear();
@@ -20,9 +23,9 @@ export function Navbar() {
   };
 
   return (
-    <nav className="bg-amber-800 text-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/menu" className="text-2xl font-bold">
+    <nav className="bg-amber-800 text-amber-50 shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
+        <Link href="/menu" className="font-serif text-2xl font-bold text-amber-50 tracking-wide">
           ☕ Roadside Coffee
         </Link>
 
@@ -48,33 +51,35 @@ export function Navbar() {
 
         {/* Desktop menu */}
         <div className="hidden md:flex items-center gap-4">
-          {user ? (
+          {isLoading ? (
+            <div className="h-8 w-32 rounded-lg bg-amber-700 animate-pulse" />
+          ) : user ? (
             <>
-              <span className="text-sm">Welcome, {user.first_name}</span>
-              <Link href="/menu" className="hover:text-amber-200">
+              <span className="text-sm font-medium">Welcome, {user.first_name}</span>
+              <Link href="/menu" className={`transition-colors ${isActive('/menu') ? 'text-amber-200 underline decoration-amber-300' : 'hover:text-amber-200'}`}>
                 Menu
               </Link>
-              <Link href="/orders" className="hover:text-amber-200">
+              <Link href="/orders" className={`transition-colors ${isActive('/orders') ? 'text-amber-200 underline decoration-amber-300' : 'hover:text-amber-200'}`}>
                 My Orders
               </Link>
-              <Link href="/settings" className="hover:text-amber-200">
+              <Link href="/settings" className={`transition-colors ${isActive('/settings') ? 'text-amber-200 underline decoration-amber-300' : 'hover:text-amber-200'}`}>
                 Settings
               </Link>
               <button
                 onClick={handleLogout}
-                className="bg-amber-900 hover:bg-amber-700 px-4 py-2 rounded"
+                className="border border-amber-200 text-amber-50 hover:bg-amber-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="hover:text-amber-200">
+              <Link href="/login" className="hover:text-amber-200 transition-colors">
                 Login
               </Link>
               <Link
                 href="/register"
-                className="bg-amber-900 hover:bg-amber-700 px-4 py-2 rounded"
+                className="border border-amber-200 text-amber-50 hover:bg-amber-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Register
               </Link>
@@ -85,34 +90,34 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-amber-700 px-4 py-4 space-y-3">
+        <div className="md:hidden border-t border-amber-900 bg-amber-800 px-4 py-4 space-y-3">
           {user ? (
             <>
-              <p className="text-sm">Welcome, {user.first_name}</p>
-              <Link href="/menu" className="block hover:text-amber-200">
+              <p className="text-sm font-medium">Welcome, {user.first_name}</p>
+              <Link href="/menu" className={`block transition-colors ${isActive('/menu') ? 'text-amber-200' : 'hover:text-amber-200'}`}>
                 Menu
               </Link>
-              <Link href="/orders" className="block hover:text-amber-200">
+              <Link href="/orders" className={`block transition-colors ${isActive('/orders') ? 'text-amber-200' : 'hover:text-amber-200'}`}>
                 My Orders
               </Link>
-              <Link href="/settings" className="block hover:text-amber-200">
+              <Link href="/settings" className={`block transition-colors ${isActive('/settings') ? 'text-amber-200' : 'hover:text-amber-200'}`}>
                 Settings
               </Link>
               <button
                 onClick={handleLogout}
-                className="w-full text-left bg-amber-900 hover:bg-amber-700 px-4 py-2 rounded"
+                className="w-full text-left border border-amber-200 text-amber-50 hover:bg-amber-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="block hover:text-amber-200">
+              <Link href="/login" className="block hover:text-amber-200 transition-colors">
                 Login
               </Link>
               <Link
                 href="/register"
-                className="block bg-amber-900 hover:bg-amber-700 px-4 py-2 rounded"
+                className="block border border-amber-200 text-amber-50 hover:bg-amber-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center"
               >
                 Register
               </Link>

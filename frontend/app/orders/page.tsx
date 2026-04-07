@@ -25,28 +25,40 @@ export default function OrdersPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-stone-50">
+      <div className="min-h-screen bg-amber-50">
         <div className="max-w-4xl mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-stone-900 mb-8">My Orders</h1>
+          <div className="mb-8">
+            <h1 className="font-serif text-4xl font-bold text-stone-900 mb-2">My Orders</h1>
+            <p className="text-stone-600">Track and manage your coffee orders</p>
+          </div>
 
           {isLoading && (
-            <div className="flex justify-center items-center py-12">
-              <Loader className="w-8 h-8 text-amber-600 animate-spin" />
+            <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-12">
+              <div className="flex justify-center items-center gap-4">
+                <Loader className="w-8 h-8 text-amber-700 animate-spin" />
+                <span className="text-stone-600">Loading your orders...</span>
+              </div>
             </div>
           )}
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
-              Error loading orders. Please try again.
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 flex items-start gap-4">
+              <span className="text-red-600 text-2xl">⚠</span>
+              <div>
+                <h3 className="font-semibold text-red-900 mb-1">Error Loading Orders</h3>
+                <p className="text-red-700">Please try again or contact support.</p>
+              </div>
             </div>
           )}
 
           {!isLoading && orders && orders.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-stone-600">No orders yet. Start by browsing the menu!</p>
+            <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-12 text-center">
+              <div className="text-4xl mb-4">☕</div>
+              <h2 className="font-serif text-2xl font-bold text-stone-900 mb-2">No Orders Yet</h2>
+              <p className="text-stone-600 mb-6">Start browsing the menu to place your first order!</p>
               <a
                 href="/menu"
-                className="inline-block mt-4 bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-lg"
+                className="inline-block bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 px-8 rounded-xl transition"
               >
                 Browse Menu
               </a>
@@ -69,68 +81,77 @@ export default function OrdersPage() {
                 return (
                   <div
                     key={order.id}
-                    className="bg-white rounded-lg shadow p-6 border border-stone-200"
+                    className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border border-amber-100"
                   >
                     {/* Header with Order ID and Status */}
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="bg-gradient-to-r from-amber-50 to-transparent p-6 border-b border-amber-100 flex justify-between items-start">
                       <div>
-                        <h2 className="text-xl font-semibold text-stone-900">
+                        <h2 className="text-2xl font-bold text-stone-900 mb-1">
                           Order #{order.id}
                         </h2>
-                        <p className="text-sm text-stone-500 mt-1">{formattedDate}</p>
+                        <p className="text-sm text-stone-500">{formattedDate}</p>
                       </div>
                       <OrderStatusBadge status={order.status} />
                     </div>
 
-                    {/* Progress Stepper */}
-                    <div className="mb-6">
-                      <OrderProgressStepper status={order.status} />
-                    </div>
+                    <div className="p-6">
+                      {/* Progress Stepper */}
+                      <div className="mb-8">
+                        <OrderProgressStepper status={order.status} />
+                      </div>
 
-                    {/* Items Summary */}
-                    <div className="mb-6 border-t border-stone-200 pt-4">
-                      <h3 className="font-medium text-stone-900 mb-3">Items</h3>
-                      <div className="space-y-2">
-                        {enrichedItems.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="flex justify-between text-sm text-stone-700"
+                      {/* Items Summary */}
+                      <div className="mb-8">
+                        <h3 className="font-serif font-semibold text-stone-900 mb-4">Order Items</h3>
+                        <div className="space-y-3">
+                          {enrichedItems.map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="flex justify-between items-center p-3 bg-amber-50/50 rounded-lg"
+                            >
+                              <span className="text-stone-700">
+                                <span className="font-medium">{item.name}</span>
+                                <span className="text-stone-500"> × {item.quantity}</span>
+                              </span>
+                              <span className="font-semibold text-stone-900">
+                                ${(
+                                  parseFloat(item.price) * item.quantity
+                                ).toFixed(2)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Total and Check-in Button */}
+                      <div className="flex justify-between items-center border-t border-amber-100 pt-6">
+                        <div>
+                          <p className="text-xs text-stone-600 mb-1">Total</p>
+                          <p className="text-2xl font-bold text-amber-800">
+                            ${order.total_amount}
+                          </p>
+                        </div>
+
+                        {order.status === 'pending' && (
+                          <button
+                            onClick={() => handleCheckIn(order.id)}
+                            disabled={isCheckingIn}
+                            className="bg-amber-800 hover:bg-amber-900 disabled:bg-stone-400 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition"
                           >
-                            <span>
-                              {item.name} × {item.quantity}
-                            </span>
-                            <span>
-                              ${(
-                                parseFloat(item.price) * item.quantity
-                              ).toFixed(2)}
-                            </span>
-                          </div>
-                        ))}
+                            {isCheckingIn ? (
+                              <>
+                                <Loader className="w-4 h-4 animate-spin" />
+                                <span>Checking In...</span>
+                              </>
+                            ) : (
+                              <>
+                                <span>✓</span>
+                                <span>I'm Here</span>
+                              </>
+                            )}
+                          </button>
+                        )}
                       </div>
-                    </div>
-
-                    {/* Total and Check-in Button */}
-                    <div className="flex justify-between items-center border-t border-stone-200 pt-4">
-                      <div className="text-lg font-semibold text-stone-900">
-                        Total: ${order.total_amount}
-                      </div>
-
-                      {order.status === 'pending' && (
-                        <button
-                          onClick={() => handleCheckIn(order.id)}
-                          disabled={isCheckingIn}
-                          className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-6 rounded-lg flex items-center gap-2 transition"
-                        >
-                          {isCheckingIn ? (
-                            <>
-                              <Loader className="w-4 h-4 animate-spin" />
-                              Checking In...
-                            </>
-                          ) : (
-                            "I'm Here"
-                          )}
-                        </button>
-                      )}
                     </div>
                   </div>
                 );

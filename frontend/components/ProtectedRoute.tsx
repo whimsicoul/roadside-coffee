@@ -6,19 +6,22 @@ import { authStorage } from '@/lib/auth';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!authStorage.getToken()
+  );
 
   useEffect(() => {
-    const token = authStorage.getToken();
-    if (!token) {
+    if (!isAuthenticated) {
       router.push('/login?redirect=' + window.location.pathname);
-    } else {
-      setIsAuthenticated(true);
     }
-  }, [router]);
+  }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
-    return null;
+    return (
+      <div className="min-h-screen bg-amber-50 flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-amber-800 border-t-transparent rounded-full" />
+      </div>
+    );
   }
 
   return <>{children}</>;

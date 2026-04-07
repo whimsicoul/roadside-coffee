@@ -20,8 +20,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      const hadToken = !!authStorage.getToken();
       authStorage.clear();
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && hadToken) {
         window.location.href = '/login';
       }
     }

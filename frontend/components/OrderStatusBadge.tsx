@@ -13,7 +13,7 @@ const statusConfig = {
   },
   arrived: {
     label: 'Arrived',
-    className: 'bg-blue-100 text-blue-800',
+    className: 'bg-orange-100 text-orange-800',
   },
   ready: {
     label: 'Ready for Pickup',
