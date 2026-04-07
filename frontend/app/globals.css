@@ -276,6 +276,12 @@
     background-attachment: fixed;
   }
 
+  /* Elevated card background - pulls away from paper texture */
+  .card-elevated {
+    background-color: #F9F7F4;
+    border: 2px solid #D4C4B0;
+  }
+
   /* Paper-embossed card shadows - subtle lifting effect */
   .shadow-paper-sm {
     box-shadow:

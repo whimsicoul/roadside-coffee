@@ -7,7 +7,7 @@ interface OrderSummaryProps {
 
 export function OrderSummary({ items, total }: OrderSummaryProps) {
   if (items.length === 0) {
-    return <p className="text-stone-500 text-sm py-4">No items yet.</p>;
+    return <p className="text-coffee-roman text-sm py-4">No items yet.</p>;
   }
 
   return (
@@ -16,18 +16,18 @@ export function OrderSummary({ items, total }: OrderSummaryProps) {
         {items.map((cartItem) => (
           <div
             key={cartItem.menuItem.id}
-            className="flex justify-between items-center py-2 border-b border-stone-200"
+            className="flex justify-between items-center py-2 border-b border-coffee-oyster"
           >
             <div>
-              <p className="font-medium text-stone-900">
+              <p className="font-medium text-coffee-oil">
                 {cartItem.menuItem.name}
               </p>
-              <p className="text-sm text-stone-600">
+              <p className="text-sm text-coffee-roman">
                 Qty: {cartItem.quantity} × $
                 {parseFloat(cartItem.menuItem.price).toFixed(2)}
               </p>
             </div>
-            <span className="font-semibold text-stone-900">
+            <span className="font-semibold text-coffee-oil">
               ${(
                 parseFloat(cartItem.menuItem.price) * cartItem.quantity
               ).toFixed(2)}
@@ -36,8 +36,8 @@ export function OrderSummary({ items, total }: OrderSummaryProps) {
         ))}
       </div>
 
-      <div className="border-t border-amber-100 pt-4 mt-4">
-        <div className="flex justify-between font-bold text-amber-800 text-lg">
+      <div className="border-t border-coffee-roman pt-4 mt-4">
+        <div className="flex justify-between font-bold text-coffee-judge text-lg">
           <span>Total</span>
           <span>${total.toFixed(2)}</span>
         </div>

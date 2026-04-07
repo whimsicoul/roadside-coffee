@@ -27,15 +27,15 @@ export function OrderProgressStepper({ status }: OrderProgressStepperProps) {
               index <= currentIndex
                 ? index === currentIndex
                   ? 'bg-amber-500 text-white'
-                  : 'bg-amber-700 text-white'
-                : 'bg-stone-200 text-stone-600'
+                  : 'bg-coffee-judge text-white'
+                : 'bg-coffee-oyster text-coffee-roman'
             }`}
           >
             {index + 1}
           </div>
 
           {/* Label */}
-          <div className="text-xs font-medium text-stone-600 ml-2">
+          <div className="text-xs font-medium text-coffee-roman ml-2">
             {stepLabels[step]}
           </div>
 
@@ -43,7 +43,7 @@ export function OrderProgressStepper({ status }: OrderProgressStepperProps) {
           {index < steps.length - 1 && (
             <div
               className={`flex-1 h-1 mx-2 ${
-                index < currentIndex ? 'bg-amber-700' : 'bg-stone-200'
+                index < currentIndex ? 'bg-coffee-judge' : 'bg-coffee-oyster'
               }`}
             />
           )}

@@ -84,15 +84,15 @@ export default function MenuPage() {
 
           {/* Metadata panels */}
           <div className="flex flex-col md:flex-row justify-center gap-8 mt-8 text-sm">
-            <div className="border border-coffee-roman px-4 py-3 bg-white/50 shadow-paper-md rounded-lg">
+            <div className="bg-white shadow-paper-md rounded-lg px-4 py-3 border border-coffee-judge">
               <div className="font-serif font-bold text-coffee-oil">Pickup Time</div>
               <div className="text-coffee-judge">5–10 min</div>
             </div>
-            <div className="border border-coffee-roman px-4 py-3 bg-white/50 shadow-paper-md rounded-lg">
+            <div className="bg-white shadow-paper-md rounded-lg px-4 py-3 border border-coffee-judge">
               <div className="font-serif font-bold text-coffee-oil">Quality</div>
               <div className="text-coffee-judge">Premium Roast</div>
             </div>
-            <div className="border border-coffee-roman px-4 py-3 bg-white/50 shadow-paper-md rounded-lg">
+            <div className="bg-white shadow-paper-md rounded-lg px-4 py-3 border border-coffee-judge">
               <div className="font-serif font-bold text-coffee-oil">Specialty</div>
               <div className="text-coffee-judge">Artisan Crafted</div>
             </div>
@@ -185,7 +185,7 @@ export default function MenuPage() {
 
           {/* Cart sidebar - Order Slip aesthetic */}
           <div className="lg:col-span-1">
-            <div className="sticky top-4 card-paper-bg rounded-lg shadow-paper-xl border-2 border-coffee-judge p-6">
+            <div className="sticky top-4 bg-white rounded-lg shadow-paper-lg border border-coffee-judge overflow-hidden p-6">
               <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-4 pb-2 border-b-2 border-coffee-roman">
                 Order Slip
               </h2>

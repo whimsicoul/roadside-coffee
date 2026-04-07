@@ -14,60 +14,51 @@ export function MenuItemCard({
   onRemove,
 }: MenuItemCardProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 border border-amber-100 overflow-hidden">
-      {/* Image */}
-      <div className="h-44 bg-gradient-to-br from-amber-100 to-amber-200 overflow-hidden flex items-center justify-center">
-        {item.image_url ? (
-          <img
-            src={item.image_url}
-            alt={item.name}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <span className="text-5xl">☕</span>
+    <div className="border-b border-coffee-oyster py-4 flex items-center justify-between gap-4 hover:bg-coffee-parchment/40 transition-all duration-200 px-2 hover:shadow-paper-sm hover:mx-2 hover:-mx-2">
+      {/* Left: Item details */}
+      <div className="flex-1 min-w-0">
+        <h3 className="font-handwritten text-lg text-coffee-oil font-semibold">{item.name}</h3>
+        {item.description && (
+          <p className="text-sm text-coffee-judge italic mt-1 line-clamp-1">{item.description}</p>
         )}
       </div>
 
-      {/* Content */}
-      <div className="p-5">
-        <h3 className="font-serif font-semibold text-stone-900 text-lg">{item.name}</h3>
-        {item.description && (
-          <p className="text-sm text-stone-600 mt-1 line-clamp-2">{item.description}</p>
-        )}
+      {/* Right: Price + Controls */}
+      <div className="flex items-center gap-4">
+        <span className="font-serif font-bold text-coffee-judge whitespace-nowrap">
+          ${parseFloat(item.price).toFixed(2)}
+        </span>
 
-        <div className="flex items-center justify-between mt-5">
-          <span className="text-xl font-bold text-amber-800">
-            ${parseFloat(item.price).toFixed(2)}
-          </span>
-
-          {/* Quantity controls */}
-          {quantity > 0 ? (
-            <div className="flex items-center gap-2">
-              {onRemove && (
-                <button
-                  onClick={() => onRemove(item)}
-                  className="bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-1 rounded-lg font-bold transition-colors"
-                >
-                  −
-                </button>
-              )}
-              <span className="w-8 text-center font-bold text-amber-900">{quantity}</span>
+        {/* Quantity controls */}
+        {quantity > 0 ? (
+          <div className="flex items-center gap-1 bg-coffee-cream border border-coffee-roman rounded-lg px-2 py-1">
+            {onRemove && (
               <button
-                onClick={() => onAdd(item)}
-                className="bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-1 rounded-lg font-bold transition-colors"
+                onClick={() => onRemove(item)}
+                className="text-coffee-judge hover:text-coffee-oil font-bold px-2 py-1 transition-colors"
+                aria-label={`Remove one ${item.name}`}
               >
-                +
+                −
               </button>
-            </div>
-          ) : (
+            )}
+            <span className="w-6 text-center font-bold text-coffee-oil text-sm">{quantity}</span>
             <button
               onClick={() => onAdd(item)}
-              className="bg-amber-800 hover:bg-amber-900 text-white px-5 py-2 rounded-xl font-semibold text-sm transition-colors"
+              className="text-coffee-judge hover:text-coffee-oil font-bold px-2 py-1 transition-colors"
+              aria-label={`Add one ${item.name}`}
             >
-              Add
+              +
             </button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => onAdd(item)}
+            className="bg-coffee-judge hover:bg-coffee-oil text-coffee-cream px-4 py-2 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
+            aria-label={`Add ${item.name} to cart`}
+          >
+            Add
+          </button>
+        )}
       </div>
     </div>
   );

@@ -1,11 +1,8 @@
 {
   "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@anthropic-ai/github-mcp"],
-      "env": {
-        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
-      }
+    "puppeteer": {
+      "command": "node",
+      "args": ["C:\Users\qylga\.cache\puppeteer\mcp-server.js"]
     }
   }
 }

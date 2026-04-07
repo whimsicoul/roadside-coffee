@@ -9,7 +9,7 @@ interface OrderStatusBadgeProps {
 const statusConfig = {
   pending: {
     label: 'Pending',
-    className: 'bg-amber-100 text-amber-800',
+    className: 'bg-coffee-oyster text-coffee-judge',
   },
   arrived: {
     label: 'Arrived',
@@ -21,7 +21,7 @@ const statusConfig = {
   },
   completed: {
     label: 'Completed',
-    className: 'bg-stone-100 text-stone-600',
+    className: 'bg-stone-100 text-coffee-roman',
   },
 };
 

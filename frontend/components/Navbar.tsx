@@ -23,16 +23,28 @@ export function Navbar() {
   };
 
   return (
-    <nav className="bg-amber-800 text-amber-50 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
-        <Link href="/menu" className="font-serif text-2xl font-bold text-amber-50 tracking-wide">
-          ☕ Roadside Coffee
+    <nav className="bg-coffee-cream border-b-2 border-coffee-oil shadow-md">
+      <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+        {/* Brand */}
+        <Link
+          href="/menu"
+          className="font-serif text-3xl font-bold text-coffee-oil tracking-wide hover:text-coffee-judge transition-colors flex items-center gap-2"
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-coffee-oil">
+            <path d="M9 3h6v8c0 1-1 2-2 2h-2c-1 0-2-1-2-2V3z" />
+            <path d="M3 11h18v2H3z" />
+            <circle cx="6" cy="15" r="2" />
+            <circle cx="12" cy="15" r="2" />
+            <circle cx="18" cy="15" r="2" />
+          </svg>
+          Roadside Coffee
         </Link>
 
         {/* Mobile menu button */}
         <button
-          className="md:hidden p-2"
+          className="md:hidden p-2 text-coffee-oil hover:text-coffee-judge transition-colors"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           <svg
             className="w-6 h-6"
@@ -50,36 +62,48 @@ export function Navbar() {
         </button>
 
         {/* Desktop menu */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-6">
           {isLoading ? (
-            <div className="h-8 w-32 rounded-lg bg-amber-700 animate-pulse" />
+            <div className="h-8 w-32 rounded-lg bg-coffee-oyster animate-pulse" />
           ) : user ? (
             <>
-              <span className="text-sm font-medium">Welcome, {user.first_name}</span>
-              <Link href="/menu" className={`transition-colors ${isActive('/menu') ? 'text-amber-200 underline decoration-amber-300' : 'hover:text-amber-200'}`}>
+              <span className="text-sm font-medium text-coffee-judge">Welcome, {user.first_name}</span>
+              <Link
+                href="/menu"
+                className={`text-sm font-medium transition-colors ${isActive('/menu') ? 'text-coffee-judge underline decoration-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+              >
                 Menu
               </Link>
-              <Link href="/orders" className={`transition-colors ${isActive('/orders') ? 'text-amber-200 underline decoration-amber-300' : 'hover:text-amber-200'}`}>
+              <Link
+                href="/orders"
+                className={`text-sm font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge underline decoration-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+              >
                 My Orders
               </Link>
-              <Link href="/settings" className={`transition-colors ${isActive('/settings') ? 'text-amber-200 underline decoration-amber-300' : 'hover:text-amber-200'}`}>
+              <Link
+                href="/settings"
+                className={`text-sm font-medium transition-colors ${isActive('/settings') ? 'text-coffee-judge underline decoration-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+              >
                 Settings
               </Link>
               <button
                 onClick={handleLogout}
-                className="border border-amber-200 text-amber-50 hover:bg-amber-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="hover:text-amber-200 transition-colors">
+              <Link
+                href="/login"
+                className="text-sm font-medium text-coffee-oil hover:text-coffee-judge transition-colors"
+              >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="border border-amber-200 text-amber-50 hover:bg-amber-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Register
               </Link>
@@ -90,34 +114,46 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-amber-900 bg-amber-800 px-4 py-4 space-y-3">
+        <div className="md:hidden border-t border-coffee-roman bg-coffee-cream px-4 py-4 space-y-3">
           {user ? (
             <>
-              <p className="text-sm font-medium">Welcome, {user.first_name}</p>
-              <Link href="/menu" className={`block transition-colors ${isActive('/menu') ? 'text-amber-200' : 'hover:text-amber-200'}`}>
+              <p className="text-sm font-medium text-coffee-judge">Welcome, {user.first_name}</p>
+              <Link
+                href="/menu"
+                className={`block text-sm font-medium transition-colors ${isActive('/menu') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
+              >
                 Menu
               </Link>
-              <Link href="/orders" className={`block transition-colors ${isActive('/orders') ? 'text-amber-200' : 'hover:text-amber-200'}`}>
+              <Link
+                href="/orders"
+                className={`block text-sm font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
+              >
                 My Orders
               </Link>
-              <Link href="/settings" className={`block transition-colors ${isActive('/settings') ? 'text-amber-200' : 'hover:text-amber-200'}`}>
+              <Link
+                href="/settings"
+                className={`block text-sm font-medium transition-colors ${isActive('/settings') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
+              >
                 Settings
               </Link>
               <button
                 onClick={handleLogout}
-                className="w-full text-left border border-amber-200 text-amber-50 hover:bg-amber-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="w-full text-left border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="block hover:text-amber-200 transition-colors">
+              <Link
+                href="/login"
+                className="block text-sm font-medium text-coffee-oil hover:text-coffee-judge transition-colors"
+              >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="block border border-amber-200 text-amber-50 hover:bg-amber-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center"
+                className="block border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center"
               >
                 Register
               </Link>
