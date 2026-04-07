@@ -76,25 +76,25 @@ export default function MenuPage() {
 
   return (
     <div className="min-h-screen section-paper-bg">
-      {/* Editorial Hero Section */}
-      <div className="bg-coffee-texture section-paper-bg px-6 py-16 mb-12 border-editorial">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="font-serif text-5xl font-bold mb-3 text-coffee-oil">Good coffee, on the road</h1>
-          <p className="text-lg text-coffee-judge mb-6">Order ahead and we'll have it ready when you arrive</p>
+      {/* Hero Section */}
+      <div className="section-paper-bg px-6 py-24 mb-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-6xl mb-6 text-coffee-oil leading-tight">Good coffee, on the road</h1>
+          <p className="text-lg text-coffee-judge mb-12 max-w-2xl mx-auto leading-relaxed">Order ahead and we'll have it ready when you arrive</p>
 
           {/* Metadata panels */}
-          <div className="flex flex-col md:flex-row justify-center gap-8 mt-8 text-sm">
-            <div className="bg-white shadow-paper-md rounded-lg px-4 py-3 border border-coffee-judge">
-              <div className="font-serif font-bold text-coffee-oil">Pickup Time</div>
-              <div className="text-coffee-judge">5–10 min</div>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-12 flex-wrap">
+            <div className="card-elevated shadow-refined-sm rounded px-7 py-5 border border-coffee-oyster">
+              <div className="text-xs font-semibold text-coffee-roman uppercase tracking-wider">Pickup Time</div>
+              <div className="text-base text-coffee-oil font-semibold mt-2">5–10 min</div>
             </div>
-            <div className="bg-white shadow-paper-md rounded-lg px-4 py-3 border border-coffee-judge">
-              <div className="font-serif font-bold text-coffee-oil">Quality</div>
-              <div className="text-coffee-judge">Premium Roast</div>
+            <div className="card-elevated shadow-refined-sm rounded px-7 py-5 border border-coffee-oyster">
+              <div className="text-xs font-semibold text-coffee-roman uppercase tracking-wider">Quality</div>
+              <div className="text-base text-coffee-oil font-semibold mt-2">Premium Roast</div>
             </div>
-            <div className="bg-white shadow-paper-md rounded-lg px-4 py-3 border border-coffee-judge">
-              <div className="font-serif font-bold text-coffee-oil">Specialty</div>
-              <div className="text-coffee-judge">Artisan Crafted</div>
+            <div className="card-elevated shadow-refined-sm rounded px-7 py-5 border border-coffee-oyster">
+              <div className="text-xs font-semibold text-coffee-roman uppercase tracking-wider">Specialty</div>
+              <div className="text-base text-coffee-oil font-semibold mt-2">Artisan Crafted</div>
             </div>
           </div>
         </div>
@@ -121,14 +121,14 @@ export default function MenuPage() {
               <div className="space-y-8">
                 {/* Hot Drinks Section */}
                 {hotItems.length > 0 && (
-                  <div className="bg-white rounded-lg shadow-paper-lg border border-coffee-judge overflow-hidden">
+                  <div className="card-elevated rounded-lg shadow-refined-md border border-coffee-oyster overflow-hidden">
                     {/* Section Header */}
-                    <div className="bg-coffee-judge px-6 py-4 flex items-center gap-3">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <div className="bg-coffee-gorzka px-8 py-5 flex items-center gap-4">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="flex-shrink-0">
                         <path d="M9 3h6v8c0 1-1 2-2 2h-2c-1 0-2-1-2-2V3z" />
                         <path d="M3 11h18v2H3z" />
                       </svg>
-                      <h2 className="font-handwritten text-2xl text-coffee-cream">Hot Drinks</h2>
+                      <h2 className="text-xl text-coffee-cream font-semibold">Hot Drinks</h2>
                     </div>
 
                     {/* Items */}
@@ -151,15 +151,15 @@ export default function MenuPage() {
 
                 {/* Cold Drinks Section */}
                 {coldItems.length > 0 && (
-                  <div className="bg-white rounded-lg shadow-paper-lg border border-coffee-judge overflow-hidden">
+                  <div className="card-elevated rounded-lg shadow-refined-md border border-coffee-oyster overflow-hidden">
                     {/* Section Header */}
-                    <div className="bg-coffee-judge px-6 py-4 flex items-center gap-3">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <div className="bg-coffee-cappuccino px-8 py-5 flex items-center gap-4">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D1E17" strokeWidth="2" className="flex-shrink-0">
                         <path d="M9 3h6v12H9z" />
                         <path d="M6 15h12v2H6z" />
                         <path d="M9 19h6v2H9z" />
                       </svg>
-                      <h2 className="font-handwritten text-2xl text-coffee-cream">Cold Drinks</h2>
+                      <h2 className="text-xl text-coffee-oil font-semibold">Cold Drinks</h2>
                     </div>
 
                     {/* Items */}
@@ -183,18 +183,18 @@ export default function MenuPage() {
             )}
           </div>
 
-          {/* Cart sidebar - Order Slip aesthetic */}
+          {/* Cart sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-4 bg-white rounded-lg shadow-paper-lg border border-coffee-judge overflow-hidden p-6">
-              <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-4 pb-2 border-b-2 border-coffee-roman">
-                Order Slip
+            <div className="sticky top-4 card-elevated rounded-lg shadow-refined-lg border border-coffee-oyster overflow-hidden p-8">
+              <h2 className="text-2xl text-coffee-oil mb-6 pb-4 border-b border-coffee-oyster font-semibold">
+                Order Summary
               </h2>
               <OrderSummary items={cart} total={total} />
 
               <button
                 onClick={handleCheckout}
                 disabled={cart.length === 0}
-                className="w-full mt-6 bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed text-coffee-cream font-bold py-3 rounded-lg transition text-base"
+                className="w-full mt-8 bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition text-base"
                 aria-label={`Proceed to checkout with ${cart.length} items`}
               >
                 {cart.length === 0 ? 'Add items to continue' : `Proceed to Checkout (${cart.length})`}

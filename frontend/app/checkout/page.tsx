@@ -64,38 +64,38 @@ function CheckoutContent() {
 
   if (orderPlaced && orderId) {
     return (
-      <div className="min-h-screen section-paper-bg flex items-center justify-center px-4 py-8">
-        <div className="card-paper-bg rounded-2xl shadow-paper-xl p-8 max-w-md w-full border border-coffee-oyster">
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-coffee-oyster mb-4">
-              <svg className="w-6 h-6 text-coffee-oil" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="min-h-screen section-paper-bg flex items-center justify-center px-6 py-12">
+        <div className="card-elevated rounded-lg shadow-refined-lg p-8 max-w-md w-full border border-coffee-oyster">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-coffee-gorzka mb-4">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-2">
+            <h2 className="text-2xl text-coffee-oil mb-2 font-semibold">
               Order Placed!
             </h2>
           </div>
 
-          <div className="bg-coffee-parchment rounded-2xl border border-coffee-roman p-4 mb-6 text-center">
-            <p className="text-sm text-coffee-judge mb-2">Order ID</p>
-            <p className="text-2xl font-bold text-coffee-oil">#{orderId}</p>
+          <div className="bg-coffee-parchment rounded border border-coffee-oyster p-4 mb-6 text-center">
+            <p className="text-xs text-coffee-roman mb-1 font-semibold uppercase">Order ID</p>
+            <p className="text-2xl text-coffee-oil font-semibold">#{orderId}</p>
           </div>
 
-          <p className="text-coffee-roman text-center mb-6">
+          <p className="text-coffee-judge text-center mb-8 text-sm">
             Your order has been successfully placed. You'll be notified when your order is ready for pickup.
           </p>
 
           <div className="space-y-3">
             <Link
               href="/orders"
-              className="block w-full bg-coffee-judge hover:bg-coffee-oil text-white font-bold py-3 rounded-xl text-center transition"
+              className="block w-full bg-coffee-judge hover:bg-coffee-oil text-white font-semibold py-2.5 rounded text-center transition text-sm"
             >
               View My Orders
             </Link>
             <Link
               href="/menu"
-              className="block w-full bg-coffee-judge hover:bg-coffee-oil text-white font-bold py-3 rounded-xl text-center transition"
+              className="block w-full bg-coffee-judge hover:bg-coffee-oil text-white font-semibold py-2.5 rounded text-center transition text-sm"
             >
               Place Another Order
             </Link>
@@ -107,25 +107,25 @@ function CheckoutContent() {
 
   return (
     <div className="min-h-screen section-paper-bg">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="font-serif text-4xl font-bold text-coffee-oil mb-2">Checkout</h1>
-          <p className="text-coffee-roman">Review and confirm your order</p>
+      <div className="max-w-5xl mx-auto px-6 py-12">
+        <div className="mb-12">
+          <h1 className="text-4xl text-coffee-oil mb-2 font-semibold">Checkout</h1>
+          <p className="text-coffee-judge">Review and confirm your order</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Order Details */}
           <div className="md:col-span-2 space-y-6">
             {/* Delivery Details Card */}
-            <div className="card-paper-bg rounded-2xl shadow-paper-lg border border-coffee-oyster p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-serif text-xl font-bold text-coffee-oil">
+            <div className="card-elevated rounded-lg shadow-refined-md border border-coffee-oyster p-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg text-coffee-oil font-semibold">
                   Delivery Details
                 </h2>
                 {user && (
                   <Link
                     href="/settings"
-                    className="text-sm text-coffee-judge hover:underline"
+                    className="text-sm text-coffee-judge hover:text-coffee-oil transition"
                   >
                     Edit
                   </Link>
@@ -133,29 +133,29 @@ function CheckoutContent() {
               </div>
 
               {user ? (
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="border-l-4 border-coffee-judge pl-4">
-                    <p className="text-xs text-coffee-roman mb-1">Name</p>
-                    <p className="font-medium text-coffee-oil">
+                <div className="grid grid-cols-1 gap-5">
+                  <div className="border-l-2 border-coffee-oyster pl-4">
+                    <p className="text-xs text-coffee-roman mb-1 font-semibold uppercase">Name</p>
+                    <p className="font-semibold text-coffee-oil">
                       {user.first_name} {user.last_name}
                     </p>
                   </div>
-                  <div className="border-l-4 border-coffee-judge pl-4">
-                    <p className="text-xs text-coffee-roman mb-1">Email</p>
-                    <p className="font-medium text-coffee-oil">{user.email}</p>
+                  <div className="border-l-2 border-coffee-oyster pl-4">
+                    <p className="text-xs text-coffee-roman mb-1 font-semibold uppercase">Email</p>
+                    <p className="font-semibold text-coffee-oil">{user.email}</p>
                   </div>
                   {user.license_plate ? (
-                    <div className="border-l-4 border-coffee-judge pl-4">
-                      <p className="text-xs text-coffee-roman mb-1">License Plate</p>
-                      <p className="font-medium text-coffee-oil">
+                    <div className="border-l-2 border-coffee-oyster pl-4">
+                      <p className="text-xs text-coffee-roman mb-1 font-semibold uppercase">License Plate</p>
+                      <p className="font-semibold text-coffee-oil">
                         {user.license_plate}
                       </p>
                     </div>
                   ) : (
-                    <div className="border-l-4 border-yellow-400 pl-4">
-                      <p className="text-xs text-coffee-roman mb-1">License Plate</p>
-                      <p className="text-yellow-700 text-sm">
-                        Not set - add it in <Link href="/settings" className="underline">Settings</Link>
+                    <div className="border-l-2 border-yellow-300 pl-4 bg-yellow-50 p-3 rounded">
+                      <p className="text-xs text-coffee-roman mb-1 font-semibold uppercase">License Plate</p>
+                      <p className="text-yellow-900 text-sm">
+                        Not set - add it in <Link href="/settings" className="underline font-semibold">Settings</Link>
                       </p>
                     </div>
                   )}
@@ -164,34 +164,34 @@ function CheckoutContent() {
             </div>
 
             {/* Order Items Card */}
-            <div className="card-paper-bg rounded-2xl shadow-paper-lg border border-coffee-oyster p-6">
-              <h3 className="font-serif text-lg font-bold text-coffee-oil mb-4">Order Items</h3>
+            <div className="card-elevated rounded-lg shadow-refined-md border border-coffee-oyster p-8">
+              <h3 className="text-lg text-coffee-oil mb-6 font-semibold">Order Items</h3>
               <OrderSummary items={cart} total={total} />
             </div>
           </div>
 
           {/* Sidebar */}
           <div className="md:col-span-1">
-            <div className="card-paper-bg rounded-2xl shadow-md border border-coffee-oyster p-6 sticky top-4">
-              <h3 className="font-serif text-lg font-bold text-coffee-oil mb-6">
+            <div className="card-elevated rounded-lg shadow-refined-lg border border-coffee-oyster p-8 sticky top-4">
+              <h3 className="text-lg text-coffee-oil mb-8 font-semibold">
                 Order Summary
               </h3>
 
-              <div className="space-y-4 mb-6 pb-6 border-b border-coffee-oyster">
-                <div className="flex justify-between text-sm text-coffee-roman">
+              <div className="space-y-4 mb-8 pb-8 border-b border-coffee-oyster">
+                <div className="flex justify-between text-sm text-coffee-judge">
                   <span>Items</span>
-                  <span>{cart.length}</span>
+                  <span className="font-semibold">{cart.length}</span>
                 </div>
-                <div className="flex justify-between text-2xl font-bold text-coffee-judge">
+                <div className="flex justify-between text-2xl text-coffee-oil">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span className="font-semibold">${total.toFixed(2)}</span>
                 </div>
               </div>
 
               <button
                 onClick={handlePlaceOrder}
                 disabled={isPlacingOrder || cart.length === 0}
-                className="w-full bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition"
+                className="w-full bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded transition text-sm"
                 aria-busy={isPlacingOrder}
               >
                 {isPlacingOrder ? (

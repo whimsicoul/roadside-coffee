@@ -19,9 +19,9 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// For development: proxy Next.js routes
+// For development: serve index.html for all routes
 // In production, Next.js should handle this
-app.get('*', (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'public', 'index.html'), (err) => {
     if (err) {
       res.status(404).json({ error: 'Not found' });

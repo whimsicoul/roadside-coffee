@@ -23,14 +23,14 @@ export function Navbar() {
   };
 
   return (
-    <nav className="bg-coffee-cream border-b-2 border-coffee-oil shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+    <nav className="bg-coffee-cream border-b border-coffee-oyster shadow-refined-sm">
+      <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
         {/* Brand */}
         <Link
           href="/menu"
-          className="font-serif text-3xl font-bold text-coffee-oil tracking-wide hover:text-coffee-judge transition-colors flex items-center gap-2"
+          className="text-2xl font-semibold text-coffee-oil hover:text-coffee-judge transition-colors flex items-center gap-2"
         >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-coffee-oil">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-coffee-oil">
             <path d="M9 3h6v8c0 1-1 2-2 2h-2c-1 0-2-1-2-2V3z" />
             <path d="M3 11h18v2H3z" />
             <circle cx="6" cy="15" r="2" />
@@ -62,33 +62,33 @@ export function Navbar() {
         </button>
 
         {/* Desktop menu */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-8">
           {isLoading ? (
-            <div className="h-8 w-32 rounded-lg bg-coffee-oyster animate-pulse" />
+            <div className="h-6 w-32 rounded bg-coffee-oyster animate-pulse" />
           ) : user ? (
             <>
-              <span className="text-sm font-medium text-coffee-judge">Welcome, {user.first_name}</span>
+              <span className="text-sm text-coffee-judge">Hi, {user.first_name}</span>
               <Link
                 href="/menu"
-                className={`text-sm font-medium transition-colors ${isActive('/menu') ? 'text-coffee-judge underline decoration-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+                className={`text-sm font-medium transition-colors ${isActive('/menu') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
               >
                 Menu
               </Link>
               <Link
                 href="/orders"
-                className={`text-sm font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge underline decoration-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+                className={`text-sm font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
               >
                 My Orders
               </Link>
               <Link
                 href="/settings"
-                className={`text-sm font-medium transition-colors ${isActive('/settings') ? 'text-coffee-judge underline decoration-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+                className={`text-sm font-medium transition-colors ${isActive('/settings') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
               >
                 Settings
               </Link>
               <button
                 onClick={handleLogout}
-                className="border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster/10 px-4 py-1.5 rounded text-sm font-medium transition-colors"
               >
                 Logout
               </button>
@@ -103,7 +103,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/register"
-                className="border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="bg-coffee-judge text-white hover:bg-coffee-oil px-4 py-1.5 rounded text-sm font-medium transition-colors"
               >
                 Register
               </Link>

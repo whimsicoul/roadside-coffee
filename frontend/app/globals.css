@@ -8,340 +8,97 @@
     --color-oyster: #9D8A7C;
     --color-cream: #F5F0E8;
     --color-parchment: #EDE6D3;
-    --shadow-sm: 0 2px 4px rgba(45, 30, 23, 0.08);
-    --shadow-md: 0 4px 8px rgba(45, 30, 23, 0.12);
-    --shadow-lg: 0 8px 16px rgba(45, 30, 23, 0.15);
-    --shadow-xl: 0 12px 24px rgba(45, 30, 23, 0.18);
+    --color-gorzka: #3B2614;
+    --color-mleczna: #7B4F32;
+    --color-cappuccino: #C8963E;
+    --color-latte: #D9BC7A;
   }
 
   body {
-    background-color: #E8DED2;
-    background-image:
-      /* Strong random noise - high opacity */
-      repeating-linear-gradient(0deg, transparent 0px, rgba(139, 115, 85, 0.4) 1px, transparent 2px),
-      repeating-linear-gradient(90deg, transparent 0px, rgba(120, 95, 70, 0.4) 1px, transparent 2px),
-      repeating-linear-gradient(45deg, transparent 0px, rgba(139, 115, 85, 0.35) 1px, transparent 2px),
-      repeating-linear-gradient(-45deg, transparent 0px, rgba(120, 95, 70, 0.35) 1px, transparent 2px),
-      /* Paper fiber texture - heavy horizontal */
-      repeating-linear-gradient(
-        90deg,
-        transparent 0px,
-        rgba(139, 115, 85, 0.5) 1px,
-        rgba(130, 105, 75, 0.3) 2px,
-        transparent 4px,
-        rgba(120, 95, 70, 0.35) 5px,
-        transparent 7px
-      ),
-      /* Paper fiber texture - heavy vertical */
-      repeating-linear-gradient(
-        0deg,
-        transparent 0px,
-        rgba(120, 95, 70, 0.5) 1px,
-        rgba(110, 85, 60, 0.3) 2px,
-        transparent 4px,
-        rgba(139, 115, 85, 0.35) 5px,
-        transparent 7px
-      ),
-      /* Large paper grain at 45° */
-      repeating-linear-gradient(
-        45deg,
-        transparent 0px,
-        rgba(139, 115, 85, 0.4) 2px,
-        transparent 4px
-      ),
-      /* Large paper grain at -45° */
-      repeating-linear-gradient(
-        -45deg,
-        transparent 0px,
-        rgba(120, 95, 70, 0.4) 2px,
-        transparent 4px
-      ),
-      /* Large organic color variations - very visible */
-      radial-gradient(ellipse 600px 500px at 10% 20%, rgba(82, 63, 49, 0.4) 0%, transparent 70%),
-      radial-gradient(ellipse 700px 550px at 85% 40%, rgba(120, 95, 70, 0.35) 0%, transparent 75%),
-      radial-gradient(ellipse 650px 600px at 50% 70%, rgba(139, 115, 85, 0.38) 0%, transparent 70%),
-      radial-gradient(ellipse 550px 480px at 25% 50%, rgba(82, 63, 49, 0.3) 0%, transparent 65%),
-      /* Paper wrinkles - visible creases */
-      radial-gradient(ellipse 400px 300px at 70% 25%, rgba(100, 75, 50, 0.25) 0%, transparent 60%),
-      radial-gradient(ellipse 350px 280px at 30% 75%, rgba(120, 95, 70, 0.28) 0%, transparent 55%),
-      /* Vignette darkening at edges */
-      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.15) 100%);
-    background-size:
-      100% 3px,
-      3px 100%,
-      4px 4px,
-      4px 4px,
-      12px 12px,
-      12px 12px,
-      6px 6px,
-      6px 6px,
-      100% 100%,
-      100% 100%,
-      100% 100%,
-      100% 100%,
-      100% 100%,
-      100% 100%,
-      100% 100%;
-    background-attachment: fixed;
+    background-color: #F8F6F2;
     color: var(--color-oil);
-    font-family: var(--font-sans), system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
     position: relative;
   }
 
   h1,
   h2,
-  h3 {
-    font-family: var(--font-serif), Georgia, serif;
+  h3,
+  h4 {
+    font-family: 'Georgia', 'Garamond', serif;
     color: var(--color-oil);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  p {
+    line-height: 1.6;
+    color: var(--color-judge);
   }
 }
 
-/* Paper texture utility class - applies to any element */
 @layer utilities {
-  .paper-texture-bg {
-    background-image:
-      /* Strong random noise - high opacity */
-      repeating-linear-gradient(0deg, transparent 0px, rgba(139, 115, 85, 0.4) 1px, transparent 2px),
-      repeating-linear-gradient(90deg, transparent 0px, rgba(120, 95, 70, 0.4) 1px, transparent 2px),
-      repeating-linear-gradient(45deg, transparent 0px, rgba(139, 115, 85, 0.35) 1px, transparent 2px),
-      repeating-linear-gradient(-45deg, transparent 0px, rgba(120, 95, 70, 0.35) 1px, transparent 2px),
-      /* Paper fiber texture - heavy horizontal */
-      repeating-linear-gradient(
-        90deg,
-        transparent 0px,
-        rgba(139, 115, 85, 0.5) 1px,
-        rgba(130, 105, 75, 0.3) 2px,
-        transparent 4px,
-        rgba(120, 95, 70, 0.35) 5px,
-        transparent 7px
-      ),
-      /* Paper fiber texture - heavy vertical */
-      repeating-linear-gradient(
-        0deg,
-        transparent 0px,
-        rgba(120, 95, 70, 0.5) 1px,
-        rgba(110, 85, 60, 0.3) 2px,
-        transparent 4px,
-        rgba(139, 115, 85, 0.35) 5px,
-        transparent 7px
-      ),
-      /* Large paper grain at 45° */
-      repeating-linear-gradient(
-        45deg,
-        transparent 0px,
-        rgba(139, 115, 85, 0.4) 2px,
-        transparent 4px
-      ),
-      /* Large paper grain at -45° */
-      repeating-linear-gradient(
-        -45deg,
-        transparent 0px,
-        rgba(120, 95, 70, 0.4) 2px,
-        transparent 4px
-      ),
-      /* Large organic color variations - very visible */
-      radial-gradient(ellipse 600px 500px at 10% 20%, rgba(82, 63, 49, 0.4) 0%, transparent 70%),
-      radial-gradient(ellipse 700px 550px at 85% 40%, rgba(120, 95, 70, 0.35) 0%, transparent 75%),
-      radial-gradient(ellipse 650px 600px at 50% 70%, rgba(139, 115, 85, 0.38) 0%, transparent 70%),
-      radial-gradient(ellipse 550px 480px at 25% 50%, rgba(82, 63, 49, 0.3) 0%, transparent 65%),
-      /* Paper wrinkles - visible creases */
-      radial-gradient(ellipse 400px 300px at 70% 25%, rgba(100, 75, 50, 0.25) 0%, transparent 60%),
-      radial-gradient(ellipse 350px 280px at 30% 75%, rgba(120, 95, 70, 0.28) 0%, transparent 55%),
-      /* Vignette darkening at edges */
-      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.15) 100%) !important;
-    background-size:
-      100% 3px,
-      3px 100%,
-      4px 4px,
-      4px 4px,
-      12px 12px,
-      12px 12px,
-      6px 6px,
-      6px 6px,
-      100% 100%,
-      100% 100%,
-      100% 100%,
-      100% 100%,
-      100% 100%,
-      100% 100%,
-      100% 100% !important;
-    background-attachment: fixed !important;
+  /* Clean, polished shadows */
+  .shadow-refined-sm {
+    box-shadow: 0 1px 3px rgba(45, 30, 23, 0.08);
   }
 
-  .bg-coffee-texture {
-    background-image:
-      radial-gradient(ellipse 60px 50px at 15% 20%, rgba(82, 63, 49, 0.07) 60%, transparent 70%),
-      radial-gradient(ellipse 40px 35px at 75% 55%, rgba(121, 98, 84, 0.06) 60%, transparent 70%),
-      radial-gradient(ellipse 80px 70px at 85% 10%, rgba(45, 30, 23, 0.05) 60%, transparent 70%),
-      radial-gradient(ellipse 50px 45px at 30% 80%, rgba(157, 138, 124, 0.07) 60%, transparent 70%),
-      radial-gradient(ellipse 35px 30px at 60% 90%, rgba(82, 63, 49, 0.05) 60%, transparent 70%);
+  .shadow-refined-md {
+    box-shadow: 0 4px 12px rgba(45, 30, 23, 0.1);
   }
 
-  /* Section backgrounds with paper texture */
+  .shadow-refined-lg {
+    box-shadow: 0 8px 24px rgba(45, 30, 23, 0.12);
+  }
+
+  .shadow-refined-xl {
+    box-shadow: 0 12px 32px rgba(45, 30, 23, 0.15);
+  }
+
+  /* Sections and cards */
   .section-paper-bg {
-    background-color: #E8DED2;
-    background-image:
-      /* Strong random noise */
-      repeating-linear-gradient(0deg, transparent 0px, rgba(139, 115, 85, 0.35) 1px, transparent 2px),
-      repeating-linear-gradient(90deg, transparent 0px, rgba(120, 95, 70, 0.35) 1px, transparent 2px),
-      /* Paper fiber texture - horizontal */
-      repeating-linear-gradient(
-        90deg,
-        transparent 0px,
-        rgba(139, 115, 85, 0.45) 1px,
-        rgba(130, 105, 75, 0.25) 2px,
-        transparent 4px,
-        rgba(120, 95, 70, 0.3) 5px,
-        transparent 7px
-      ),
-      /* Paper fiber texture - vertical */
-      repeating-linear-gradient(
-        0deg,
-        transparent 0px,
-        rgba(120, 95, 70, 0.45) 1px,
-        rgba(110, 85, 60, 0.25) 2px,
-        transparent 4px,
-        rgba(139, 115, 85, 0.3) 5px,
-        transparent 7px
-      ),
-      /* Paper grain at 45° */
-      repeating-linear-gradient(
-        45deg,
-        transparent 0px,
-        rgba(139, 115, 85, 0.35) 2px,
-        transparent 4px
-      ),
-      /* Paper grain at -45° */
-      repeating-linear-gradient(
-        -45deg,
-        transparent 0px,
-        rgba(120, 95, 70, 0.35) 2px,
-        transparent 4px
-      ),
-      /* Large organic variations */
-      radial-gradient(ellipse 600px 500px at 10% 20%, rgba(82, 63, 49, 0.3) 0%, transparent 70%),
-      radial-gradient(ellipse 700px 550px at 85% 40%, rgba(120, 95, 70, 0.25) 0%, transparent 75%);
-    background-size:
-      100% 3px,
-      3px 100%,
-      12px 12px,
-      12px 12px,
-      6px 6px,
-      6px 6px,
-      100% 100%,
-      100% 100%;
-    background-attachment: fixed;
+    background-color: #F8F6F2;
   }
 
-  /* Card backgrounds with paper texture */
   .card-paper-bg {
-    background-color: #EFEFEF;
-    background-image:
-      /* Noise texture */
-      repeating-linear-gradient(0deg, transparent 0px, rgba(139, 115, 85, 0.3) 1px, transparent 2px),
-      repeating-linear-gradient(90deg, transparent 0px, rgba(120, 95, 70, 0.3) 1px, transparent 2px),
-      /* Paper fiber texture - horizontal */
-      repeating-linear-gradient(
-        90deg,
-        transparent 0px,
-        rgba(139, 115, 85, 0.4) 1px,
-        rgba(130, 105, 75, 0.2) 2px,
-        transparent 4px,
-        rgba(120, 95, 70, 0.25) 5px,
-        transparent 7px
-      ),
-      /* Paper fiber texture - vertical */
-      repeating-linear-gradient(
-        0deg,
-        transparent 0px,
-        rgba(120, 95, 70, 0.4) 1px,
-        rgba(110, 85, 60, 0.2) 2px,
-        transparent 4px,
-        rgba(139, 115, 85, 0.25) 5px,
-        transparent 7px
-      ),
-      /* Paper grain at 45° */
-      repeating-linear-gradient(
-        45deg,
-        transparent 0px,
-        rgba(139, 115, 85, 0.3) 2px,
-        transparent 4px
-      );
-    background-size:
-      100% 3px,
-      3px 100%,
-      12px 12px,
-      12px 12px,
-      6px 6px;
-    background-attachment: fixed;
+    background-color: #FAFAF9;
   }
 
-  /* Elevated card background - pulls away from paper texture */
   .card-elevated {
-    background-color: #F9F7F4;
-    border: 2px solid #D4C4B0;
+    background-color: #FFFFFF;
+    border: 1px solid #E5DDD5;
   }
 
-  /* Paper-embossed card shadows - subtle lifting effect */
-  .shadow-paper-sm {
-    box-shadow:
-      0 1px 2px rgba(45, 30, 23, 0.05),
-      0 2px 4px rgba(45, 30, 23, 0.06);
+  /* Typography utilities */
+  .text-coffee-oil {
+    color: var(--color-oil);
   }
 
-  .shadow-paper-md {
-    box-shadow:
-      0 2px 4px rgba(45, 30, 23, 0.08),
-      0 4px 8px rgba(45, 30, 23, 0.1),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  .text-coffee-judge {
+    color: var(--color-judge);
   }
 
-  .shadow-paper-lg {
-    box-shadow:
-      0 4px 8px rgba(45, 30, 23, 0.1),
-      0 8px 16px rgba(45, 30, 23, 0.12),
-      0 12px 24px rgba(45, 30, 23, 0.08),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  .text-coffee-roman {
+    color: var(--color-roman);
   }
 
-  .shadow-paper-xl {
-    box-shadow:
-      0 6px 12px rgba(45, 30, 23, 0.1),
-      0 12px 24px rgba(45, 30, 23, 0.12),
-      0 18px 36px rgba(45, 30, 23, 0.1),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
-  }
-
-  /* Floating effect with paper depth */
-  .shadow-paper-float {
-    box-shadow:
-      0 2px 4px rgba(45, 30, 23, 0.06),
-      0 4px 12px rgba(45, 30, 23, 0.1),
-      0 8px 20px rgba(45, 30, 23, 0.08);
-    transition: box-shadow 0.3s ease;
-  }
-
-  .shadow-paper-float:hover {
-    box-shadow:
-      0 4px 8px rgba(45, 30, 23, 0.08),
-      0 8px 20px rgba(45, 30, 23, 0.12),
-      0 12px 28px rgba(45, 30, 23, 0.1);
-  }
-
-  /* Paper pressed effect (minimal shadow) */
-  .shadow-paper-pressed {
-    box-shadow:
-      0 0 0 1px rgba(45, 30, 23, 0.08),
-      0 1px 2px rgba(45, 30, 23, 0.04);
-  }
-
-  .border-editorial {
-    border-top: 2px solid var(--color-oil);
-    border-bottom: 1px solid var(--color-judge);
-  }
-
-  .font-handwritten {
-    font-family: var(--font-handwritten), cursive;
+  .text-coffee-oyster {
+    color: var(--color-oyster);
   }
 
   .text-coffee-oil {
@@ -398,5 +155,53 @@
 
   .border-coffee-oyster {
     border-color: var(--color-oyster);
+  }
+
+  .bg-coffee-gorzka {
+    background-color: var(--color-gorzka);
+  }
+
+  .bg-coffee-mleczna {
+    background-color: var(--color-mleczna);
+  }
+
+  .bg-coffee-cappuccino {
+    background-color: var(--color-cappuccino);
+  }
+
+  .bg-coffee-latte {
+    background-color: var(--color-latte);
+  }
+
+  .text-coffee-gorzka {
+    color: var(--color-gorzka);
+  }
+
+  .text-coffee-mleczna {
+    color: var(--color-mleczna);
+  }
+
+  .text-coffee-cappuccino {
+    color: var(--color-cappuccino);
+  }
+
+  .text-coffee-latte {
+    color: var(--color-latte);
+  }
+
+  .border-coffee-gorzka {
+    border-color: var(--color-gorzka);
+  }
+
+  .border-coffee-mleczna {
+    border-color: var(--color-mleczna);
+  }
+
+  .border-coffee-cappuccino {
+    border-color: var(--color-cappuccino);
+  }
+
+  .border-coffee-latte {
+    border-color: var(--color-latte);
   }
 }

@@ -24,6 +24,7 @@ if (!fs.existsSync(SCREENSHOTS_DIR)) {
  *   node screenshot.mjs http://localhost:3000 --full-page
  *   node screenshot.mjs http://localhost:3000 --wait-for-selector ".menu-items"
  *   node screenshot.mjs http://localhost:3000 --filename custom-name.png
+ *   node screenshot.mjs http://localhost:3000 --temp (saves to .screenshots/temp/)
  *
  * OPTIONS:
  *   --viewport <WIDTHxHEIGHT>    Desktop viewport (default: 1280x800)
@@ -33,6 +34,7 @@ if (!fs.existsSync(SCREENSHOTS_DIR)) {
  *   --wait-for-nav                Wait for navigation to complete
  *   --delay <ms>                  Wait N milliseconds before screenshot (for animations)
  *   --filename <name.png>         Custom output filename (default: auto-generated)
+ *   --temp                        Save to .screenshots/temp/ instead of .screenshots/
  *   --no-headless                 Show browser window (debug mode)
  *   --disable-css                 Strip CSS for content-only view
  *   --emulate-media <dark|light>  Force prefers-color-scheme
@@ -50,10 +52,20 @@ async function takeScreenshot(url, options = {}) {
       waitForNavigation = false,
       delay = 0,
       filename = null,
+      useTemp = false,
       headless = true,
       disableCss = false,
       emulateMedia = null,
     } = parseOptions(options);
+
+    // Determine output directory
+    const outputDir = useTemp
+      ? path.join(SCREENSHOTS_DIR, 'temp')
+      : SCREENSHOTS_DIR;
+
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
 
     // Validate URL
     if (!url || !url.startsWith('http')) {
@@ -131,7 +143,7 @@ async function takeScreenshot(url, options = {}) {
 
     // Generate filename if not provided
     const outputFilename = filename || generateFilename(url);
-    const outputPath = path.join(SCREENSHOTS_DIR, outputFilename);
+    const outputPath = path.join(outputDir, outputFilename);
 
     // Take screenshot
     console.log(`📷 Capturing screenshot...`);
@@ -139,7 +151,6 @@ async function takeScreenshot(url, options = {}) {
       path: outputPath,
       fullPage,
       type: 'png',
-      quality: 100,
     });
 
     console.log(`✅ Screenshot saved to: ${outputPath}`);
@@ -167,6 +178,7 @@ function parseOptions(args) {
     waitForNavigation: false,
     delay: 0,
     filename: null,
+    useTemp: false,
     headless: true,
     disableCss: false,
     emulateMedia: null,
@@ -179,6 +191,8 @@ function parseOptions(args) {
       options.mobile = true;
     } else if (arg === '--full-page') {
       options.fullPage = true;
+    } else if (arg === '--temp') {
+      options.useTemp = true;
     } else if (arg === '--no-headless') {
       options.headless = false;
     } else if (arg === '--disable-css') {
@@ -225,6 +239,7 @@ if (!url) {
   console.error('  node screenshot.mjs http://localhost:3000');
   console.error('  node screenshot.mjs http://localhost:3000/menu --full-page');
   console.error('  node screenshot.mjs http://localhost:3000 --mobile');
+  console.error('  node screenshot.mjs http://localhost:3000 --temp (iterate in temp/)');
   console.error('');
   console.error('Options:');
   console.error('  --viewport <WIDTHxHEIGHT>    Desktop viewport (default: 1280x800)');
@@ -233,6 +248,7 @@ if (!url) {
   console.error('  --wait-for <selector>         Wait for element before screenshot');
   console.error('  --delay <ms>                  Wait N milliseconds for animations');
   console.error('  --filename <name.png>         Custom output filename');
+  console.error('  --temp                        Save to .screenshots/temp/ (for iteration)');
   console.error('  --no-headless                 Show browser window (debug)');
   console.error('  --emulate-media <dark|light>  Force color scheme');
   process.exit(1);

@@ -28,6 +28,17 @@
   - `--filename <name.png>`: Custom output filename
   - `--viewport <WIDTHxHEIGHT>`: Custom viewport (default: 1280x800)
   - `--no-headless`: Show browser window (debug mode)
+  - `--temp`: Save to `.screenshots/temp/` for iterative work
+
+## Iterative Screenshot Management
+- Use `--temp` flag to save screenshots to `.screenshots/temp/` while iterating on designs
+- Keeps temporary iterations separate from finalized screenshots
+- Utility commands via `screenshot-temp-utils.mjs`:
+  - `list` - List all temp screenshots
+  - `latest` - Show path to latest temp screenshot
+  - `clean` - Delete all temp screenshots
+  - `move <N>` - Promote temp screenshot N to main `.screenshots/` folder
+- Example workflow: `node screenshot.mjs http://localhost:3000 --temp` → iterate → `node screenshot-temp-utils.mjs move 1` when done
 
 ## Output Defaults
 - Single `index.html` file, all styles inline, unless user says otherwise
