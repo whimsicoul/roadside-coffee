@@ -17,49 +17,62 @@
   body {
     background-color: var(--color-cream);
     background-image:
-      /* Fine paper fiber weave - horizontal */
+      /* Noise texture - visible grain */
+      repeating-linear-gradient(0deg, transparent 0px, rgba(157, 138, 124, 0.15) 1px, transparent 2px),
+      repeating-linear-gradient(90deg, transparent 0px, rgba(121, 98, 84, 0.12) 1px, transparent 2px),
+      /* Paper fiber texture - horizontal lines */
       repeating-linear-gradient(
         90deg,
-        transparent,
-        rgba(157, 138, 124, 0.06) 0.5px,
-        transparent 1px
+        transparent 0px,
+        rgba(157, 138, 124, 0.25) 0.5px,
+        transparent 1px,
+        transparent 2px,
+        rgba(121, 98, 84, 0.15) 2.5px,
+        transparent 3px
       ),
-      /* Fine paper fiber weave - vertical */
+      /* Paper fiber texture - vertical lines */
       repeating-linear-gradient(
         0deg,
-        transparent,
-        rgba(121, 98, 84, 0.06) 0.5px,
-        transparent 1px
+        transparent 0px,
+        rgba(121, 98, 84, 0.25) 0.5px,
+        transparent 1px,
+        transparent 2px,
+        rgba(157, 138, 124, 0.15) 2.5px,
+        transparent 3px
       ),
-      /* Paper grain texture - diagonal weave */
+      /* Paper grain - diagonal weave at 45° */
       repeating-linear-gradient(
         45deg,
-        transparent,
-        rgba(157, 138, 124, 0.03) 1px,
+        transparent 0px,
+        rgba(157, 138, 124, 0.12) 1px,
         transparent 2px
       ),
-      /* Paper grain texture - opposite diagonal */
+      /* Paper grain - diagonal weave at -45° */
       repeating-linear-gradient(
         -45deg,
-        transparent,
-        rgba(121, 98, 84, 0.03) 1px,
+        transparent 0px,
+        rgba(121, 98, 84, 0.12) 1px,
         transparent 2px
       ),
-      /* Organic paper irregularities - warm spots */
-      radial-gradient(ellipse 300px 250px at 10% 15%, rgba(82, 63, 49, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse 350px 280px at 85% 30%, rgba(121, 98, 84, 0.06) 0%, transparent 55%),
-      radial-gradient(ellipse 280px 300px at 40% 70%, rgba(157, 138, 124, 0.07) 0%, transparent 50%),
-      radial-gradient(ellipse 320px 260px at 70% 85%, rgba(82, 63, 49, 0.05) 0%, transparent 55%),
-      /* Paper age spots - subtle discoloration */
-      radial-gradient(ellipse 180px 150px at 20% 40%, rgba(157, 138, 124, 0.04) 0%, transparent 45%),
-      radial-gradient(ellipse 200px 180px at 75% 15%, rgba(121, 98, 84, 0.035) 0%, transparent 50%),
-      /* Vignette edge shadow - natural paper darkening */
-      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.06) 100%);
+      /* Large organic variations - warm spots */
+      radial-gradient(ellipse 500px 400px at 15% 25%, rgba(82, 63, 49, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 550px 450px at 80% 35%, rgba(121, 98, 84, 0.12) 0%, transparent 65%),
+      radial-gradient(ellipse 480px 520px at 45% 75%, rgba(157, 138, 124, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 520px 400px at 70% 85%, rgba(82, 63, 49, 0.1) 0%, transparent 65%),
+      /* Paper wrinkles and age marks */
+      radial-gradient(ellipse 250px 180px at 25% 50%, rgba(157, 138, 124, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 300px 200px at 75% 20%, rgba(121, 98, 84, 0.09) 0%, transparent 55%),
+      radial-gradient(ellipse 280px 250px at 35% 80%, rgba(82, 63, 49, 0.07) 0%, transparent 50%),
+      /* Subtle vignette */
+      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.08) 100%);
     background-size:
-      2px 2px,
-      2px 2px,
+      100% 2px,
+      2px 100%,
+      8px 8px,
+      8px 8px,
       4px 4px,
       4px 4px,
+      100% 100%,
       100% 100%,
       100% 100%,
       100% 100%,
@@ -85,49 +98,62 @@
 @layer utilities {
   .paper-texture-bg {
     background-image:
-      /* Fine paper fiber weave - horizontal */
+      /* Noise texture - visible grain */
+      repeating-linear-gradient(0deg, transparent 0px, rgba(157, 138, 124, 0.15) 1px, transparent 2px),
+      repeating-linear-gradient(90deg, transparent 0px, rgba(121, 98, 84, 0.12) 1px, transparent 2px),
+      /* Paper fiber texture - horizontal lines */
       repeating-linear-gradient(
         90deg,
-        transparent,
-        rgba(157, 138, 124, 0.06) 0.5px,
-        transparent 1px
+        transparent 0px,
+        rgba(157, 138, 124, 0.25) 0.5px,
+        transparent 1px,
+        transparent 2px,
+        rgba(121, 98, 84, 0.15) 2.5px,
+        transparent 3px
       ),
-      /* Fine paper fiber weave - vertical */
+      /* Paper fiber texture - vertical lines */
       repeating-linear-gradient(
         0deg,
-        transparent,
-        rgba(121, 98, 84, 0.06) 0.5px,
-        transparent 1px
+        transparent 0px,
+        rgba(121, 98, 84, 0.25) 0.5px,
+        transparent 1px,
+        transparent 2px,
+        rgba(157, 138, 124, 0.15) 2.5px,
+        transparent 3px
       ),
-      /* Paper grain texture - diagonal weave */
+      /* Paper grain - diagonal weave at 45° */
       repeating-linear-gradient(
         45deg,
-        transparent,
-        rgba(157, 138, 124, 0.03) 1px,
+        transparent 0px,
+        rgba(157, 138, 124, 0.12) 1px,
         transparent 2px
       ),
-      /* Paper grain texture - opposite diagonal */
+      /* Paper grain - diagonal weave at -45° */
       repeating-linear-gradient(
         -45deg,
-        transparent,
-        rgba(121, 98, 84, 0.03) 1px,
+        transparent 0px,
+        rgba(121, 98, 84, 0.12) 1px,
         transparent 2px
       ),
-      /* Organic paper irregularities */
-      radial-gradient(ellipse 300px 250px at 10% 15%, rgba(82, 63, 49, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse 350px 280px at 85% 30%, rgba(121, 98, 84, 0.06) 0%, transparent 55%),
-      radial-gradient(ellipse 280px 300px at 40% 70%, rgba(157, 138, 124, 0.07) 0%, transparent 50%),
-      radial-gradient(ellipse 320px 260px at 70% 85%, rgba(82, 63, 49, 0.05) 0%, transparent 55%),
-      /* Paper age spots */
-      radial-gradient(ellipse 180px 150px at 20% 40%, rgba(157, 138, 124, 0.04) 0%, transparent 45%),
-      radial-gradient(ellipse 200px 180px at 75% 15%, rgba(121, 98, 84, 0.035) 0%, transparent 50%),
-      /* Vignette edge shadow */
-      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.06) 100%) !important;
+      /* Large organic variations */
+      radial-gradient(ellipse 500px 400px at 15% 25%, rgba(82, 63, 49, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 550px 450px at 80% 35%, rgba(121, 98, 84, 0.12) 0%, transparent 65%),
+      radial-gradient(ellipse 480px 520px at 45% 75%, rgba(157, 138, 124, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 520px 400px at 70% 85%, rgba(82, 63, 49, 0.1) 0%, transparent 65%),
+      /* Paper wrinkles and age marks */
+      radial-gradient(ellipse 250px 180px at 25% 50%, rgba(157, 138, 124, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 300px 200px at 75% 20%, rgba(121, 98, 84, 0.09) 0%, transparent 55%),
+      radial-gradient(ellipse 280px 250px at 35% 80%, rgba(82, 63, 49, 0.07) 0%, transparent 50%),
+      /* Subtle vignette */
+      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.08) 100%) !important;
     background-size:
-      2px 2px,
-      2px 2px,
+      100% 2px,
+      2px 100%,
+      8px 8px,
+      8px 8px,
       4px 4px,
       4px 4px,
+      100% 100%,
       100% 100%,
       100% 100%,
       100% 100%,
@@ -147,42 +173,55 @@
       radial-gradient(ellipse 35px 30px at 60% 90%, rgba(82, 63, 49, 0.05) 60%, transparent 70%);
   }
 
-  /* Section backgrounds with subtle paper texture */
+  /* Section backgrounds with paper texture */
   .section-paper-bg {
     background-color: var(--color-cream);
     background-image:
-      /* Fine paper fiber weave */
+      /* Noise texture */
+      repeating-linear-gradient(0deg, transparent 0px, rgba(157, 138, 124, 0.1) 1px, transparent 2px),
+      repeating-linear-gradient(90deg, transparent 0px, rgba(121, 98, 84, 0.08) 1px, transparent 2px),
+      /* Paper fiber texture - horizontal lines */
       repeating-linear-gradient(
         90deg,
-        transparent,
-        rgba(157, 138, 124, 0.05) 0.5px,
-        transparent 1px
+        transparent 0px,
+        rgba(157, 138, 124, 0.18) 0.5px,
+        transparent 1px,
+        transparent 2px,
+        rgba(121, 98, 84, 0.1) 2.5px,
+        transparent 3px
       ),
+      /* Paper fiber texture - vertical lines */
       repeating-linear-gradient(
         0deg,
-        transparent,
-        rgba(121, 98, 84, 0.05) 0.5px,
-        transparent 1px
+        transparent 0px,
+        rgba(121, 98, 84, 0.18) 0.5px,
+        transparent 1px,
+        transparent 2px,
+        rgba(157, 138, 124, 0.1) 2.5px,
+        transparent 3px
       ),
-      /* Paper grain texture */
+      /* Paper grain - diagonal weave at 45° */
       repeating-linear-gradient(
         45deg,
-        transparent,
-        rgba(157, 138, 124, 0.02) 1px,
+        transparent 0px,
+        rgba(157, 138, 124, 0.08) 1px,
         transparent 2px
       ),
+      /* Paper grain - diagonal weave at -45° */
       repeating-linear-gradient(
         -45deg,
-        transparent,
-        rgba(121, 98, 84, 0.02) 1px,
+        transparent 0px,
+        rgba(121, 98, 84, 0.08) 1px,
         transparent 2px
       ),
-      /* Subtle organic variations */
-      radial-gradient(ellipse 300px 250px at 10% 15%, rgba(82, 63, 49, 0.04) 0%, transparent 50%),
-      radial-gradient(ellipse 350px 280px at 85% 30%, rgba(121, 98, 84, 0.03) 0%, transparent 55%);
+      /* Large organic variations */
+      radial-gradient(ellipse 500px 400px at 15% 25%, rgba(82, 63, 49, 0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 550px 450px at 80% 35%, rgba(121, 98, 84, 0.08) 0%, transparent 65%);
     background-size:
-      2px 2px,
-      2px 2px,
+      100% 2px,
+      2px 100%,
+      8px 8px,
+      8px 8px,
       4px 4px,
       4px 4px,
       100% 100%,
@@ -190,32 +229,47 @@
     background-attachment: fixed;
   }
 
-  /* Card backgrounds with subtle texture */
+  /* Card backgrounds with paper texture */
   .card-paper-bg {
     background-color: var(--color-cream);
     background-image:
+      /* Noise texture */
+      repeating-linear-gradient(0deg, transparent 0px, rgba(157, 138, 124, 0.08) 1px, transparent 2px),
+      repeating-linear-gradient(90deg, transparent 0px, rgba(121, 98, 84, 0.06) 1px, transparent 2px),
+      /* Paper fiber texture - horizontal lines */
       repeating-linear-gradient(
         90deg,
-        transparent,
-        rgba(157, 138, 124, 0.04) 0.5px,
-        transparent 1px
+        transparent 0px,
+        rgba(157, 138, 124, 0.15) 0.5px,
+        transparent 1px,
+        transparent 2px,
+        rgba(121, 98, 84, 0.08) 2.5px,
+        transparent 3px
       ),
+      /* Paper fiber texture - vertical lines */
       repeating-linear-gradient(
         0deg,
-        transparent,
-        rgba(121, 98, 84, 0.04) 0.5px,
-        transparent 1px
+        transparent 0px,
+        rgba(121, 98, 84, 0.15) 0.5px,
+        transparent 1px,
+        transparent 2px,
+        rgba(157, 138, 124, 0.08) 2.5px,
+        transparent 3px
       ),
+      /* Paper grain - diagonal weave */
       repeating-linear-gradient(
         45deg,
-        transparent,
-        rgba(157, 138, 124, 0.015) 1px,
+        transparent 0px,
+        rgba(157, 138, 124, 0.06) 1px,
         transparent 2px
       );
     background-size:
-      2px 2px,
-      2px 2px,
+      100% 2px,
+      2px 100%,
+      8px 8px,
+      8px 8px,
       4px 4px;
+    background-attachment: fixed;
   }
 
   /* Paper-embossed card shadows - subtle lifting effect */
