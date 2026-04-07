@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Organic watercolor noise texture -->
+    <filter id="organicWashCold">
+      <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="6" seed="42" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="80" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <!-- Soft edge vignette - cooler tones -->
+    <radialGradient id="vignetteCold" cx="50%" cy="45%" r="55%" fy="45%">
+      <stop offset="0%" style="stop-color:#C8963E;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#B8842E;stop-opacity:0.95" />
+      <stop offset="70%" style="stop-color:#A0701E;stop-opacity:0.75" />
+      <stop offset="100%" style="stop-color:#8B5E0E;stop-opacity:0.4" />
+    </radialGradient>
+
+    <!-- Layered tone variation -->
+    <linearGradient id="toneLayersCold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D9BC7A;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#C8963E;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#B8842E;stop-opacity:0.15" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base watercolor wash with organic distortion -->
+  <rect width="300" height="300" fill="url(#vignetteCold)" filter="url(#organicWashCold)" />
+
+  <!-- Warm golden mid-tone layer -->
+  <ellipse cx="80" cy="60" rx="120" ry="140" fill="#D9BC7A" opacity="0.25" filter="url(#organicWashCold)" />
+
+  <!-- Darker accent for depth -->
+  <ellipse cx="120" cy="100" rx="90" ry="110" fill="#B8842E" opacity="0.2" />
+
+  <!-- Tone gradient overlay -->
+  <rect width="300" height="300" fill="url(#toneLayersCold)" />
+
+  <!-- Subtle texture grain -->
+  <rect width="300" height="300" fill="#C8963E" opacity="0.08" />
+</svg>

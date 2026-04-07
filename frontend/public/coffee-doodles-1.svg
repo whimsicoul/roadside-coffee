@@ -1,0 +1,46 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+  <!-- Coffee cup with steam -->
+  <g transform="translate(80, 60)">
+    <!-- Cup body -->
+    <path d="M 20 10 L 15 50 Q 15 55 20 55 L 60 55 Q 65 55 65 50 L 60 10 Z" fill="none" stroke="#8B6F47" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Cup handle -->
+    <path d="M 65 25 Q 90 25 90 40" fill="none" stroke="#8B6F47" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Steam wisps -->
+    <path d="M 30 5 Q 32 -5 30 -15" fill="none" stroke="#A0918C" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 50 0 Q 52 -8 50 -18" fill="none" stroke="#A0918C" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 40 8 Q 38 -5 40 -15" fill="none" stroke="#A0918C" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  </g>
+
+  <!-- Coffee beans scattered -->
+  <g transform="translate(150, 120)">
+    <ellipse cx="10" cy="5" rx="3" ry="5" fill="#5C3D2E" transform="rotate(25 10 5)"/>
+    <ellipse cx="0" cy="15" rx="3" ry="5" fill="#6B4423" transform="rotate(-30 0 15)"/>
+    <ellipse cx="25" cy="10" rx="3" ry="5" fill="#5C3D2E" transform="rotate(45 25 10)"/>
+    <ellipse cx="20" cy="25" rx="3" ry="5" fill="#7A5433" transform="rotate(-15 20 25)"/>
+  </g>
+
+  <!-- Decorative plant -->
+  <g transform="translate(40, 180)">
+    <!-- Pot -->
+    <path d="M 15 25 L 10 45 L 50 45 L 45 25 Z" fill="none" stroke="#B89968" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Pot rim -->
+    <line x1="15" y1="25" x2="45" y2="25" stroke="#B89968" stroke-width="2" stroke-linecap="round"/>
+    <!-- Leaves -->
+    <path d="M 30 25 Q 20 10 15 0" fill="none" stroke="#6B9B5F" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 30 25 Q 35 8 40 -5" fill="none" stroke="#7CB342" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 30 25 Q 30 5 28 -8" fill="none" stroke="#6B9B5F" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Hand holding coffee -->
+  <g transform="translate(200, 180)">
+    <!-- Hand -->
+    <path d="M 10 40 L 5 25 L 8 15 L 15 12 L 22 15 L 24 25 L 20 40" fill="none" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Fingers -->
+    <path d="M 8 15 L 5 5" stroke="#D4A574" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 15 12 L 12 0" stroke="#D4A574" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 22 15 L 25 5" stroke="#D4A574" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Cup in hand -->
+    <circle cx="15" cy="25" r="8" fill="none" stroke="#8B6F47" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="10" y1="28" x2="20" y2="28" stroke="#8B6F47" stroke-width="1" opacity="0.5"/>
+  </g>
+</svg>

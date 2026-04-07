@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Multi-layer noise for realistic crumpling -->
+    <filter id="crumpleBase">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="8" seed="1" result="noise1" />
+      <feDisplacementMap in="SourceGraphic" in2="noise1" scale="120" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <!-- Secondary crumple for fine detail -->
+    <filter id="crumpleDetail">
+      <feTurbulence type="fractalNoise" baseFrequency="0.12" numOctaves="5" seed="2" result="noise2" />
+      <feDisplacementMap in="SourceGraphic" in2="noise2" scale="40" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <!-- Combined crumple effect -->
+    <filter id="fullCrumple">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="7" seed="3" result="turbulence" />
+      <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="100" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+      <feTurbulence in="displaced" type="fractalNoise" baseFrequency="0.15" numOctaves="4" seed="4" result="detail" />
+      <feDisplacementMap in="displaced" in2="detail" scale="30" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <!-- Lighting effect for depth -->
+    <filter id="paperLighting">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blurred" />
+      <feSpecularLighting in="blurred" surfaceScale="2" specularConstant="0.7" specularExponent="20" lighting-color="#ffffff" result="spec">
+        <fePointLight x="-800" y="-800" z="500" />
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceGraphic" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage" />
+      <feComposite in="litImage" in2="SourceGraphic" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
+    </filter>
+
+    <!-- Soft shadow for wrinkles -->
+    <filter id="wrinkleShadow">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+      <feOffset dx="1" dy="1" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Gradient for subtle color variation -->
+    <linearGradient id="paperGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEFDFB;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FDFBF7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FCF9F3;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Shadow accumulation in creases -->
+    <radialGradient id="creaseDepth" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.8" />
+      <stop offset="60%" style="stop-color:#F5F3F0;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#E8E4DE;stop-opacity:0.4" />
+    </radialGradient>
+  </defs>
+
+  <!-- Base paper color -->
+  <rect width="800" height="800" fill="url(#paperGradient)" />
+
+  <!-- Crumple displacement layer 1 -->
+  <rect width="800" height="800" fill="url(#creaseDepth)" filter="url(#crumpleBase)" opacity="0.6" />
+
+  <!-- Crumple displacement layer 2 with detail -->
+  <g filter="url(#crumpleDetail)">
+    <rect width="800" height="800" fill="#F5F1E8" opacity="0.4" />
+  </g>
+
+  <!-- Shadow accumulation - darker in creases -->
+  <rect width="800" height="800" fill="#2D1E17" opacity="0.04" filter="url(#fullCrumple)" />
+
+  <!-- Micro-wrinkles and texture detail -->
+  <rect width="800" height="800" fill="#3D2615" opacity="0.02" filter="url(#crumpleDetail)" />
+
+  <!-- High-frequency noise for paper grain -->
+  <rect width="800" height="800" fill="#FFFFFF" opacity="0.15">
+    <animate attributeName="opacity" values="0.12;0.18;0.12" dur="0s" repeatCount="1" />
+  </rect>
+
+  <!-- Subtle lighting effect -->
+  <ellipse cx="200" cy="200" rx="600" ry="600" fill="#FFFFFF" opacity="0.08" filter="url(#wrinkleShadow)" />
+  <ellipse cx="600" cy="600" rx="500" ry="500" fill="#2D1E17" opacity="0.05" />
+</svg>

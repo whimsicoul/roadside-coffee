@@ -1,0 +1,67 @@
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Scattered coffee doodles for accent areas -->
+
+  <!-- Coffee cup with saucer -->
+  <g transform="translate(30, 20)">
+    <!-- Saucer -->
+    <ellipse cx="25" cy="40" rx="20" ry="5" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.7"/>
+    <!-- Cup body -->
+    <path d="M 20 25 L 15 40 L 35 40 L 30 25 Z" fill="none" stroke="#8B6F47" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Cup rim -->
+    <ellipse cx="25" cy="25" rx="5" ry="3" fill="none" stroke="#8B6F47" stroke-width="1.5"/>
+    <!-- Handle -->
+    <path d="M 31 28 Q 42 28 42 37" fill="none" stroke="#8B6F47" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Beans scattered -->
+  <g transform="translate(120, 30)" opacity="0.8">
+    <ellipse cx="5" cy="5" rx="2.5" ry="4" fill="#5C3D2E" transform="rotate(30 5 5)"/>
+    <ellipse cx="15" cy="8" rx="2.5" ry="4" fill="#6B4423" transform="rotate(-20 15 8)"/>
+    <ellipse cx="25" cy="5" rx="2.5" ry="4" fill="#5C3D2E" transform="rotate(45 25 5)"/>
+    <ellipse cx="10" cy="20" rx="2.5" ry="4" fill="#7A5433" transform="rotate(-10 10 20)"/>
+    <ellipse cx="20" cy="22" rx="2.5" ry="4" fill="#6B4423" transform="rotate(60 20 22)"/>
+  </g>
+
+  <!-- Leaf flourish -->
+  <g transform="translate(280, 40)" opacity="0.6">
+    <path d="M 0 5 Q -5 0 -3 -8" fill="none" stroke="#7CB342" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 0 5 Q 5 2 8 -5" fill="none" stroke="#6B9B5F" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 0 5 Q 2 8 -2 15" fill="none" stroke="#7CB342" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Stirring spoon -->
+  <g transform="translate(350, 60)">
+    <ellipse cx="5" cy="5" rx="4" ry="6" fill="none" stroke="#C8974E" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 7 10 L 20 25" stroke="#C8974E" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="22" cy="27" r="1.5" fill="#C8974E"/>
+  </g>
+
+  <!-- Pour-over cone with coffee -->
+  <g transform="translate(60, 90)">
+    <path d="M 10 5 L 5 20 L 25 20 Z" fill="none" stroke="#8B6F47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="15" cy="18" rx="8" ry="4" fill="#6B4423" opacity="0.4"/>
+    <!-- Stand lines -->
+    <line x1="6" y1="20" x2="2" y2="32" stroke="#8B6F47" stroke-width="1" opacity="0.5"/>
+    <line x1="24" y1="20" x2="28" y2="32" stroke="#8B6F47" stroke-width="1" opacity="0.5"/>
+  </g>
+
+  <!-- Croissant/pastry -->
+  <g transform="translate(180, 110)">
+    <path d="M 8 5 Q 3 10 6 18 Q 10 22 18 20 Q 24 18 25 12 Q 26 5 18 2 Q 12 0 8 5" fill="none" stroke="#C8974E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 10 8 L 18 15" stroke="#D4A574" stroke-width="1" opacity="0.6"/>
+    <path d="M 14 5 L 20 16" stroke="#D4A574" stroke-width="1" opacity="0.6"/>
+  </g>
+
+  <!-- Decorative swirl/flourish -->
+  <g transform="translate(310, 130)" opacity="0.5">
+    <path d="M 0 10 Q 5 5 10 8 Q 15 11 10 16 Q 5 18 0 10" fill="none" stroke="#A0918C" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 8 10 Q 12 8 15 12" fill="none" stroke="#A0918C" stroke-width="1" stroke-linecap="round"/>
+  </g>
+
+  <!-- Espresso cup small -->
+  <g transform="translate(240, 155)">
+    <path d="M 5 8 L 3 18 Q 3 20 8 20 L 20 20 Q 25 20 25 18 L 23 8 Z" fill="none" stroke="#8B6F47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 25 12 Q 32 12 32 16" fill="none" stroke="#8B6F47" stroke-width="1.5" stroke-linecap="round"/>
+    <ellipse cx="14" cy="16" rx="5" ry="3" fill="#6B4423" opacity="0.5"/>
+  </g>
+</svg>
