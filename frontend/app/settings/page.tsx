@@ -24,10 +24,14 @@ const subscriptionFormSchema = z.object({
   start_date: z.string().min(1, 'Start date is required'),
   end_date: z.string().min(1, 'End date is required'),
   weekly_allowance: z.coerce.number().positive('Allowance must be positive'),
-});
+}) as any;
 
 type UpdateProfileData = z.infer<typeof updateProfileSchema>;
-type SubscriptionFormData = z.infer<typeof subscriptionFormSchema>;
+type SubscriptionFormData = {
+  start_date: string;
+  end_date: string;
+  weekly_allowance: string;
+};
 
 function SettingsContent() {
   const { data: user, isLoading: userLoading } = useUser();
@@ -81,7 +85,7 @@ function SettingsContent() {
       await createSubscription.mutateAsync({
         start_date: data.start_date,
         end_date: data.end_date,
-        weekly_allowance: data.weekly_allowance,
+        weekly_allowance: parseFloat(data.weekly_allowance as any),
       });
       setShowSubForm(false);
       resetSub();
@@ -111,43 +115,43 @@ function SettingsContent() {
   if (userLoading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <p className="text-stone-600">Loading...</p>
+        <p className="text-coffee-roman">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen section-paper-bg">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="font-serif text-4xl font-bold text-stone-900 mb-2">Settings</h1>
-          <p className="text-stone-600">Manage your account and preferences</p>
+          <h1 className="font-serif text-4xl font-bold text-coffee-oil mb-2">Settings</h1>
+          <p className="text-coffee-roman">Manage your account and preferences</p>
         </div>
 
         {/* Account Summary */}
         {user && (
-          <div className="bg-gradient-to-r from-amber-50 to-stone-100 border border-amber-200 rounded-2xl p-6 mb-8">
-            <h2 className="text-lg font-bold text-amber-900 mb-4">Account Overview</h2>
+          <div className="bg-gradient-to-r from-coffee-parchment to-coffee-oyster border border-coffee-oyster rounded-2xl p-6 mb-8">
+            <h2 className="text-lg font-bold text-coffee-oil mb-4">Account Overview</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <p className="text-xs text-amber-700 font-semibold uppercase tracking-wide">Email</p>
-                <p className="font-medium text-amber-900 truncate">{user.email}</p>
+                <p className="text-xs text-coffee-judge font-semibold uppercase tracking-wide">Email</p>
+                <p className="font-medium text-coffee-oil truncate">{user.email}</p>
               </div>
               <div>
-                <p className="text-xs text-amber-700 font-semibold uppercase tracking-wide">Phone</p>
-                <p className="font-medium text-amber-900">
+                <p className="text-xs text-coffee-judge font-semibold uppercase tracking-wide">Phone</p>
+                <p className="font-medium text-coffee-oil">
                   {user.phone || <span className="text-amber-600">Not set</span>}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-amber-700 font-semibold uppercase tracking-wide">License Plate</p>
-                <p className="font-medium text-amber-900">
+                <p className="text-xs text-coffee-judge font-semibold uppercase tracking-wide">License Plate</p>
+                <p className="font-medium text-coffee-oil">
                   {user.license_plate || <span className="text-amber-600">Not set</span>}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-amber-700 font-semibold uppercase tracking-wide">Member Since</p>
-                <p className="font-medium text-amber-900">
+                <p className="text-xs text-coffee-judge font-semibold uppercase tracking-wide">Member Since</p>
+                <p className="font-medium text-coffee-oil">
                   {new Date(user.created_at).toLocaleDateString()}
                 </p>
               </div>
@@ -155,19 +159,19 @@ function SettingsContent() {
           </div>
         )}
 
-      {/* Profile Section */}
-      <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-6 mb-8">
-        <h2 className="font-serif text-2xl font-bold text-stone-900 mb-1">
+        {/* Profile Section */}
+        <div className="card-paper-bg rounded-2xl shadow-paper-lg border border-coffee-oyster p-6 mb-8">
+        <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-1">
           Profile Information
         </h2>
-        <p className="text-sm text-stone-600 mb-6">
+        <p className="text-sm text-coffee-roman mb-6">
           Update your personal details
         </p>
 
         <form onSubmit={handleSubmit(onUpdateProfile)} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="first_name" className="block text-sm font-semibold text-stone-900 mb-2">
+              <label htmlFor="first_name" className="block text-sm font-semibold text-coffee-oil mb-2">
                 First Name *
               </label>
               <input
@@ -175,7 +179,7 @@ function SettingsContent() {
                 {...register('first_name')}
                 type="text"
                 placeholder="Enter your first name"
-                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
               />
               {errors.first_name && (
                 <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
@@ -185,7 +189,7 @@ function SettingsContent() {
             </div>
 
             <div>
-              <label htmlFor="last_name" className="block text-sm font-semibold text-stone-900 mb-2">
+              <label htmlFor="last_name" className="block text-sm font-semibold text-coffee-oil mb-2">
                 Last Name *
               </label>
               <input
@@ -193,7 +197,7 @@ function SettingsContent() {
                 {...register('last_name')}
                 type="text"
                 placeholder="Enter your last name"
-                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
               />
               {errors.last_name && (
                 <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
@@ -203,28 +207,28 @@ function SettingsContent() {
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-semibold text-stone-900 mb-2">
-                Phone <span className="text-stone-500 font-normal">(optional)</span>
+              <label htmlFor="phone" className="block text-sm font-semibold text-coffee-oil mb-2">
+                Phone <span className="text-coffee-roman font-normal">(optional)</span>
               </label>
               <input
                 id="phone"
                 {...register('phone')}
                 type="tel"
                 placeholder="e.g., +1 (555) 000-0000"
-                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
               />
             </div>
 
             <div>
-              <label htmlFor="license_plate" className="block text-sm font-semibold text-stone-900 mb-2">
-                License Plate <span className="text-stone-500 font-normal">(optional)</span>
+              <label htmlFor="license_plate" className="block text-sm font-semibold text-coffee-oil mb-2">
+                License Plate <span className="text-coffee-roman font-normal">(optional)</span>
               </label>
               <input
                 id="license_plate"
                 {...register('license_plate')}
                 type="text"
                 placeholder="e.g., ABC-1234"
-                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent uppercase"
+                className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent uppercase"
               />
             </div>
           </div>
@@ -232,7 +236,7 @@ function SettingsContent() {
           <button
             type="submit"
             disabled={isSubmitting || updateUser.isPending}
-            className="bg-amber-800 hover:bg-amber-900 disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg transition"
+            className="bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg transition"
           >
             {updateUser.isPending ? (
               <span className="flex items-center justify-center gap-2">
@@ -244,19 +248,19 @@ function SettingsContent() {
             )}
           </button>
         </form>
-      </div>
+        </div>
 
-      {/* Subscription Section */}
-      <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-6">
-        <h2 className="font-serif text-2xl font-bold text-stone-900 mb-1">Subscription</h2>
-        <p className="text-sm text-stone-600 mb-6">
+        {/* Subscription Section */}
+        <div className="card-paper-bg rounded-2xl shadow-md border border-coffee-oyster p-6">
+          <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-1">Subscription</h2>
+        <p className="text-sm text-coffee-roman mb-6">
           Manage your daily coffee subscription
         </p>
 
         {subLoading ? (
           <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-stone-200 rounded w-1/4"></div>
-            <div className="h-4 bg-stone-200 rounded w-1/3"></div>
+            <div className="h-4 bg-coffee-oyster rounded w-1/4"></div>
+            <div className="h-4 bg-coffee-oyster rounded w-1/3"></div>
           </div>
         ) : subscription ? (
           <div className="space-y-6">
@@ -299,7 +303,7 @@ function SettingsContent() {
                 </div>
                 <div className="w-full bg-amber-200 rounded-full h-2">
                   <div
-                    className="bg-amber-700 h-2 rounded-full"
+                    className="bg-coffee-judge h-2 rounded-full"
                     style={{
                       width: `${Math.min((parseFloat(subscription.used_amount) / parseFloat(subscription.weekly_allowance)) * 100, 100)}%`,
                     }}
@@ -311,7 +315,7 @@ function SettingsContent() {
             <button
               onClick={handleCancelSubscription}
               disabled={cancelSubscription.isPending}
-              className="w-full bg-red-600 hover:bg-red-700 disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition"
+              className="w-full bg-red-600 hover:bg-red-700 disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition"
             >
               {cancelSubscription.isPending ? (
                 <span className="flex items-center justify-center gap-2">
@@ -325,8 +329,8 @@ function SettingsContent() {
           </div>
         ) : (
           <div>
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
-              <p className="text-amber-900 text-sm">
+            <div className="bg-coffee-cream border border-coffee-oyster rounded-2xl p-4 mb-6">
+              <p className="text-coffee-oil text-sm">
                 Create a subscription to get daily coffee delivered with a weekly spending allowance.
               </p>
             </div>
@@ -334,7 +338,7 @@ function SettingsContent() {
             {!showSubForm ? (
               <button
                 onClick={() => setShowSubForm(true)}
-                className="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 rounded-lg transition"
+                className="w-full bg-coffee-judge hover:bg-coffee-oil text-white font-bold py-3 rounded-lg transition"
               >
                 Create Subscription
               </button>
@@ -349,14 +353,14 @@ function SettingsContent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label htmlFor="start_date" className="block text-sm font-semibold text-stone-900 mb-2">
+                    <label htmlFor="start_date" className="block text-sm font-semibold text-coffee-oil mb-2">
                       Start Date *
                     </label>
                     <input
                       id="start_date"
                       type="date"
                       {...registerSub('start_date')}
-                      className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
                     />
                     {subErrors.start_date && (
                       <p className="text-red-600 text-sm mt-2">{subErrors.start_date.message}</p>
@@ -364,14 +368,14 @@ function SettingsContent() {
                   </div>
 
                   <div>
-                    <label htmlFor="end_date" className="block text-sm font-semibold text-stone-900 mb-2">
+                    <label htmlFor="end_date" className="block text-sm font-semibold text-coffee-oil mb-2">
                       End Date *
                     </label>
                     <input
                       id="end_date"
                       type="date"
                       {...registerSub('end_date')}
-                      className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
                     />
                     {subErrors.end_date && (
                       <p className="text-red-600 text-sm mt-2">{subErrors.end_date.message}</p>
@@ -379,7 +383,7 @@ function SettingsContent() {
                   </div>
 
                   <div>
-                    <label htmlFor="weekly_allowance" className="block text-sm font-semibold text-stone-900 mb-2">
+                    <label htmlFor="weekly_allowance" className="block text-sm font-semibold text-coffee-oil mb-2">
                       Weekly Allowance ($) *
                     </label>
                     <input
@@ -389,7 +393,7 @@ function SettingsContent() {
                       min="0"
                       placeholder="50.00"
                       {...registerSub('weekly_allowance')}
-                      className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
                     />
                     {subErrors.weekly_allowance && (
                       <p className="text-red-600 text-sm mt-2">{subErrors.weekly_allowance.message}</p>
@@ -401,7 +405,7 @@ function SettingsContent() {
                   <button
                     type="submit"
                     disabled={createSubscription.isPending}
-                    className="flex-1 bg-amber-800 hover:bg-amber-900 disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition"
+                    className="flex-1 bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition"
                   >
                     {createSubscription.isPending ? (
                       <span className="flex items-center justify-center gap-2">
@@ -419,7 +423,7 @@ function SettingsContent() {
                       setSubError(null);
                       resetSub();
                     }}
-                    className="flex-1 bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 rounded-lg transition"
+                    className="flex-1 bg-coffee-oyster hover:bg-coffee-oyster text-coffee-oil font-bold py-3 rounded-lg transition"
                   >
                     Cancel
                   </button>
@@ -428,6 +432,7 @@ function SettingsContent() {
             )}
           </div>
         )}
+        </div>
       </div>
     </div>
   );

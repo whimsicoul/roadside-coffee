@@ -25,18 +25,18 @@ export default function OrdersPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-amber-50">
+      <div className="min-h-screen section-paper-bg">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="mb-8">
-            <h1 className="font-serif text-4xl font-bold text-stone-900 mb-2">My Orders</h1>
-            <p className="text-stone-600">Track and manage your coffee orders</p>
+            <h1 className="font-serif text-4xl font-bold text-coffee-oil mb-2">My Orders</h1>
+            <p className="text-coffee-roman">Track and manage your coffee orders</p>
           </div>
 
           {isLoading && (
-            <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-12">
+            <div className="card-paper-bg rounded-2xl shadow-paper-lg border border-coffee-oyster p-12">
               <div className="flex justify-center items-center gap-4">
-                <Loader className="w-8 h-8 text-amber-700 animate-spin" />
-                <span className="text-stone-600">Loading your orders...</span>
+                <Loader className="w-8 h-8 text-coffee-judge animate-spin" />
+                <span className="text-coffee-roman">Loading your orders...</span>
               </div>
             </div>
           )}
@@ -52,13 +52,13 @@ export default function OrdersPage() {
           )}
 
           {!isLoading && orders && orders.length === 0 && (
-            <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-12 text-center">
+            <div className="card-paper-bg rounded-2xl shadow-md border border-coffee-oyster p-12 text-center">
               <div className="text-4xl mb-4">☕</div>
-              <h2 className="font-serif text-2xl font-bold text-stone-900 mb-2">No Orders Yet</h2>
-              <p className="text-stone-600 mb-6">Start browsing the menu to place your first order!</p>
+              <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-2">No Orders Yet</h2>
+              <p className="text-coffee-roman mb-6">Start browsing the menu to place your first order!</p>
               <a
                 href="/menu"
-                className="inline-block bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 px-8 rounded-xl transition"
+                className="inline-block bg-coffee-judge hover:bg-coffee-oil text-white font-bold py-3 px-8 rounded-xl transition"
               >
                 Browse Menu
               </a>
@@ -81,15 +81,15 @@ export default function OrdersPage() {
                 return (
                   <div
                     key={order.id}
-                    className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border border-amber-100"
+                    className="card-paper-bg rounded-2xl shadow-paper-lg hover:shadow-paper-xl transition border border-coffee-oyster"
                   >
                     {/* Header with Order ID and Status */}
-                    <div className="bg-gradient-to-r from-amber-50 to-transparent p-6 border-b border-amber-100 flex justify-between items-start">
+                    <div className="bg-gradient-to-r from-coffee-parchment to-transparent p-6 border-b border-coffee-oyster flex justify-between items-start">
                       <div>
-                        <h2 className="text-2xl font-bold text-stone-900 mb-1">
+                        <h2 className="text-2xl font-bold text-coffee-oil mb-1">
                           Order #{order.id}
                         </h2>
-                        <p className="text-sm text-stone-500">{formattedDate}</p>
+                        <p className="text-sm text-coffee-roman">{formattedDate}</p>
                       </div>
                       <OrderStatusBadge status={order.status} />
                     </div>
@@ -102,18 +102,18 @@ export default function OrdersPage() {
 
                       {/* Items Summary */}
                       <div className="mb-8">
-                        <h3 className="font-serif font-semibold text-stone-900 mb-4">Order Items</h3>
+                        <h3 className="font-serif font-semibold text-coffee-oil mb-4">Order Items</h3>
                         <div className="space-y-3">
                           {enrichedItems.map((item, idx) => (
                             <div
                               key={idx}
-                              className="flex justify-between items-center p-3 bg-amber-50/50 rounded-lg"
+                              className="flex justify-between items-center p-3 bg-coffee-cream/50 rounded-lg"
                             >
-                              <span className="text-stone-700">
+                              <span className="text-coffee-judge">
                                 <span className="font-medium">{item.name}</span>
-                                <span className="text-stone-500"> × {item.quantity}</span>
+                                <span className="text-coffee-roman"> × {item.quantity}</span>
                               </span>
-                              <span className="font-semibold text-stone-900">
+                              <span className="font-semibold text-coffee-oil">
                                 ${(
                                   parseFloat(item.price) * item.quantity
                                 ).toFixed(2)}
@@ -124,10 +124,10 @@ export default function OrdersPage() {
                       </div>
 
                       {/* Total and Check-in Button */}
-                      <div className="flex justify-between items-center border-t border-amber-100 pt-6">
+                      <div className="flex justify-between items-center border-t border-coffee-oyster pt-6">
                         <div>
-                          <p className="text-xs text-stone-600 mb-1">Total</p>
-                          <p className="text-2xl font-bold text-amber-800">
+                          <p className="text-xs text-coffee-roman mb-1">Total</p>
+                          <p className="text-2xl font-bold text-coffee-judge">
                             ${order.total_amount}
                           </p>
                         </div>
@@ -136,7 +136,7 @@ export default function OrdersPage() {
                           <button
                             onClick={() => handleCheckIn(order.id)}
                             disabled={isCheckingIn}
-                            className="bg-amber-800 hover:bg-amber-900 disabled:bg-stone-400 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition"
+                            className="bg-coffee-judge hover:bg-coffee-oil disabled:bg-stone-400 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition"
                           >
                             {isCheckingIn ? (
                               <>

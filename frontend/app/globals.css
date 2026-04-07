@@ -1,20 +1,338 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
-  h1,
-  h2,
-  h3 {
-    @apply font-serif;
+  :root {
+    --color-oil: #2D1E17;
+    --color-judge: #523F31;
+    --color-roman: #796254;
+    --color-oyster: #9D8A7C;
+    --color-cream: #F5F0E8;
+    --color-parchment: #EDE6D3;
+    --shadow-sm: 0 2px 4px rgba(45, 30, 23, 0.08);
+    --shadow-md: 0 4px 8px rgba(45, 30, 23, 0.12);
+    --shadow-lg: 0 8px 16px rgba(45, 30, 23, 0.15);
+    --shadow-xl: 0 12px 24px rgba(45, 30, 23, 0.18);
   }
 
   body {
-    @apply bg-amber-50 text-stone-900;
+    background-color: var(--color-cream);
+    background-image:
+      /* Fine paper fiber weave - horizontal */
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        rgba(157, 138, 124, 0.06) 0.5px,
+        transparent 1px
+      ),
+      /* Fine paper fiber weave - vertical */
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        rgba(121, 98, 84, 0.06) 0.5px,
+        transparent 1px
+      ),
+      /* Paper grain texture - diagonal weave */
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        rgba(157, 138, 124, 0.03) 1px,
+        transparent 2px
+      ),
+      /* Paper grain texture - opposite diagonal */
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        rgba(121, 98, 84, 0.03) 1px,
+        transparent 2px
+      ),
+      /* Organic paper irregularities - warm spots */
+      radial-gradient(ellipse 300px 250px at 10% 15%, rgba(82, 63, 49, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 350px 280px at 85% 30%, rgba(121, 98, 84, 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse 280px 300px at 40% 70%, rgba(157, 138, 124, 0.07) 0%, transparent 50%),
+      radial-gradient(ellipse 320px 260px at 70% 85%, rgba(82, 63, 49, 0.05) 0%, transparent 55%),
+      /* Paper age spots - subtle discoloration */
+      radial-gradient(ellipse 180px 150px at 20% 40%, rgba(157, 138, 124, 0.04) 0%, transparent 45%),
+      radial-gradient(ellipse 200px 180px at 75% 15%, rgba(121, 98, 84, 0.035) 0%, transparent 50%),
+      /* Vignette edge shadow - natural paper darkening */
+      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.06) 100%);
+    background-size:
+      2px 2px,
+      2px 2px,
+      4px 4px,
+      4px 4px,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100%;
+    background-attachment: fixed;
+    color: var(--color-oil);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    position: relative;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif), Georgia, serif;
+    color: var(--color-oil);
   }
 }
 
-@theme {
-  --font-serif: var(--font-serif), Georgia, serif;
-  --font-sans: var(--font-sans), system-ui, sans-serif;
+/* Paper texture utility class - applies to any element */
+@layer utilities {
+  .paper-texture-bg {
+    background-image:
+      /* Fine paper fiber weave - horizontal */
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        rgba(157, 138, 124, 0.06) 0.5px,
+        transparent 1px
+      ),
+      /* Fine paper fiber weave - vertical */
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        rgba(121, 98, 84, 0.06) 0.5px,
+        transparent 1px
+      ),
+      /* Paper grain texture - diagonal weave */
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        rgba(157, 138, 124, 0.03) 1px,
+        transparent 2px
+      ),
+      /* Paper grain texture - opposite diagonal */
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        rgba(121, 98, 84, 0.03) 1px,
+        transparent 2px
+      ),
+      /* Organic paper irregularities */
+      radial-gradient(ellipse 300px 250px at 10% 15%, rgba(82, 63, 49, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 350px 280px at 85% 30%, rgba(121, 98, 84, 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse 280px 300px at 40% 70%, rgba(157, 138, 124, 0.07) 0%, transparent 50%),
+      radial-gradient(ellipse 320px 260px at 70% 85%, rgba(82, 63, 49, 0.05) 0%, transparent 55%),
+      /* Paper age spots */
+      radial-gradient(ellipse 180px 150px at 20% 40%, rgba(157, 138, 124, 0.04) 0%, transparent 45%),
+      radial-gradient(ellipse 200px 180px at 75% 15%, rgba(121, 98, 84, 0.035) 0%, transparent 50%),
+      /* Vignette edge shadow */
+      radial-gradient(ellipse at center, transparent 0%, rgba(45, 30, 23, 0.06) 100%) !important;
+    background-size:
+      2px 2px,
+      2px 2px,
+      4px 4px,
+      4px 4px,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100% !important;
+    background-attachment: fixed !important;
+  }
+
+  .bg-coffee-texture {
+    background-image:
+      radial-gradient(ellipse 60px 50px at 15% 20%, rgba(82, 63, 49, 0.07) 60%, transparent 70%),
+      radial-gradient(ellipse 40px 35px at 75% 55%, rgba(121, 98, 84, 0.06) 60%, transparent 70%),
+      radial-gradient(ellipse 80px 70px at 85% 10%, rgba(45, 30, 23, 0.05) 60%, transparent 70%),
+      radial-gradient(ellipse 50px 45px at 30% 80%, rgba(157, 138, 124, 0.07) 60%, transparent 70%),
+      radial-gradient(ellipse 35px 30px at 60% 90%, rgba(82, 63, 49, 0.05) 60%, transparent 70%);
+  }
+
+  /* Section backgrounds with subtle paper texture */
+  .section-paper-bg {
+    background-color: var(--color-cream);
+    background-image:
+      /* Fine paper fiber weave */
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        rgba(157, 138, 124, 0.05) 0.5px,
+        transparent 1px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        rgba(121, 98, 84, 0.05) 0.5px,
+        transparent 1px
+      ),
+      /* Paper grain texture */
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        rgba(157, 138, 124, 0.02) 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        rgba(121, 98, 84, 0.02) 1px,
+        transparent 2px
+      ),
+      /* Subtle organic variations */
+      radial-gradient(ellipse 300px 250px at 10% 15%, rgba(82, 63, 49, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse 350px 280px at 85% 30%, rgba(121, 98, 84, 0.03) 0%, transparent 55%);
+    background-size:
+      2px 2px,
+      2px 2px,
+      4px 4px,
+      4px 4px,
+      100% 100%,
+      100% 100%;
+    background-attachment: fixed;
+  }
+
+  /* Card backgrounds with subtle texture */
+  .card-paper-bg {
+    background-color: var(--color-cream);
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        rgba(157, 138, 124, 0.04) 0.5px,
+        transparent 1px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        rgba(121, 98, 84, 0.04) 0.5px,
+        transparent 1px
+      ),
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        rgba(157, 138, 124, 0.015) 1px,
+        transparent 2px
+      );
+    background-size:
+      2px 2px,
+      2px 2px,
+      4px 4px;
+  }
+
+  /* Paper-embossed card shadows - subtle lifting effect */
+  .shadow-paper-sm {
+    box-shadow:
+      0 1px 2px rgba(45, 30, 23, 0.05),
+      0 2px 4px rgba(45, 30, 23, 0.06);
+  }
+
+  .shadow-paper-md {
+    box-shadow:
+      0 2px 4px rgba(45, 30, 23, 0.08),
+      0 4px 8px rgba(45, 30, 23, 0.1),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  }
+
+  .shadow-paper-lg {
+    box-shadow:
+      0 4px 8px rgba(45, 30, 23, 0.1),
+      0 8px 16px rgba(45, 30, 23, 0.12),
+      0 12px 24px rgba(45, 30, 23, 0.08),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+
+  .shadow-paper-xl {
+    box-shadow:
+      0 6px 12px rgba(45, 30, 23, 0.1),
+      0 12px 24px rgba(45, 30, 23, 0.12),
+      0 18px 36px rgba(45, 30, 23, 0.1),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  }
+
+  /* Floating effect with paper depth */
+  .shadow-paper-float {
+    box-shadow:
+      0 2px 4px rgba(45, 30, 23, 0.06),
+      0 4px 12px rgba(45, 30, 23, 0.1),
+      0 8px 20px rgba(45, 30, 23, 0.08);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .shadow-paper-float:hover {
+    box-shadow:
+      0 4px 8px rgba(45, 30, 23, 0.08),
+      0 8px 20px rgba(45, 30, 23, 0.12),
+      0 12px 28px rgba(45, 30, 23, 0.1);
+  }
+
+  /* Paper pressed effect (minimal shadow) */
+  .shadow-paper-pressed {
+    box-shadow:
+      0 0 0 1px rgba(45, 30, 23, 0.08),
+      0 1px 2px rgba(45, 30, 23, 0.04);
+  }
+
+  .border-editorial {
+    border-top: 2px solid var(--color-oil);
+    border-bottom: 1px solid var(--color-judge);
+  }
+
+  .font-handwritten {
+    font-family: var(--font-handwritten), cursive;
+  }
+
+  .text-coffee-oil {
+    color: var(--color-oil);
+  }
+
+  .text-coffee-judge {
+    color: var(--color-judge);
+  }
+
+  .text-coffee-roman {
+    color: var(--color-roman);
+  }
+
+  .text-coffee-oyster {
+    color: var(--color-oyster);
+  }
+
+  .bg-coffee-oil {
+    background-color: var(--color-oil);
+  }
+
+  .bg-coffee-judge {
+    background-color: var(--color-judge);
+  }
+
+  .bg-coffee-roman {
+    background-color: var(--color-roman);
+  }
+
+  .bg-coffee-oyster {
+    background-color: var(--color-oyster);
+  }
+
+  .bg-coffee-cream {
+    background-color: var(--color-cream);
+  }
+
+  .bg-coffee-parchment {
+    background-color: var(--color-parchment);
+  }
+
+  .border-coffee-oil {
+    border-color: var(--color-oil);
+  }
+
+  .border-coffee-judge {
+    border-color: var(--color-judge);
+  }
+
+  .border-coffee-roman {
+    border-color: var(--color-roman);
+  }
+
+  .border-coffee-oyster {
+    border-color: var(--color-oyster);
+  }
 }
