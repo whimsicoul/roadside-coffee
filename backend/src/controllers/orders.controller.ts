@@ -54,6 +54,19 @@ export class OrdersController {
       res.status(400).json({ error: error.message });
     }
   }
+
+  async checkInOrder(req: Request, res: Response) {
+    try {
+      const order = await ordersService.checkInOrder(
+        parseInt(req.params.id),
+        req.user!.id
+      );
+
+      res.status(200).json(order);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  }
 }
 
 export const ordersController = new OrdersController();

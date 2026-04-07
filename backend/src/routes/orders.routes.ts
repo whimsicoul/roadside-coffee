@@ -17,7 +17,7 @@ const createOrderSchema = z.object({
 });
 
 const updateStatusSchema = z.object({
-  status: z.enum(['pending', 'ready', 'completed']),
+  status: z.enum(['pending', 'arrived', 'ready', 'completed']),
 });
 
 router.get('/', (req, res) => ordersController.getOrders(req, res));
@@ -30,6 +30,10 @@ router.get('/:id', (req, res) => ordersController.getOrder(req, res));
 
 router.patch('/:id/status', validate(updateStatusSchema), (req, res) =>
   ordersController.updateOrderStatus(req, res)
+);
+
+router.post('/:id/checkin', (req, res) =>
+  ordersController.checkInOrder(req, res)
 );
 
 export default router;
