@@ -9,8 +9,9 @@ const config: Config = {
     extend: {
       fontFamily: {
         serif: ['var(--font-serif)', 'Georgia', 'serif'],
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-handwritten)', 'cursive'],
         handwritten: ['var(--font-handwritten)', 'cursive'],
+        display: ['var(--font-display)', 'cursive'],
       },
       colors: {
         coffee: {
