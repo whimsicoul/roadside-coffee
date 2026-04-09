@@ -67,4 +67,5 @@ model MenuItem {
   price       Decimal @db.Decimal(10, 2)
   description String?
   image_url   String?
+  category    String? // "hot" | "cold" | "food"
 }

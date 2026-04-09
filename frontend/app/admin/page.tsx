@@ -88,7 +88,6 @@ function AdminOrdersDashboard() {
 
       {visibleOrders.length === 0 && (
         <div className="card-paper-bg rounded-2xl border border-coffee-oyster p-12 text-center">
-          <div className="text-4xl mb-3">☕</div>
           <p className="text-coffee-roman font-medium">No orders in this view</p>
         </div>
       )}

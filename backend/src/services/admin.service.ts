@@ -4,20 +4,21 @@ import { Decimal } from '@prisma/client/runtime/library';
 export class AdminService {
   // ── Menu Management ──────────────────────────────────────────────────────
 
-  async createMenuItem(data: { name: string; price: number; description?: string }) {
+  async createMenuItem(data: { name: string; price: number; description?: string; category?: string }) {
     return prisma.menuItem.create({
       data: {
         name: data.name,
         price: new Decimal(data.price),
         description: data.description ?? null,
         image_url: null,
+        category: data.category ?? null,
       },
     });
   }
 
   async updateMenuItem(
     id: number,
-    data: { name?: string; price?: number; description?: string }
+    data: { name?: string; price?: number; description?: string; category?: string }
   ) {
     const item = await prisma.menuItem.findUnique({ where: { id } });
     if (!item) throw new Error('Menu item not found');
@@ -28,6 +29,7 @@ export class AdminService {
         ...(data.name !== undefined && { name: data.name }),
         ...(data.price !== undefined && { price: new Decimal(data.price) }),
         ...(data.description !== undefined && { description: data.description }),
+        ...(data.category !== undefined && { category: data.category }),
       },
     });
   }

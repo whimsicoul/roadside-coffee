@@ -5,7 +5,7 @@ import type { MenuItem } from '@/types';
 
 interface AdminMenuItemCardProps {
   item: MenuItem;
-  onSave: (id: number, payload: { name: string; price: number; description?: string }) => void;
+  onSave: (id: number, payload: { name: string; price: number; description?: string; category?: string }) => void;
   onDelete: (id: number, name: string) => void;
   isSaving?: boolean;
   isDeleting?: boolean;
@@ -21,6 +21,7 @@ export function AdminMenuItemCard({
   const [name, setName] = useState(item.name);
   const [price, setPrice] = useState(item.price);
   const [description, setDescription] = useState(item.description ?? '');
+  const [category, setCategory] = useState<string>(item.category ?? '');
   const [isDirty, setIsDirty] = useState(false);
 
   // Sync if item changes from outside (e.g. after save)
@@ -28,8 +29,9 @@ export function AdminMenuItemCard({
     setName(item.name);
     setPrice(item.price);
     setDescription(item.description ?? '');
+    setCategory(item.category ?? '');
     setIsDirty(false);
-  }, [item.name, item.price, item.description]);
+  }, [item.name, item.price, item.description, item.category]);
 
   const handleSave = () => {
     const parsedPrice = parseFloat(price);
@@ -38,6 +40,7 @@ export function AdminMenuItemCard({
       name: name.trim(),
       price: parsedPrice,
       description: description.trim() || undefined,
+      category: category || undefined,
     });
   };
 
@@ -71,6 +74,18 @@ export function AdminMenuItemCard({
           placeholder="Add a description…"
           title="Click to edit description"
         />
+        {/* Category */}
+        <select
+          className={`${inputBase} text-3xl text-coffee-roman`}
+          value={category}
+          onChange={e => { setCategory(e.target.value); setIsDirty(true); }}
+          title="Category"
+        >
+          <option value="">— category —</option>
+          <option value="hot">hot</option>
+          <option value="cold">cold</option>
+          <option value="food">food</option>
+        </select>
       </div>
 
       {/* Right: Price + admin controls */}
@@ -121,7 +136,7 @@ export function AdminMenuItemCard({
 }
 
 interface AdminAddItemRowProps {
-  onAdd: (payload: { name: string; price: number; description?: string }) => void;
+  onAdd: (payload: { name: string; price: number; description?: string; category?: string }) => void;
   isAdding?: boolean;
 }
 
@@ -130,6 +145,7 @@ export function AdminAddItemRow({ onAdd, isAdding }: AdminAddItemRowProps) {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
   const [error, setError] = useState('');
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -143,10 +159,11 @@ export function AdminAddItemRow({ onAdd, isAdding }: AdminAddItemRowProps) {
     if (!name.trim()) { setError('Name is required'); return; }
     if (isNaN(parsedPrice) || parsedPrice <= 0) { setError('Enter a valid price'); return; }
     setError('');
-    onAdd({ name: name.trim(), price: parsedPrice, description: description.trim() || undefined });
+    onAdd({ name: name.trim(), price: parsedPrice, description: description.trim() || undefined, category: category || undefined });
     setName('');
     setPrice('');
     setDescription('');
+    setCategory('');
     setExpanded(false);
   };
 
@@ -155,6 +172,7 @@ export function AdminAddItemRow({ onAdd, isAdding }: AdminAddItemRowProps) {
     setName('');
     setPrice('');
     setDescription('');
+    setCategory('');
     setError('');
   };
 
@@ -218,6 +236,19 @@ export function AdminAddItemRow({ onAdd, isAdding }: AdminAddItemRowProps) {
             onChange={e => setDescription(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleAdd()}
           />
+        </div>
+        <div className="w-28">
+          <label className="block text-xs font-medium text-coffee-roman mb-1">Category</label>
+          <select
+            className={inputCls}
+            value={category}
+            onChange={e => setCategory(e.target.value)}
+          >
+            <option value="">— none —</option>
+            <option value="hot">hot</option>
+            <option value="cold">cold</option>
+            <option value="food">food</option>
+          </select>
         </div>
         <div className="flex gap-2">
           <button

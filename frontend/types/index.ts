@@ -16,6 +16,7 @@ export interface MenuItem {
   price: string;
   description?: string | null;
   image_url?: string | null;
+  category?: 'hot' | 'cold' | 'food' | null;
 }
 
 export interface OrderItem {
@@ -69,12 +70,14 @@ export interface CreateMenuItemPayload {
   name: string;
   price: number;
   description?: string;
+  category?: 'hot' | 'cold' | 'food';
 }
 
 export interface UpdateMenuItemPayload {
   name?: string;
   price?: number;
   description?: string;
+  category?: 'hot' | 'cold' | 'food';
 }
 
 export interface CartItem {

@@ -79,7 +79,14 @@ export function Navbar() {
               >
                 Menu
               </Link>
-              {user.role !== 'admin' && (
+              {user.role === 'admin' ? (
+                <Link
+                  href="/admin"
+                  className={`text-3xl font-medium transition-colors ${isActive('/admin') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+                >
+                  Orders
+                </Link>
+              ) : (
                 <Link
                   href="/orders"
                   className={`text-3xl font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
@@ -93,14 +100,6 @@ export function Navbar() {
               >
                 Settings
               </Link>
-              {user.role === 'admin' && (
-                <Link
-                  href="/admin"
-                  className={`text-3xl font-medium transition-colors ${isActive('/admin') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
-                >
-                  Orders
-                </Link>
-              )}
               <button
                 onClick={handleLogout}
                 style={{
@@ -165,7 +164,14 @@ export function Navbar() {
               >
                 Menu
               </Link>
-              {user.role !== 'admin' && (
+              {user.role === 'admin' ? (
+                <Link
+                  href="/admin"
+                  className={`block text-3xl font-medium transition-colors ${isActive('/admin') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
+                >
+                  Orders
+                </Link>
+              ) : (
                 <Link
                   href="/orders"
                   className={`block text-3xl font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
@@ -179,14 +185,6 @@ export function Navbar() {
               >
                 Settings
               </Link>
-              {user.role === 'admin' && (
-                <Link
-                  href="/admin"
-                  className={`block text-3xl font-medium transition-colors ${isActive('/admin') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
-                >
-                  Orders
-                </Link>
-              )}
               <button
                 onClick={handleLogout}
                 style={{ mixBlendMode: 'multiply', opacity: 0.5, background: 'transparent', border: 'none' }}

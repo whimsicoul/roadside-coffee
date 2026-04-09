@@ -6,8 +6,8 @@ export class AdminController {
 
   async createMenuItem(req: Request, res: Response): Promise<void> {
     try {
-      const { name, price, description } = req.body;
-      const item = await adminService.createMenuItem({ name, price, description });
+      const { name, price, description, category } = req.body;
+      const item = await adminService.createMenuItem({ name, price, description, category });
       res.status(201).json(item);
     } catch (error: any) {
       res.status(400).json({ error: error.message });
@@ -16,11 +16,12 @@ export class AdminController {
 
   async updateMenuItem(req: Request, res: Response): Promise<void> {
     try {
-      const { name, price, description } = req.body;
+      const { name, price, description, category } = req.body;
       const item = await adminService.updateMenuItem(parseInt(req.params.id as string), {
         name,
         price,
         description,
+        category,
       });
       res.status(200).json(item);
     } catch (error: any) {
