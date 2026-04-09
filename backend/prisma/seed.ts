@@ -100,6 +100,28 @@ async function main() {
   } else {
     console.log(`Admin user already exists: ${adminEmail}`);
   }
+
+  // Seed test customer user
+  const testEmail = 'test@roadsidecoffee.com';
+  const existingTest = await prisma.user.findUnique({ where: { email: testEmail } });
+
+  if (!existingTest) {
+    const password_hash = await bcrypt.hash('TestUser123!', 12);
+    await prisma.user.create({
+      data: {
+        first_name: 'Test',
+        last_name: 'User',
+        email: testEmail,
+        password_hash,
+        phone: '555-0100',
+        license_plate: 'TEST-01',
+        role: 'customer',
+      },
+    });
+    console.log(`Created test customer: ${testEmail}`);
+  } else {
+    console.log(`Test customer already exists: ${testEmail}`);
+  }
 }
 
 main()

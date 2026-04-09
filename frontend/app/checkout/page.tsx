@@ -14,7 +14,7 @@ import {
 } from '@stripe/react-stripe-js';
 import Link from 'next/link';
 import { useUser } from '@/lib/hooks/useUser';
-import { useCreateGuestOrder } from '@/lib/hooks/useOrders';
+import { useCreateGuestOrder, useClaimGuestOrder } from '@/lib/hooks/useOrders';
 import { useCreatePaymentIntent } from '@/lib/hooks/usePayments';
 import { OrderSummary } from '@/components/OrderSummary';
 import { authStorage } from '@/lib/auth';
@@ -42,13 +42,15 @@ interface PaymentFormProps {
   cart: CartItem[];
   total: number;
   pickupSlot: string;
+  isLoggedIn: boolean;
   onBack: () => void;
 }
 
-function PaymentForm({ guestInfo, cart, total, pickupSlot, onBack }: PaymentFormProps) {
+function PaymentForm({ guestInfo, cart, total, pickupSlot, isLoggedIn, onBack }: PaymentFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const createGuestOrder = useCreateGuestOrder();
+  const claimGuestOrder = useClaimGuestOrder();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -91,9 +93,14 @@ function PaymentForm({ guestInfo, cart, total, pickupSlot, onBack }: PaymentForm
         stripe_payment_intent_id: paymentIntent.id,
       });
 
-      // Step 3: Persist guest token, clear cart, navigate to success
-      sessionStorage.setItem('rc_guest_token', result.guestToken);
-      sessionStorage.setItem('rc_guest_checkout', JSON.stringify(guestInfo));
+      // Step 3: If logged in, link the order to the user's account
+      if (isLoggedIn) {
+        await claimGuestOrder.mutateAsync(result.order.id);
+      } else {
+        sessionStorage.setItem('rc_guest_token', result.guestToken);
+        sessionStorage.setItem('rc_guest_checkout', JSON.stringify(guestInfo));
+      }
+
       sessionStorage.removeItem('cart');
       sessionStorage.removeItem('total');
 
@@ -555,6 +562,7 @@ function CheckoutContent() {
             cart={cart}
             total={total}
             pickupSlot={pickupSlot}
+            isLoggedIn={isLoggedIn}
             onBack={() => setStep('form')}
           />
         </Elements>
