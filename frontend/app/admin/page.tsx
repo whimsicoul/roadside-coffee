@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { AdminRoute } from '@/components/AdminRoute';
 import { OrderStatusBadge } from '@/components/OrderStatusBadge';
-import { useAdminOrders, useAdminUpdateOrderStatus, useAdminCreateMenuItem, useAdminUpdateMenuItem, useAdminDeleteMenuItem } from '@/lib/hooks/useAdmin';
-import { useMenu } from '@/lib/hooks/useMenu';
-import type { AdminOrder, MenuItem } from '@/types';
+import { useAdminOrders, useAdminUpdateOrderStatus } from '@/lib/hooks/useAdmin';
+import type { AdminOrder } from '@/types';
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -182,231 +181,9 @@ function AdminOrdersDashboard() {
   );
 }
 
-// ── Menu Manager ──────────────────────────────────────────────────────────
-
-function AdminMenuManager() {
-  const { data: menuItems, isLoading } = useMenu();
-  const { mutate: createItem, isPending: isCreating } = useAdminCreateMenuItem();
-  const { mutate: updateItem, isPending: isUpdating } = useAdminUpdateMenuItem();
-  const { mutate: deleteItem, isPending: isDeleting } = useAdminDeleteMenuItem();
-
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<{ name: string; price: string; description: string }>({ name: '', price: '', description: '' });
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [addForm, setAddForm] = useState<{ name: string; price: string; description: string }>({ name: '', price: '', description: '' });
-  const [addError, setAddError] = useState('');
-
-  const startEdit = (item: MenuItem) => {
-    setEditingId(item.id);
-    setEditForm({ name: item.name, price: item.price, description: item.description ?? '' });
-  };
-
-  const cancelEdit = () => setEditingId(null);
-
-  const saveEdit = (id: number) => {
-    const price = parseFloat(editForm.price);
-    if (!editForm.name.trim() || isNaN(price) || price <= 0) return;
-    updateItem(
-      { id, payload: { name: editForm.name.trim(), price, description: editForm.description.trim() || undefined } },
-      { onSuccess: () => setEditingId(null) }
-    );
-  };
-
-  const handleDelete = (id: number, name: string) => {
-    if (!window.confirm(`Delete "${name}" from the menu?`)) return;
-    deleteItem(id);
-  };
-
-  const handleAdd = () => {
-    const price = parseFloat(addForm.price);
-    if (!addForm.name.trim()) { setAddError('Name is required'); return; }
-    if (isNaN(price) || price <= 0) { setAddError('Enter a valid price'); return; }
-    setAddError('');
-    createItem(
-      { name: addForm.name.trim(), price, description: addForm.description.trim() || undefined },
-      {
-        onSuccess: () => {
-          setAddForm({ name: '', price: '', description: '' });
-          setShowAddForm(false);
-        },
-      }
-    );
-  };
-
-  if (isLoading) return (
-    <div className="flex justify-center py-20">
-      <div className="animate-spin h-8 w-8 border-4 border-coffee-judge border-t-transparent rounded-full" />
-    </div>
-  );
-
-  const inputCls = 'w-full px-3 py-1.5 rounded-lg border border-coffee-oyster bg-coffee-cream/60 text-coffee-oil text-sm focus:outline-none focus:border-coffee-judge focus:ring-1 focus:ring-coffee-judge/30 transition-colors';
-
-  return (
-    <div>
-      {/* Add Item Button */}
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={() => setShowAddForm(v => !v)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-coffee-judge text-white font-semibold text-sm hover:bg-coffee-oil transition-colors"
-          style={{ transition: 'background-color 180ms ease' }}
-        >
-          {showAddForm ? '✕ Cancel' : '+ Add Item'}
-        </button>
-      </div>
-
-      {/* Add Form */}
-      {showAddForm && (
-        <div className="card-paper-bg rounded-2xl border border-coffee-oyster p-5 mb-6" style={{ boxShadow: '0 2px 12px rgba(45,30,23,0.07)' }}>
-          <h3 className="font-serif font-bold text-coffee-oil text-lg mb-4">New Menu Item</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-            <div>
-              <label className="block text-xs font-medium text-coffee-roman mb-1">Name *</label>
-              <input
-                className={inputCls}
-                placeholder="e.g. Oat Latte"
-                value={addForm.name}
-                onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-coffee-roman mb-1">Price ($) *</label>
-              <input
-                className={inputCls}
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="5.00"
-                value={addForm.price}
-                onChange={e => setAddForm(f => ({ ...f, price: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-coffee-roman mb-1">Description</label>
-              <input
-                className={inputCls}
-                placeholder="Optional description"
-                value={addForm.description}
-                onChange={e => setAddForm(f => ({ ...f, description: e.target.value }))}
-              />
-            </div>
-          </div>
-          {addError && <p className="text-red-600 text-xs mb-2">{addError}</p>}
-          <button
-            onClick={handleAdd}
-            disabled={isCreating}
-            className="px-6 py-2 rounded-xl bg-coffee-judge hover:bg-coffee-oil text-white font-semibold text-sm transition-colors disabled:opacity-50"
-            style={{ transition: 'background-color 180ms ease' }}
-          >
-            {isCreating ? 'Adding…' : 'Add to Menu'}
-          </button>
-        </div>
-      )}
-
-      {/* Menu Table */}
-      <div className="card-paper-bg rounded-2xl border border-coffee-oyster overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(45,30,23,0.07)' }}>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-coffee-parchment border-b border-coffee-oyster">
-              <th className="text-left px-5 py-3 font-serif font-semibold text-coffee-oil">Name</th>
-              <th className="text-left px-4 py-3 font-serif font-semibold text-coffee-oil w-24">Price</th>
-              <th className="text-left px-4 py-3 font-serif font-semibold text-coffee-oil hidden sm:table-cell">Description</th>
-              <th className="px-4 py-3 w-32"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {(menuItems ?? []).map((item, i) => (
-              <tr
-                key={item.id}
-                className={`border-b border-coffee-oyster/40 last:border-0 ${i % 2 === 0 ? '' : 'bg-coffee-cream/30'}`}
-              >
-                {editingId === item.id ? (
-                  <>
-                    <td className="px-5 py-2">
-                      <input
-                        className={inputCls}
-                        value={editForm.name}
-                        onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
-                      />
-                    </td>
-                    <td className="px-4 py-2">
-                      <input
-                        className={inputCls}
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={editForm.price}
-                        onChange={e => setEditForm(f => ({ ...f, price: e.target.value }))}
-                      />
-                    </td>
-                    <td className="px-4 py-2 hidden sm:table-cell">
-                      <input
-                        className={inputCls}
-                        value={editForm.description}
-                        onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
-                      />
-                    </td>
-                    <td className="px-4 py-2">
-                      <div className="flex gap-2 justify-end">
-                        <button
-                          onClick={() => saveEdit(item.id)}
-                          disabled={isUpdating}
-                          className="px-3 py-1 rounded-lg bg-green-100 hover:bg-green-200 text-green-900 font-semibold text-xs transition-colors disabled:opacity-50"
-                        >
-                          {isUpdating ? '…' : 'Save'}
-                        </button>
-                        <button
-                          onClick={cancelEdit}
-                          className="px-3 py-1 rounded-lg bg-coffee-oyster/20 hover:bg-coffee-oyster/40 text-coffee-roman font-semibold text-xs transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td className="px-5 py-3 font-medium text-coffee-oil">{item.name}</td>
-                    <td className="px-4 py-3 text-coffee-judge font-semibold">${parseFloat(item.price).toFixed(2)}</td>
-                    <td className="px-4 py-3 text-coffee-roman hidden sm:table-cell">{item.description ?? <span className="italic text-coffee-oyster">—</span>}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2 justify-end">
-                        <button
-                          onClick={() => startEdit(item)}
-                          className="px-3 py-1 rounded-lg bg-coffee-oyster/20 hover:bg-coffee-oyster/40 text-coffee-roman font-semibold text-xs transition-colors"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.id, item.name)}
-                          disabled={isDeleting}
-                          className="px-3 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-xs transition-colors disabled:opacity-50"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {(menuItems ?? []).length === 0 && (
-          <div className="py-12 text-center text-coffee-roman">No menu items yet.</div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // ── Admin Page ────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
-  const [activeTab, setActiveTab] = useState<'orders' | 'menu'>('orders');
-  const { data: ordersData } = useAdminOrders({ refetchInterval: 30000 });
-
-  const activeOrderCount = (ordersData?.orders ?? []).filter(o => o.status !== 'completed').length;
-
   return (
     <AdminRoute>
       <div className="min-h-screen section-paper-bg">
@@ -414,41 +191,10 @@ export default function AdminPage() {
           {/* Page header */}
           <div className="mb-8">
             <h1 className="font-serif text-4xl font-bold text-coffee-oil mb-1">Admin Dashboard</h1>
-            <p className="text-coffee-roman">Manage orders and menu items</p>
+            <p className="text-coffee-roman">Manage orders</p>
           </div>
 
-          {/* Tabs */}
-          <div className="flex gap-1 mb-8 border-b border-coffee-oyster">
-            <button
-              onClick={() => setActiveTab('orders')}
-              className={`relative pb-3 px-1 mr-6 text-xl font-semibold transition-colors ${
-                activeTab === 'orders' ? 'text-coffee-judge' : 'text-coffee-roman hover:text-coffee-judge'
-              }`}
-            >
-              Live Orders
-              {activeOrderCount > 0 && (
-                <span className="ml-2 inline-flex items-center justify-center w-5 h-5 rounded-full bg-coffee-cappuccino text-white text-xs font-bold">
-                  {activeOrderCount}
-                </span>
-              )}
-              {activeTab === 'orders' && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-coffee-judge rounded-full" />
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('menu')}
-              className={`relative pb-3 px-1 text-xl font-semibold transition-colors ${
-                activeTab === 'menu' ? 'text-coffee-judge' : 'text-coffee-roman hover:text-coffee-judge'
-              }`}
-            >
-              Menu Management
-              {activeTab === 'menu' && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-coffee-judge rounded-full" />
-              )}
-            </button>
-          </div>
-
-          {activeTab === 'orders' ? <AdminOrdersDashboard /> : <AdminMenuManager />}
+          <AdminOrdersDashboard />
         </div>
       </div>
     </AdminRoute>

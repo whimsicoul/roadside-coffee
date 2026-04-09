@@ -79,12 +79,14 @@ export function Navbar() {
               >
                 Menu
               </Link>
-              <Link
-                href="/orders"
-                className={`text-3xl font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
-              >
-                My Orders
-              </Link>
+              {user.role !== 'admin' && (
+                <Link
+                  href="/orders"
+                  className={`text-3xl font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+                >
+                  My Orders
+                </Link>
+              )}
               <Link
                 href="/settings"
                 className={`text-3xl font-medium transition-colors ${isActive('/settings') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
@@ -96,7 +98,7 @@ export function Navbar() {
                   href="/admin"
                   className={`text-3xl font-medium transition-colors ${isActive('/admin') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
                 >
-                  Admin
+                  Orders
                 </Link>
               )}
               <button
@@ -163,12 +165,14 @@ export function Navbar() {
               >
                 Menu
               </Link>
-              <Link
-                href="/orders"
-                className={`block text-3xl font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
-              >
-                My Orders
-              </Link>
+              {user.role !== 'admin' && (
+                <Link
+                  href="/orders"
+                  className={`block text-3xl font-medium transition-colors ${isActive('/orders') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
+                >
+                  My Orders
+                </Link>
+              )}
               <Link
                 href="/settings"
                 className={`block text-3xl font-medium transition-colors ${isActive('/settings') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
@@ -180,7 +184,7 @@ export function Navbar() {
                   href="/admin"
                   className={`block text-3xl font-medium transition-colors ${isActive('/admin') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
                 >
-                  Admin
+                  Orders
                 </Link>
               )}
               <button
