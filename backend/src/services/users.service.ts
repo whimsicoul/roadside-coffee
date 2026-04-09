@@ -12,6 +12,7 @@ export class UsersService {
         phone: true,
         license_plate: true,
         subscription_status: true,
+        role: true,
         created_at: true,
       },
     });
@@ -43,6 +44,7 @@ export class UsersService {
         phone: true,
         license_plate: true,
         subscription_status: true,
+        role: true,
         created_at: true,
       },
     });

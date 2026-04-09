@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -75,9 +76,30 @@ async function main() {
     ],
   });
 
-  console.log(
-    `Seeded ${menuItems.count} menu items`
-  );
+  console.log(`Seeded ${menuItems.count} menu items`);
+
+  // Seed admin user
+  // Set ADMIN_EMAIL and ADMIN_PASSWORD in .env before running in production
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@roadsidecoffee.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'ChangeMe123!';
+
+  const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
+
+  if (!existingAdmin) {
+    const password_hash = await bcrypt.hash(adminPassword, 12);
+    await prisma.user.create({
+      data: {
+        first_name: 'Admin',
+        last_name: 'User',
+        email: adminEmail,
+        password_hash,
+        role: 'admin',
+      },
+    });
+    console.log(`Created admin user: ${adminEmail}`);
+  } else {
+    console.log(`Admin user already exists: ${adminEmail}`);
+  }
 }
 
 main()

@@ -16,6 +16,7 @@ model User {
   license_plate       String?
   password_hash       String
   subscription_status String         @default("inactive")
+  role                String         @default("customer")  // "customer" | "admin"
   created_at          DateTime       @default(now())
 
   orders              Order[]

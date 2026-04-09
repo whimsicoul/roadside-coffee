@@ -30,4 +30,14 @@ export const authStorage = {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
   },
+
+  getRole: (): 'customer' | 'admin' | null => {
+    if (typeof window === 'undefined') return null;
+    const user = authStorage.getUser();
+    return (user?.role as 'customer' | 'admin') ?? null;
+  },
+
+  isAdmin: (): boolean => {
+    return authStorage.getRole() === 'admin';
+  },
 };

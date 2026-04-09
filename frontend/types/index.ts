@@ -6,6 +6,7 @@ export interface User {
   phone?: string | null;
   license_plate?: string | null;
   subscription_status: 'active' | 'inactive';
+  role: 'customer' | 'admin';
   created_at: string;
 }
 
@@ -49,8 +50,31 @@ export interface Subscription {
 }
 
 export interface AuthResponse {
-  user: Pick<User, 'id' | 'first_name' | 'last_name' | 'email'>;
+  user: Pick<User, 'id' | 'first_name' | 'last_name' | 'email' | 'role'>;
   token: string;
+}
+
+export interface AdminOrder extends Order {
+  user: Pick<User, 'id' | 'first_name' | 'last_name' | 'email'> | null;
+}
+
+export interface AdminOrdersResponse {
+  orders: AdminOrder[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface CreateMenuItemPayload {
+  name: string;
+  price: number;
+  description?: string;
+}
+
+export interface UpdateMenuItemPayload {
+  name?: string;
+  price?: number;
+  description?: string;
 }
 
 export interface CartItem {

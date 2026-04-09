@@ -28,11 +28,12 @@ export class AuthService {
         first_name: true,
         last_name: true,
         email: true,
+        role: true,
         created_at: true,
       },
     });
 
-    const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user.id, role: 'customer' }, env.JWT_SECRET, {
       expiresIn: '24h',
     });
 
@@ -54,7 +55,7 @@ export class AuthService {
       throw new Error('Invalid email or password');
     }
 
-    const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user.id, role: user.role }, env.JWT_SECRET, {
       expiresIn: '24h',
     });
 
@@ -64,6 +65,7 @@ export class AuthService {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        role: user.role,
       },
       token,
     };
