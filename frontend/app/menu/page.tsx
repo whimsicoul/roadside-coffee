@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMenu } from '@/lib/hooks/useMenu';
 import { MenuItemCard } from '@/components/MenuItemCard';
+import { AdminMenuItemCard, AdminAddItemRow } from '@/components/AdminMenuItemCard';
 import { OrderSummary } from '@/components/OrderSummary';
+import { useAdminUpdateMenuItem, useAdminDeleteMenuItem, useAdminCreateMenuItem } from '@/lib/hooks/useAdmin';
+import { authStorage } from '@/lib/auth';
 import type { MenuItem, CartItem } from '@/types';
 
 // Animation styles for the header image
@@ -51,6 +54,29 @@ export default function MenuPage() {
   const router = useRouter();
   const { data: menuItems = [], isLoading, error } = useMenu();
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Detect admin on client side only (authStorage uses localStorage)
+  useEffect(() => {
+    setIsAdmin(authStorage.isAdmin());
+  }, []);
+
+  const { mutate: updateItem, isPending: isUpdating } = useAdminUpdateMenuItem();
+  const { mutate: deleteItem, isPending: isDeleting } = useAdminDeleteMenuItem();
+  const { mutate: createItem, isPending: isCreating } = useAdminCreateMenuItem();
+
+  const handleAdminSave = (id: number, payload: { name: string; price: number; description?: string }) => {
+    updateItem({ id, payload });
+  };
+
+  const handleAdminDelete = (id: number, name: string) => {
+    if (!window.confirm(`Remove "${name}" from the menu?`)) return;
+    deleteItem(id);
+  };
+
+  const handleAdminAdd = (payload: { name: string; price: number; description?: string }) => {
+    createItem(payload);
+  };
 
   const handleAddToCart = (menuItem: MenuItem) => {
     setCart((prev) => {
@@ -262,10 +288,19 @@ export default function MenuPage() {
                     </div>
 
                     {/* Menu Items */}
-                    <div className="divide-y divide-coffee-oyster/30" style={{ borderRadius: '0 0 8px 8px', overflow: 'hidden' }}>
+                    <div className="divide-y divide-coffee-oyster/30" style={{ borderRadius: isAdmin ? '0' : '0 0 8px 8px', overflow: 'hidden' }}>
                       {hotItems.map((item) => {
                         const cartItem = cart.find((c) => c.menuItem.id === item.id);
-                        return (
+                        return isAdmin ? (
+                          <AdminMenuItemCard
+                            key={item.id}
+                            item={item}
+                            onSave={handleAdminSave}
+                            onDelete={handleAdminDelete}
+                            isSaving={isUpdating}
+                            isDeleting={isDeleting}
+                          />
+                        ) : (
                           <MenuItemCard
                             key={item.id}
                             item={item}
@@ -276,6 +311,9 @@ export default function MenuPage() {
                         );
                       })}
                     </div>
+                    {isAdmin && (
+                      <AdminAddItemRow onAdd={handleAdminAdd} isAdding={isCreating} />
+                    )}
                   </div>
                 )}
 
@@ -366,7 +404,16 @@ export default function MenuPage() {
                     <div className="divide-y divide-coffee-oyster/30 relative z-10">
                       {coldItems.map((item) => {
                         const cartItem = cart.find((c) => c.menuItem.id === item.id);
-                        return (
+                        return isAdmin ? (
+                          <AdminMenuItemCard
+                            key={item.id}
+                            item={item}
+                            onSave={handleAdminSave}
+                            onDelete={handleAdminDelete}
+                            isSaving={isUpdating}
+                            isDeleting={isDeleting}
+                          />
+                        ) : (
                           <MenuItemCard
                             key={item.id}
                             item={item}
@@ -377,6 +424,9 @@ export default function MenuPage() {
                         );
                       })}
                     </div>
+                    {isAdmin && (
+                      <AdminAddItemRow onAdd={handleAdminAdd} isAdding={isCreating} />
+                    )}
                   </div>
                 )}
               </div>
