@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../api';
-import type { Order, OrderItem } from '@/types';
+import type { Order, OrderItem, GuestOrderPayload, GuestOrderResponse } from '@/types';
 
 export function useOrders(options?: { refetchInterval?: number }) {
   return useQuery({
@@ -33,6 +33,28 @@ export function useCreateOrder() {
       ready_time?: string;
     }) => {
       const { data } = await api.post<Order>('/orders', payload);
+      return data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['orders'] });
+    },
+  });
+}
+
+export function useCreateGuestOrder() {
+  return useMutation({
+    mutationFn: async (payload: GuestOrderPayload) => {
+      const { data } = await api.post<GuestOrderResponse>('/orders/guest', payload);
+      return data;
+    },
+  });
+}
+
+export function useClaimGuestOrder() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (orderId: number) => {
+      const { data } = await api.post<Order>(`/orders/${orderId}/claim`);
       return data;
     },
     onSuccess: () => {

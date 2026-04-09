@@ -117,27 +117,34 @@ export default function MenuPage() {
   return (
     <div className="min-h-screen section-paper-bg">
       <style>{imageAnimationStyles}</style>
-      {/* Hero Section */}
-      <div className="section-paper-bg px-8 py-32 mb-24 relative overflow-hidden">
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-8xl mb-8 text-coffee-oil leading-tight">Good coffee, on the road</h1>
-          <p className="text-5xl text-coffee-judge mb-16 max-w-2xl mx-auto leading-relaxed">Order ahead and we'll have it ready when you arrive</p>
-
-          {/* Metadata panels */}
-          <div className="flex flex-col sm:flex-row justify-center gap-6 mt-16 flex-wrap relative z-20">
-            <div className="card-elevated shadow-refined-sm rounded px-10 py-8 border border-coffee-oyster">
-              <div className="text-xl font-semibold text-coffee-roman uppercase tracking-wider">Pickup Time</div>
-              <div className="text-3xl text-coffee-oil font-semibold mt-3">5–10 min</div>
-            </div>
-            <div className="card-elevated shadow-refined-sm rounded px-10 py-8 border border-coffee-oyster">
-              <div className="text-xl font-semibold text-coffee-roman uppercase tracking-wider">Quality</div>
-              <div className="text-3xl text-coffee-oil font-semibold mt-3">Premium Roast</div>
-            </div>
-            <div className="card-elevated shadow-refined-sm rounded px-10 py-8 border border-coffee-oyster">
-              <div className="text-xl font-semibold text-coffee-roman uppercase tracking-wider">Specialty</div>
-              <div className="text-3xl text-coffee-oil font-semibold mt-3">Artisan Crafted</div>
-            </div>
-          </div>
+      {/* Logo Header */}
+      <div
+        className="flex flex-col items-center justify-center"
+        style={{ paddingTop: '3.5rem', paddingBottom: '3rem' }}
+      >
+        <div
+          style={{
+            width: '260px',
+            height: '260px',
+            borderRadius: '50%',
+            overflow: 'hidden',
+            boxShadow: '0 8px 40px rgba(45, 30, 23, 0.22), 0 2px 10px rgba(45, 30, 23, 0.12)',
+            flexShrink: 0,
+          }}
+        >
+          <img
+            src="/roadside-coffee-logo.png"
+            alt="Roadside Coffee"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+              display: 'block',
+              transform: 'scale(1.04)',
+              mixBlendMode: 'multiply',
+            }}
+          />
         </div>
       </div>
 

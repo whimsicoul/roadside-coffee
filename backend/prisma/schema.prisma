@@ -24,17 +24,25 @@ model User {
 
 model Order {
   id           Int       @id @default(autoincrement())
-  user_id      Int
+  user_id      Int?
   items        Json                           // JSONB in PostgreSQL
   total_amount Decimal   @db.Decimal(10, 2)
-  status       String    @default("pending")  // pending | ready | completed
+  status       String    @default("pending")  // pending | arrived | ready | completed
   created_at   DateTime  @default(now())
   ready_time   DateTime?
 
-  user         User      @relation(fields: [user_id], references: [id])
+  guest_first_name          String?
+  guest_last_name           String?
+  guest_email               String?
+  guest_phone               String?
+  guest_license_plate       String?
+  stripe_payment_intent_id  String?
+
+  user         User?     @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
   @@index([status])
+  @@index([guest_email])
 }
 
 model Subscription {

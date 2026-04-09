@@ -1,29 +1,23 @@
 import { Decimal } from '@prisma/client/runtime/library';
 import { prisma } from '../lib/prisma';
+import { paymentsService } from './payments.service';
 
 interface OrderItem {
   menu_item_id: number;
   quantity: number;
 }
 
+interface GuestInfo {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  license_plate: string;
+}
+
 export class OrdersService {
-  async createOrder(
-    userId: number,
-    items: OrderItem[],
-    total_amount: number,
-    ready_time?: Date
-  ) {
-    // Verify user exists
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    // Enrich items with menu item details
-    const enrichedItems = await Promise.all(
+  private async enrichItems(items: OrderItem[]) {
+    return Promise.all(
       items.map(async (item) => {
         const menuItem = await prisma.menuItem.findUnique({
           where: { id: item.menu_item_id },
@@ -41,6 +35,24 @@ export class OrdersService {
         };
       })
     );
+  }
+
+  async createOrder(
+    userId: number,
+    items: OrderItem[],
+    total_amount: number,
+    ready_time?: Date
+  ) {
+    // Verify user exists
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const enrichedItems = await this.enrichItems(items);
 
     const order = await prisma.order.create({
       data: {
@@ -53,6 +65,55 @@ export class OrdersService {
     });
 
     return order;
+  }
+
+  async createGuestOrder(
+    guestInfo: GuestInfo,
+    items: OrderItem[],
+    total_amount: number,
+    stripe_payment_intent_id: string,
+    ready_time?: Date
+  ) {
+    // Verify payment succeeded before writing the order
+    const paid = await paymentsService.verifyPaymentIntent(stripe_payment_intent_id);
+    if (!paid) {
+      throw new Error('Payment has not been completed');
+    }
+
+    const enrichedItems = await this.enrichItems(items);
+
+    const order = await prisma.order.create({
+      data: {
+        user_id: null,
+        items: enrichedItems,
+        total_amount: new Decimal(total_amount),
+        status: 'pending',
+        ready_time: ready_time ? new Date(ready_time) : null,
+        guest_first_name: guestInfo.first_name,
+        guest_last_name: guestInfo.last_name,
+        guest_email: guestInfo.email,
+        guest_phone: guestInfo.phone,
+        guest_license_plate: guestInfo.license_plate,
+        stripe_payment_intent_id,
+      },
+    });
+
+    return order;
+  }
+
+  async linkGuestOrderToUser(orderId: number, userId: number) {
+    const order = await prisma.order.findFirst({
+      where: { id: orderId, user_id: null },
+    });
+
+    if (!order) {
+      throw new Error('Guest order not found');
+    }
+
+    return prisma.order.update({
+      where: { id: orderId },
+      data: { user_id: userId },
+    });
   }
 
   async getOrdersByUser(userId: number) {

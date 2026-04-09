@@ -10,6 +10,8 @@ const registerSchema = z.object({
   last_name: z.string().min(1),
   email: z.string().email(),
   password: z.string().min(8),
+  phone: z.string().optional(),
+  license_plate: z.string().optional(),
 });
 
 const loginSchema = z.object({

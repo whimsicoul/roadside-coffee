@@ -8,7 +8,9 @@ export class AuthService {
     first_name: string,
     last_name: string,
     email: string,
-    password: string
+    password: string,
+    phone?: string,
+    license_plate?: string
   ) {
     const password_hash = await bcrypt.hash(password, 12);
 
@@ -18,6 +20,8 @@ export class AuthService {
         last_name,
         email,
         password_hash,
+        phone: phone ?? null,
+        license_plate: license_plate ?? null,
       },
       select: {
         id: true,

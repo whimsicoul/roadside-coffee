@@ -4,13 +4,15 @@ import { authService } from '../services/auth.service';
 export class AuthController {
   async register(req: Request, res: Response) {
     try {
-      const { first_name, last_name, email, password } = req.body;
+      const { first_name, last_name, email, password, phone, license_plate } = req.body;
 
       const result = await authService.register(
         first_name,
         last_name,
         email,
-        password
+        password,
+        phone,
+        license_plate
       );
 
       res.status(201).json(result);

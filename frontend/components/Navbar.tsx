@@ -19,8 +19,8 @@ function CoinLogo() {
         src="/roadside-coffee-logo.png"
         alt="Roadside Coffee logo"
         style={{
-          width: '110px',
-          height: '110px',
+          width: '72px',
+          height: '72px',
           objectFit: 'contain',
           mixBlendMode: 'multiply',
           display: 'block',
@@ -49,31 +49,24 @@ export function Navbar() {
   };
 
   return (
-    <nav className="bg-coffee-cream border-b border-coffee-oyster shadow-refined-sm" style={{ paddingTop: '4px' }}>
-      <div className="max-w-7xl mx-auto px-8 flex items-center justify-between gap-6" style={{ paddingTop: '32px', paddingBottom: '32px' }}>
-        {/* Brand */}
-        <div className="flex items-center gap-4 flex-shrink-0">
-          <CoinLogo />
-          <Link
-            href="/menu"
-            className="text-5xl font-semibold text-coffee-oil hover:text-coffee-judge transition-colors"
-          >
-            Roadside Coffee
-          </Link>
-        </div>
+    <div className="relative" style={{ background: 'transparent' }}>
+      <div className="max-w-7xl mx-auto px-8 flex items-start justify-between gap-6" style={{ paddingTop: '20px', paddingBottom: '12px' }}>
+        {/* Spacer to keep auth links right-aligned */}
+        <div />
 
         {/* Mobile menu button */}
         <button
-          className="md:hidden p-2 text-coffee-oil hover:text-coffee-judge transition-colors"
+          className="md:hidden p-2 transition-opacity"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
+          style={{ mixBlendMode: 'multiply', opacity: 0.55 }}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-coffee-oil" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
 
-        {/* Desktop: nav links + coin */}
+        {/* Desktop: nav links */}
         <div className="hidden md:flex items-center gap-10">
           {isLoading ? (
             <div className="h-6 w-32 rounded bg-coffee-oyster animate-pulse" />
@@ -100,7 +93,17 @@ export function Navbar() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster/10 px-6 py-3 rounded text-2xl font-medium transition-colors"
+                style={{
+                  mixBlendMode: 'multiply',
+                  background: 'transparent',
+                  border: 'none',
+                  letterSpacing: '0.06em',
+                  opacity: 0.55,
+                  transition: 'opacity 220ms ease',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.85'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.55'; }}
+                className="text-coffee-oil text-2xl font-medium cursor-pointer"
               >
                 Logout
               </button>
@@ -109,28 +112,43 @@ export function Navbar() {
             <>
               <Link
                 href="/login"
-                className="text-3xl font-medium text-coffee-oil hover:text-coffee-judge transition-colors"
+                style={{
+                  mixBlendMode: 'multiply',
+                  letterSpacing: '0.06em',
+                  opacity: 0.5,
+                  transition: 'opacity 220ms ease',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.85'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.5'; }}
+                className="text-3xl font-medium text-coffee-oil"
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="bg-coffee-judge text-white hover:bg-coffee-oil px-6 py-3 rounded text-2xl font-medium transition-colors"
+                style={{
+                  mixBlendMode: 'multiply',
+                  letterSpacing: '0.06em',
+                  opacity: 0.5,
+                  transition: 'opacity 220ms ease',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.85'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.5'; }}
+                className="text-3xl font-medium text-coffee-oil"
               >
                 Register
               </Link>
             </>
           )}
-
         </div>
       </div>
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-coffee-roman bg-coffee-cream px-6 py-6 space-y-4">
+        <div className="md:hidden px-6 py-6 space-y-4" style={{ background: 'transparent' }}>
           {user ? (
             <>
-              <p className="text-3xl font-medium text-coffee-judge">Welcome, {user.first_name}</p>
+              <p className="text-3xl font-medium text-coffee-judge" style={{ mixBlendMode: 'multiply', opacity: 0.7 }}>Welcome, {user.first_name}</p>
               <Link
                 href="/menu"
                 className={`block text-3xl font-medium transition-colors ${isActive('/menu') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
@@ -151,7 +169,8 @@ export function Navbar() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="w-full text-left border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster px-6 py-3 rounded-lg text-2xl font-medium transition-colors"
+                style={{ mixBlendMode: 'multiply', opacity: 0.5, background: 'transparent', border: 'none' }}
+                className="text-left text-coffee-oil text-2xl font-medium cursor-pointer"
               >
                 Logout
               </button>
@@ -160,13 +179,15 @@ export function Navbar() {
             <>
               <Link
                 href="/login"
-                className="block text-3xl font-medium text-coffee-oil hover:text-coffee-judge transition-colors"
+                style={{ mixBlendMode: 'multiply', opacity: 0.5 }}
+                className="block text-3xl font-medium text-coffee-oil"
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="block border border-coffee-oil text-coffee-oil hover:bg-coffee-oyster px-6 py-3 rounded-lg text-2xl font-medium transition-colors text-center"
+                style={{ mixBlendMode: 'multiply', opacity: 0.5 }}
+                className="block text-3xl font-medium text-coffee-oil"
               >
                 Register
               </Link>
@@ -174,6 +195,6 @@ export function Navbar() {
           )}
         </div>
       )}
-    </nav>
+    </div>
   );
 }
