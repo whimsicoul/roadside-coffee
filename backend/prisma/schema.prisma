@@ -40,16 +40,22 @@ model Order {
   guest_license_plate       String?
   stripe_payment_intent_id  String?
 
+  subscription_id  Int?
+  subscription     Subscription? @relation(fields: [subscription_id], references: [id], onDelete: SetNull)
+
   user         User?     @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
   @@index([status])
   @@index([guest_email])
+  @@index([subscription_id])
 }
 
 model Subscription {
   id               Int      @id @default(autoincrement())
   user_id          Int
+  tier             String   @default("drink")  // "drink" | "combo"
+  pickup_time      String   @default("08:00")  // "HH:MM" local time
   start_date       DateTime
   end_date         DateTime
   weekly_allowance Decimal  @db.Decimal(10, 2)
@@ -57,6 +63,7 @@ model Subscription {
   default_items    Json?    // For automated daily order generation
 
   user             User     @relation(fields: [user_id], references: [id])
+  orders           Order[]
 
   @@unique([user_id])
   @@index([end_date])

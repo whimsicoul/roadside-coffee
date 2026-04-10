@@ -109,6 +109,100 @@ export class AdminService {
 
     return prisma.order.update({ where: { id }, data: { status } });
   }
+
+  // ── Subscription Management ──────────────────────────────────────────────
+
+  async getAdminSubscriptions() {
+    const now = new Date();
+
+    const subscriptions = await prisma.subscription.findMany({
+      where: {
+        end_date: { gte: now },
+      },
+      include: {
+        user: {
+          select: { id: true, first_name: true, last_name: true, email: true },
+        },
+      },
+      orderBy: { start_date: 'asc' },
+    });
+
+    // Fetch all relevant menu items for projecting upcoming orders
+    const allMenuItems = await prisma.menuItem.findMany();
+    const menuMap = new Map(allMenuItems.map(item => [item.id, item]));
+
+    const DAILY_COST: Record<string, number> = { drink: 5, combo: 9 };
+
+    const subscriptionsWithUpcoming = subscriptions.map(sub => {
+      const upcoming: Array<{
+        date: string;
+        items: Array<{ menu_item_id: number; name: string; price: string; quantity: number }>;
+        total_amount: number;
+        pickup_time: string;
+        subscription_id: number;
+      }> = [];
+
+      if (sub.default_items && Array.isArray(sub.default_items)) {
+        const defaultItems = sub.default_items as Array<{ menu_item_id: number; quantity: number }>;
+        const dailyCost = DAILY_COST[sub.tier] ?? 5;
+        const weeklyAllowance = Number(sub.weekly_allowance);
+
+        // Track projected weekly spend (Mon–Sun windows)
+        // Start from tomorrow to project future orders
+        let weeklyProjected = 0;
+        let weekWindowStart: Date | null = null;
+
+        for (let i = 1; i <= 7; i++) {
+          const day = new Date(now);
+          day.setDate(day.getDate() + i);
+          day.setHours(0, 0, 0, 0);
+
+          // Don't project past the subscription end date
+          if (day > sub.end_date) break;
+
+          // Reset weekly projected spend on a new Mon–Sun window
+          const dayOfWeek = day.getDay(); // 0=Sun, 1=Mon
+          if (dayOfWeek === 1 || weekWindowStart === null) {
+            // New week
+            weeklyProjected = 0;
+            weekWindowStart = day;
+          }
+
+          if (weeklyProjected + dailyCost > weeklyAllowance) continue;
+
+          const projectedItems = defaultItems
+            .map(item => {
+              const menuItem = menuMap.get(item.menu_item_id);
+              if (!menuItem) return null;
+              return {
+                menu_item_id: item.menu_item_id,
+                name: menuItem.name,
+                price: menuItem.price.toString(),
+                quantity: item.quantity,
+              };
+            })
+            .filter((x): x is NonNullable<typeof x> => x !== null);
+
+          upcoming.push({
+            date: day.toISOString().slice(0, 10),
+            items: projectedItems,
+            total_amount: dailyCost,
+            pickup_time: sub.pickup_time,
+            subscription_id: sub.id,
+          });
+
+          weeklyProjected += dailyCost;
+        }
+      }
+
+      return {
+        ...sub,
+        upcoming,
+      };
+    });
+
+    return { subscriptions: subscriptionsWithUpcoming, total: subscriptionsWithUpcoming.length };
+  }
 }
 
 export const adminService = new AdminService();

@@ -1,6 +1,24 @@
 import { Request, Response } from 'express';
 import { subscriptionsService } from '../services/subscriptions.service';
 
+function computeEndDate(duration: string): Date {
+  const end = new Date();
+  switch (duration) {
+    case '1w':
+      end.setDate(end.getDate() + 7);
+      break;
+    case '1m':
+      end.setMonth(end.getMonth() + 1);
+      break;
+    case '3m':
+      end.setMonth(end.getMonth() + 3);
+      break;
+    default:
+      end.setDate(end.getDate() + 7);
+  }
+  return end;
+}
+
 export class SubscriptionsController {
   async getSubscription(req: Request, res: Response) {
     try {
@@ -21,14 +39,17 @@ export class SubscriptionsController {
 
   async createSubscription(req: Request, res: Response) {
     try {
-      const { start_date, end_date, weekly_allowance, default_items } =
-        req.body;
+      const { tier, pickup_time, duration, default_items } = req.body;
+
+      const start_date = new Date();
+      const end_date = computeEndDate(duration);
 
       const subscription = await subscriptionsService.createSubscription(
         req.user!.id,
-        new Date(start_date),
-        new Date(end_date),
-        weekly_allowance,
+        start_date,
+        end_date,
+        tier,
+        pickup_time,
         default_items
       );
 
@@ -40,17 +61,11 @@ export class SubscriptionsController {
 
   async updateSubscription(req: Request, res: Response) {
     try {
-      const { start_date, end_date, weekly_allowance, default_items } =
-        req.body;
+      const { tier, pickup_time, default_items } = req.body;
 
       const subscription = await subscriptionsService.updateSubscription(
         req.user!.id,
-        {
-          start_date: start_date ? new Date(start_date) : undefined,
-          end_date: end_date ? new Date(end_date) : undefined,
-          weekly_allowance,
-          default_items,
-        }
+        { tier, pickup_time, default_items }
       );
 
       res.status(200).json(subscription);

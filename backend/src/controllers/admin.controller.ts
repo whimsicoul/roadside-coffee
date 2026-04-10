@@ -67,6 +67,17 @@ export class AdminController {
       res.status(httpStatus).json({ error: error.message });
     }
   }
+
+  // ── Subscriptions ────────────────────────────────────────────────────────
+
+  async getSubscriptions(req: Request, res: Response): Promise<void> {
+    try {
+      const result = await adminService.getAdminSubscriptions();
+      res.status(200).json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
 
 export const adminController = new AdminController();

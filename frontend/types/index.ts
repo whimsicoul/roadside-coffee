@@ -38,16 +38,46 @@ export interface Order {
   guest_phone?: string | null;
   guest_license_plate?: string | null;
   stripe_payment_intent_id?: string | null;
+  subscription_id?: number | null;
 }
 
 export interface Subscription {
   id: number;
   user_id: number;
+  tier: 'drink' | 'combo';
+  pickup_time: string;
   start_date: string;
   end_date: string;
   weekly_allowance: string;
   used_amount: string;
   default_items?: OrderItem[] | null;
+}
+
+export interface ProjectedOrder {
+  date: string;
+  items: Array<{ menu_item_id: number; name: string; price: string; quantity: number }>;
+  total_amount: number;
+  pickup_time: string;
+  subscription_id: number;
+}
+
+export interface AdminSubscription {
+  id: number;
+  user_id: number;
+  tier: 'drink' | 'combo';
+  pickup_time: string;
+  start_date: string;
+  end_date: string;
+  weekly_allowance: string;
+  used_amount: string;
+  default_items?: OrderItem[] | null;
+  user: Pick<User, 'id' | 'first_name' | 'last_name' | 'email'>;
+  upcoming: ProjectedOrder[];
+}
+
+export interface AdminSubscriptionsResponse {
+  subscriptions: AdminSubscription[];
+  total: number;
 }
 
 export interface AuthResponse {

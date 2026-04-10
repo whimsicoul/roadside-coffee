@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../api';
 import type {
   AdminOrdersResponse,
+  AdminSubscriptionsResponse,
   MenuItem,
   CreateMenuItemPayload,
   UpdateMenuItemPayload,
@@ -34,6 +35,19 @@ export function useAdminUpdateOrderStatus() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin', 'orders'] });
     },
+  });
+}
+
+// ── Subscriptions ────────────────────────────────────────────────────────
+
+export function useAdminSubscriptions(options?: { refetchInterval?: number }) {
+  return useQuery({
+    queryKey: ['admin', 'subscriptions'],
+    queryFn: async () => {
+      const { data } = await api.get<AdminSubscriptionsResponse>('/admin/subscriptions');
+      return data;
+    },
+    refetchInterval: options?.refetchInterval,
   });
 }
 

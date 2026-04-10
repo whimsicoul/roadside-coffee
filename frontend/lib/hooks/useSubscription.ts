@@ -23,10 +23,10 @@ export function useCreateSubscription() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: {
-      start_date: string;
-      end_date: string;
-      weekly_allowance: number;
-      default_items?: OrderItem[];
+      tier: 'drink' | 'combo';
+      pickup_time: string;
+      duration: '1w' | '1m' | '3m';
+      default_items: OrderItem[];
     }) => {
       const { data } = await api.post<Subscription>('/subscriptions', payload);
       return data;
@@ -41,7 +41,8 @@ export function useUpdateSubscription() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: {
-      weekly_allowance?: number;
+      tier?: 'drink' | 'combo';
+      pickup_time?: string;
       default_items?: OrderItem[];
     }) => {
       const { data } = await api.put<Subscription>(

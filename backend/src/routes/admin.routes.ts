@@ -41,4 +41,7 @@ router.patch('/orders/:id/status', validate(updateOrderStatusSchema), (req, res)
   adminController.updateOrderStatus(req, res)
 );
 
+// Subscriptions routes
+router.get('/subscriptions', (req, res) => adminController.getSubscriptions(req, res));
+
 export default router;

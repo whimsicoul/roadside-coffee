@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { AdminRoute } from '@/components/AdminRoute';
 import { OrderStatusBadge } from '@/components/OrderStatusBadge';
+import { AdminSubscriptionsDashboard } from '@/components/AdminSubscriptionsDashboard';
 import { useAdminOrders, useAdminUpdateOrderStatus } from '@/lib/hooks/useAdmin';
 import type { AdminOrder } from '@/types';
 
@@ -239,9 +240,14 @@ function AdminOrdersDashboard() {
               {/* Card header */}
               <div className="bg-gradient-to-r from-coffee-parchment to-transparent px-5 py-4 border-b border-coffee-oyster flex items-start justify-between gap-3">
                 <div>
-                  <div className="flex items-center gap-2 mb-0.5">
+                  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                     <span className="font-serif font-bold text-coffee-oil text-lg">#{order.id}</span>
                     <span className="text-coffee-roman text-sm">{getCustomerName(order)}</span>
+                    {order.subscription_id && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                        Sub #{order.subscription_id}
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-3 text-xs text-coffee-roman">
                     <span>
@@ -332,17 +338,44 @@ function AdminOrdersDashboard() {
 // ── Admin Page ────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
+  const [activeTab, setActiveTab] = useState<'orders' | 'subscriptions'>('orders');
+
   return (
     <AdminRoute>
       <div className="min-h-screen section-paper-bg">
         <div className="max-w-6xl mx-auto px-4 py-8">
           {/* Page header */}
-          <div className="mb-8">
+          <div className="mb-6">
             <h1 className="font-serif text-4xl font-bold text-coffee-oil mb-1">Admin Dashboard</h1>
-            <p className="text-coffee-roman">Manage orders</p>
+            <p className="text-coffee-roman">Manage orders and subscriptions</p>
           </div>
 
-          <AdminOrdersDashboard />
+          {/* Top-level tab navigation */}
+          <div className="flex gap-2 mb-6 border-b border-coffee-oyster pb-4">
+            {([
+              { key: 'orders', label: 'Orders' },
+              { key: 'subscriptions', label: 'Subscriptions' },
+            ] as const).map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key)}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
+                  activeTab === key
+                    ? 'bg-coffee-judge text-white'
+                    : 'bg-coffee-oyster/20 text-coffee-roman hover:bg-coffee-oyster/40'
+                }`}
+                style={{ transition: 'background-color 180ms ease' }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {activeTab === 'orders' ? (
+            <AdminOrdersDashboard />
+          ) : (
+            <AdminSubscriptionsDashboard />
+          )}
         </div>
       </div>
     </AdminRoute>
