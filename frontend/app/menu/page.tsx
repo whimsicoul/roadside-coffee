@@ -482,7 +482,7 @@ export default function MenuPage() {
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        objectPosition: '50% 40%',
+                        objectPosition: '39% 40%',
                         filter: 'grayscale(100%) contrast(3) brightness(1.15)',
                       }}
                     />
