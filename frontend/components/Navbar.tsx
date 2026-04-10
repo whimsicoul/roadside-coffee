@@ -1,43 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useUser } from '@/lib/hooks/useUser';
 import { authStorage } from '@/lib/auth';
 import { queryClient } from '@/lib/queryClient';
 
-function CoinLogo() {
-  return (
-    <Link
-      href="/menu"
-      aria-label="Roadside Coffee home"
-      className="cursor-pointer flex-shrink-0"
-      style={{ display: 'block' }}
-    >
-      <img
-        src="/roadside-coffee-logo.png"
-        alt="Roadside Coffee logo"
-        style={{
-          width: '72px',
-          height: '72px',
-          objectFit: 'contain',
-          mixBlendMode: 'multiply',
-          display: 'block',
-          transition: 'transform 220ms cubic-bezier(0.34,1.56,0.64,1)',
-        }}
-        onMouseEnter={e => { (e.currentTarget as HTMLImageElement).style.transform = 'scale(1.07) rotate(-2deg)'; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLImageElement).style.transform = ''; }}
-      />
-    </Link>
-  );
-}
 
 export function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const { data: user, isLoading } = useUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (path: string) => pathname === path;
 
@@ -68,7 +48,7 @@ export function Navbar() {
 
         {/* Desktop: nav links */}
         <div className="hidden md:flex items-center gap-10">
-          {isLoading ? (
+          {!mounted || isLoading ? (
             <div className="h-6 w-32 rounded bg-coffee-oyster animate-pulse" />
           ) : user ? (
             <>
@@ -153,7 +133,7 @@ export function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      {mobileMenuOpen && (
+      {mobileMenuOpen && mounted && (
         <div className="md:hidden px-6 py-6 space-y-4" style={{ background: 'transparent' }}>
           {user ? (
             <>

@@ -177,9 +177,14 @@ export function LoginForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-xs font-semibold text-coffee-oil mb-2 uppercase tracking-[0.14em]">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="password" className="block text-xs font-semibold text-coffee-oil uppercase tracking-[0.14em]">
+                  Password
+                </label>
+                <Link href="/forgot-password" className="text-xs text-coffee-cappuccino hover:text-coffee-judge font-medium" style={{ transition: 'color 0.15s ease' }}>
+                  Forgot password?
+                </Link>
+              </div>
               <input
                 id="password"
                 {...register('password')}

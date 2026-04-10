@@ -30,3 +30,36 @@ export function useUpdateUser() {
     },
   });
 }
+
+export function useChangeEmail() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: { new_email: string; current_password: string }) => {
+      const { data } = await api.put<User>('/users/me/email', payload);
+      return data;
+    },
+    onSuccess: (data) => {
+      qc.setQueryData(['user', 'me'], data);
+    },
+  });
+}
+
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: async (payload: { current_password: string; new_password: string }) => {
+      await api.put('/users/me/password', payload);
+    },
+  });
+}
+
+export function useDeleteAccount() {
+  return useMutation({
+    mutationFn: async (payload: { password: string }) => {
+      await api.delete('/users/me', { data: payload });
+    },
+    onSuccess: () => {
+      authStorage.clear();
+      window.location.href = '/login';
+    },
+  });
+}

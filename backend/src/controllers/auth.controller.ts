@@ -36,6 +36,27 @@ export class AuthController {
       res.status(401).json({ error: error.message });
     }
   }
+
+  async forgotPassword(req: Request, res: Response) {
+    try {
+      const { email } = req.body;
+      await authService.requestPasswordReset(email);
+      // Always 200 to prevent email enumeration
+      res.status(200).json({ message: 'If that email is registered, a reset link has been sent.' });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to process request' });
+    }
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    try {
+      const { token, password } = req.body;
+      await authService.resetPassword(token, password);
+      res.status(200).json({ message: 'Password updated successfully' });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  }
 }
 
 export const authController = new AuthController();

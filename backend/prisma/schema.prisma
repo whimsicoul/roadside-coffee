@@ -21,6 +21,7 @@ model User {
 
   orders              Order[]
   subscriptions       Subscription[]
+  passwordResetTokens PasswordResetToken[]
 }
 
 model Order {
@@ -68,4 +69,18 @@ model MenuItem {
   description String?
   image_url   String?
   category    String? // "hot" | "cold" | "food"
+}
+
+model PasswordResetToken {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  token      String   @unique
+  expires_at DateTime
+  used       Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id])
+
+  @@index([token])
+  @@index([user_id])
 }

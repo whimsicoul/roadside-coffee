@@ -44,9 +44,10 @@ export class AdminController {
 
   async getAllOrders(req: Request, res: Response): Promise<void> {
     try {
-      const { status, page, limit } = req.query;
+      const { status, date, page, limit } = req.query;
       const result = await adminService.getAllOrders({
         status: status as string | undefined,
+        date: date as string | undefined,
         page: page ? parseInt(page as string) : undefined,
         limit: limit ? parseInt(limit as string) : undefined,
       });

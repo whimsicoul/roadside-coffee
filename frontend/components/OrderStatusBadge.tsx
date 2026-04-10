@@ -11,10 +11,6 @@ const statusConfig = {
     label: 'Pending',
     className: 'bg-coffee-oyster text-coffee-judge',
   },
-  arrived: {
-    label: 'Arrived',
-    className: 'bg-orange-100 text-orange-800',
-  },
   ready: {
     label: 'Ready for Pickup',
     className: 'bg-green-100 text-green-800',
@@ -22,6 +18,10 @@ const statusConfig = {
   completed: {
     label: 'Completed',
     className: 'bg-stone-100 text-coffee-roman',
+  },
+  cancelled: {
+    label: 'Cancelled',
+    className: 'bg-red-100 text-red-700',
   },
 };
 

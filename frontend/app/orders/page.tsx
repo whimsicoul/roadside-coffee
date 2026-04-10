@@ -53,7 +53,6 @@ export default function OrdersPage() {
 
           {!isLoading && orders && orders.length === 0 && (
             <div className="card-paper-bg rounded-2xl shadow-md border border-coffee-oyster p-12 text-center">
-              <div className="text-4xl mb-4">☕</div>
               <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-2">No Orders Yet</h2>
               <p className="text-coffee-roman mb-6">Start browsing the menu to place your first order!</p>
               <a

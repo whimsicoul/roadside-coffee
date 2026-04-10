@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod/v3';
-import { useUser, useUpdateUser } from '@/lib/hooks/useUser';
+import { useUser, useUpdateUser, useChangeEmail, useChangePassword, useDeleteAccount } from '@/lib/hooks/useUser';
 import {
   useSubscription,
   useCreateSubscription,
@@ -20,6 +20,24 @@ const updateProfileSchema = z.object({
   license_plate: z.string().optional().nullable(),
 });
 
+const changeEmailSchema = z.object({
+  new_email: z.string().email('Invalid email address'),
+  current_password: z.string().min(1, 'Password is required'),
+});
+
+const changePasswordSchema = z.object({
+  current_password: z.string().min(1, 'Current password is required'),
+  new_password: z.string().min(8, 'Password must be at least 8 characters'),
+  confirm_password: z.string().min(1, 'Please confirm your password'),
+}).refine((d) => d.new_password === d.confirm_password, {
+  message: 'Passwords do not match',
+  path: ['confirm_password'],
+});
+
+const deleteAccountSchema = z.object({
+  password: z.string().min(1, 'Password is required'),
+});
+
 const subscriptionFormSchema = z.object({
   start_date: z.string().min(1, 'Start date is required'),
   end_date: z.string().min(1, 'End date is required'),
@@ -27,6 +45,9 @@ const subscriptionFormSchema = z.object({
 }) as any;
 
 type UpdateProfileData = z.infer<typeof updateProfileSchema>;
+type ChangeEmailData = z.infer<typeof changeEmailSchema>;
+type ChangePasswordData = z.infer<typeof changePasswordSchema>;
+type DeleteAccountData = z.infer<typeof deleteAccountSchema>;
 type SubscriptionFormData = {
   start_date: string;
   end_date: string;
@@ -37,12 +58,16 @@ function SettingsContent() {
   const { data: user, isLoading: userLoading } = useUser();
   const { data: subscription, isLoading: subLoading } = useSubscription();
   const updateUser = useUpdateUser();
+  const changeEmail = useChangeEmail();
+  const changePassword = useChangePassword();
+  const deleteAccount = useDeleteAccount();
   const createSubscription = useCreateSubscription();
   const updateSubscription = useUpdateSubscription();
   const cancelSubscription = useCancelSubscription();
 
   const [showSubForm, setShowSubForm] = useState(false);
   const [subError, setSubError] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const {
     register,
@@ -70,12 +95,63 @@ function SettingsContent() {
     resolver: zodResolver(subscriptionFormSchema),
   });
 
+  const {
+    register: registerEmail,
+    handleSubmit: handleEmailSubmit,
+    reset: resetEmail,
+    formState: { errors: emailErrors, isSubmitting: emailSubmitting },
+  } = useForm<ChangeEmailData>({ resolver: zodResolver(changeEmailSchema) });
+
+  const {
+    register: registerPwd,
+    handleSubmit: handlePwdSubmit,
+    reset: resetPwd,
+    formState: { errors: pwdErrors, isSubmitting: pwdSubmitting },
+  } = useForm<ChangePasswordData>({ resolver: zodResolver(changePasswordSchema) });
+
+  const {
+    register: registerDelete,
+    handleSubmit: handleDeleteSubmit,
+    formState: { errors: deleteErrors, isSubmitting: deleteSubmitting },
+  } = useForm<DeleteAccountData>({ resolver: zodResolver(deleteAccountSchema) });
+
   const onUpdateProfile = async (data: UpdateProfileData) => {
     try {
       await updateUser.mutateAsync(data);
       alert('Profile updated successfully');
     } catch (error: any) {
       alert(error.response?.data?.message || 'Failed to update profile');
+    }
+  };
+
+  const onChangeEmail = async (data: ChangeEmailData) => {
+    try {
+      await changeEmail.mutateAsync(data);
+      resetEmail();
+      alert('Email updated successfully');
+    } catch (error: any) {
+      alert(error.response?.data?.error || 'Failed to update email');
+    }
+  };
+
+  const onChangePassword = async (data: ChangePasswordData) => {
+    try {
+      await changePassword.mutateAsync({
+        current_password: data.current_password,
+        new_password: data.new_password,
+      });
+      resetPwd();
+      alert('Password updated successfully');
+    } catch (error: any) {
+      alert(error.response?.data?.error || 'Failed to update password');
+    }
+  };
+
+  const onDeleteAccount = async (data: DeleteAccountData) => {
+    try {
+      await deleteAccount.mutateAsync(data);
+    } catch (error: any) {
+      alert(error.response?.data?.error || 'Failed to delete account');
     }
   };
 
@@ -248,6 +324,213 @@ function SettingsContent() {
             )}
           </button>
         </form>
+        </div>
+
+        {/* Change Email Section */}
+        <div className="card-paper-bg rounded-2xl shadow-paper-lg border border-coffee-oyster p-6 mb-8">
+          <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-1">Change Email</h2>
+          <p className="text-sm text-coffee-roman mb-6">Update the email address on your account</p>
+
+          <form onSubmit={handleEmailSubmit(onChangeEmail)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="new_email" className="block text-sm font-semibold text-coffee-oil mb-2">
+                  New Email *
+                </label>
+                <input
+                  id="new_email"
+                  {...registerEmail('new_email')}
+                  type="email"
+                  placeholder="new@example.com"
+                  className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
+                />
+                {emailErrors.new_email && (
+                  <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                    <span className="text-lg">⚠</span> {emailErrors.new_email.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="email_current_password" className="block text-sm font-semibold text-coffee-oil mb-2">
+                  Current Password *
+                </label>
+                <input
+                  id="email_current_password"
+                  {...registerEmail('current_password')}
+                  type="password"
+                  placeholder="Confirm with your password"
+                  className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
+                />
+                {emailErrors.current_password && (
+                  <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                    <span className="text-lg">⚠</span> {emailErrors.current_password.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={emailSubmitting || changeEmail.isPending}
+              className="bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg transition"
+            >
+              {changeEmail.isPending ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="animate-spin inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                  Updating Email...
+                </span>
+              ) : (
+                'Update Email'
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Change Password Section */}
+        <div className="card-paper-bg rounded-2xl shadow-paper-lg border border-coffee-oyster p-6 mb-8">
+          <h2 className="font-serif text-2xl font-bold text-coffee-oil mb-1">Change Password</h2>
+          <p className="text-sm text-coffee-roman mb-6">Choose a strong password at least 8 characters long</p>
+
+          <form onSubmit={handlePwdSubmit(onChangePassword)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label htmlFor="current_password" className="block text-sm font-semibold text-coffee-oil mb-2">
+                  Current Password *
+                </label>
+                <input
+                  id="current_password"
+                  {...registerPwd('current_password')}
+                  type="password"
+                  placeholder="Your current password"
+                  className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
+                />
+                {pwdErrors.current_password && (
+                  <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                    <span className="text-lg">⚠</span> {pwdErrors.current_password.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="new_password" className="block text-sm font-semibold text-coffee-oil mb-2">
+                  New Password *
+                </label>
+                <input
+                  id="new_password"
+                  {...registerPwd('new_password')}
+                  type="password"
+                  placeholder="Min. 8 characters"
+                  className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
+                />
+                {pwdErrors.new_password && (
+                  <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                    <span className="text-lg">⚠</span> {pwdErrors.new_password.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="confirm_password" className="block text-sm font-semibold text-coffee-oil mb-2">
+                  Confirm New Password *
+                </label>
+                <input
+                  id="confirm_password"
+                  {...registerPwd('confirm_password')}
+                  type="password"
+                  placeholder="Repeat new password"
+                  className="w-full px-4 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent"
+                />
+                {pwdErrors.confirm_password && (
+                  <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                    <span className="text-lg">⚠</span> {pwdErrors.confirm_password.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={pwdSubmitting || changePassword.isPending}
+              className="bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg transition"
+            >
+              {changePassword.isPending ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="animate-spin inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                  Updating Password...
+                </span>
+              ) : (
+                'Update Password'
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Delete Account Section */}
+        <div className="card-paper-bg rounded-2xl shadow-paper-lg border border-red-200 p-6 mb-8">
+          <h2 className="font-serif text-2xl font-bold text-red-700 mb-1">Delete Account</h2>
+          <p className="text-sm text-coffee-roman mb-6">
+            Permanently delete your account and all associated data. This cannot be undone.
+          </p>
+
+          {!showDeleteConfirm ? (
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition"
+            >
+              Delete My Account
+            </button>
+          ) : (
+            <form onSubmit={handleDeleteSubmit(onDeleteAccount)} className="space-y-6 border-t border-red-100 pt-6">
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-800 text-sm font-medium">
+                  This action is irreversible. Enter your password to confirm.
+                </p>
+              </div>
+
+              <div className="max-w-sm">
+                <label htmlFor="delete_password" className="block text-sm font-semibold text-coffee-oil mb-2">
+                  Password *
+                </label>
+                <input
+                  id="delete_password"
+                  {...registerDelete('password')}
+                  type="password"
+                  placeholder="Enter your password to confirm"
+                  className="w-full px-4 py-2 border border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                />
+                {deleteErrors.password && (
+                  <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                    <span className="text-lg">⚠</span> {deleteErrors.password.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="submit"
+                  disabled={deleteSubmitting || deleteAccount.isPending}
+                  className="bg-red-600 hover:bg-red-700 disabled:bg-coffee-oyster disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg transition"
+                >
+                  {deleteAccount.isPending ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="animate-spin inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                      Deleting Account...
+                    </span>
+                  ) : (
+                    'Confirm Delete'
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="bg-coffee-oyster hover:bg-coffee-oyster text-coffee-oil font-bold py-3 px-8 rounded-lg transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
         </div>
 
         {/* Subscription Section */}

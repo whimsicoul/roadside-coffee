@@ -5,6 +5,18 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes coinToss {
+  0%   { transform: translateY(0)     rotateY(0deg)    scaleX(1); }
+  15%  { transform: translateY(-80px)  rotateY(180deg)  scaleX(0.85); }
+  30%  { transform: translateY(-130px) rotateY(360deg)  scaleX(1); }
+  45%  { transform: translateY(-80px)  rotateY(540deg)  scaleX(0.85); }
+  60%  { transform: translateY(-130px) rotateY(720deg)  scaleX(1); }
+  75%  { transform: translateY(-50px)  rotateY(900deg)  scaleX(0.85); }
+  88%  { transform: translateY(-130px) rotateY(1080deg) scaleX(1); }
+  95%  { transform: translateY(-8px)   rotateY(1080deg) scaleX(1.04); }
+  100% { transform: translateY(0)     rotateY(1080deg) scaleX(1); }
+}
+
 @layer base {
   :root {
     --color-oil: #2D1E17;

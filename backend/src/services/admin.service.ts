@@ -42,36 +42,61 @@ export class AdminService {
 
   // ── Order Management ─────────────────────────────────────────────────────
 
-  async getAllOrders(options: { status?: string; page?: number; limit?: number }) {
-    const { status, page = 1, limit = 50 } = options;
+  async getAllOrders(options: { status?: string; date?: string; page?: number; limit?: number }) {
+    const { status, date, page = 1, limit = 50 } = options;
     const skip = (page - 1) * limit;
 
-    const where = status ? { status } : {};
+    // Build date range filter if a date is provided
+    let dateFilter: { gte?: Date; lt?: Date } | undefined;
+    if (date) {
+      const start = new Date(date);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      dateFilter = { gte: start, lt: end };
+    }
 
-    const [orders, total] = await Promise.all([
-      prisma.order.findMany({
-        where,
-        orderBy: { created_at: 'desc' },
-        skip,
-        take: limit,
-        include: {
-          user: {
-            select: { id: true, first_name: true, last_name: true, email: true },
+    const where: Record<string, unknown> = {};
+    if (status) where.status = status;
+    if (dateFilter) where.created_at = dateFilter;
+
+    // Daily summary counts (always scoped to the date range, ignoring status filter)
+    const dayWhere: Record<string, unknown> = dateFilter ? { created_at: dateFilter } : {};
+    const [orders, total, pendingCount, readyCount, completedCount, cancelledCount, dailyTotalAgg] =
+      await Promise.all([
+        prisma.order.findMany({
+          where,
+          orderBy: { created_at: 'desc' },
+          skip,
+          take: limit,
+          include: {
+            user: {
+              select: { id: true, first_name: true, last_name: true, email: true },
+            },
           },
-        },
-      }),
-      prisma.order.count({ where }),
-    ]);
+        }),
+        prisma.order.count({ where }),
+        prisma.order.count({ where: { ...dayWhere, status: 'pending' } }),
+        prisma.order.count({ where: { ...dayWhere, status: 'ready' } }),
+        prisma.order.count({ where: { ...dayWhere, status: 'completed' } }),
+        prisma.order.count({ where: { ...dayWhere, status: 'cancelled' } }),
+        prisma.order.aggregate({
+          where: dayWhere,
+          _sum: { total_amount: true },
+        }),
+      ]);
 
-    return { orders, total, page, limit };
+    const dailyTotal = Number(dailyTotalAgg._sum.total_amount ?? 0);
+
+    return { orders, total, page, limit, pendingCount, readyCount, completedCount, cancelledCount, dailyTotal };
   }
 
   async updateOrderStatus(id: number, status: string) {
     const validTransitions: Record<string, string[]> = {
-      pending: ['arrived', 'ready', 'completed'],
-      arrived: ['ready', 'completed'],
-      ready: ['completed'],
+      pending: ['ready', 'completed', 'cancelled'],
+      ready: ['completed', 'cancelled'],
       completed: [],
+      cancelled: [],
     };
 
     const order = await prisma.order.findUnique({ where: { id } });

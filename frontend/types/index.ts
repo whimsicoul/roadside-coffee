@@ -29,7 +29,7 @@ export interface Order {
   user_id: number | null;
   items: OrderItem[];
   total_amount: string;
-  status: 'pending' | 'arrived' | 'ready' | 'completed';
+  status: 'pending' | 'ready' | 'completed' | 'cancelled';
   created_at: string;
   ready_time?: string | null;
   guest_first_name?: string | null;
@@ -64,6 +64,11 @@ export interface AdminOrdersResponse {
   total: number;
   page: number;
   limit: number;
+  dailyTotal: number;
+  pendingCount: number;
+  readyCount: number;
+  completedCount: number;
+  cancelledCount: number;
 }
 
 export interface CreateMenuItemPayload {

@@ -10,8 +10,26 @@ import { useAdminUpdateMenuItem, useAdminDeleteMenuItem, useAdminCreateMenuItem 
 import { authStorage } from '@/lib/auth';
 import type { MenuItem, CartItem } from '@/types';
 
-// Animation styles for the header image
+// Animation styles for the header image and coin toss
 const imageAnimationStyles = `
+  @keyframes coinToss {
+    0%   { transform: translateY(0)      scaleX(1);    }
+    8%   { transform: translateY(-30px)  scaleX(0.5);  }
+    16%  { transform: translateY(-80px)  scaleX(-1);   }
+    24%  { transform: translateY(-115px) scaleX(-0.5); }
+    32%  { transform: translateY(-130px) scaleX(1);    }
+    40%  { transform: translateY(-115px) scaleX(0.5);  }
+    48%  { transform: translateY(-80px)  scaleX(-1);   }
+    56%  { transform: translateY(-50px)  scaleX(-0.5); }
+    64%  { transform: translateY(-30px)  scaleX(1);    }
+    72%  { transform: translateY(-50px)  scaleX(0.5);  }
+    80%  { transform: translateY(-80px)  scaleX(-1);   }
+    88%  { transform: translateY(-40px)  scaleX(-0.5); }
+    94%  { transform: translateY(-8px)   scaleX(1);    }
+    97%  { transform: translateY(-3px)   scaleX(1.02); }
+    100% { transform: translateY(0)      scaleX(1);    }
+  }
+
   @keyframes gentleFloat {
     0%, 100% {
       transform: translateY(0px) rotateZ(0deg);
@@ -55,6 +73,7 @@ export default function MenuPage() {
   const { data: menuItems = [], isLoading, error } = useMenu();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isCoinFlipping, setIsCoinFlipping] = useState(false);
 
   // Detect admin on client side only (authStorage uses localStorage)
   useEffect(() => {
@@ -66,16 +85,16 @@ export default function MenuPage() {
   const { mutate: createItem, isPending: isCreating } = useAdminCreateMenuItem();
 
   const handleAdminSave = (id: number, payload: { name: string; price: number; description?: string; category?: string }) => {
-    updateItem({ id, payload });
+    updateItem({ id, payload: { ...payload, category: payload.category as 'hot' | 'cold' | 'food' | undefined } });
   };
 
-  const handleAdminDelete = (id: number, name: string) => {
+  function handleAdminDelete(id: number, name: string) {
     if (!window.confirm(`Remove "${name}" from the menu?`)) return;
     deleteItem(id);
-  };
+  }
 
   const handleAdminAdd = (payload: { name: string; price: number; description?: string; category?: string }) => {
-    createItem(payload);
+    createItem({ ...payload, category: payload.category as 'hot' | 'cold' | 'food' | undefined });
   };
 
   const handleAddToCart = (menuItem: MenuItem) => {
@@ -145,23 +164,23 @@ export default function MenuPage() {
           style={{
             width: '260px',
             height: '260px',
-            borderRadius: '50%',
-            overflow: 'hidden',
-            boxShadow: '0 8px 40px rgba(45, 30, 23, 0.22), 0 2px 10px rgba(45, 30, 23, 0.12)',
             flexShrink: 0,
+            cursor: isCoinFlipping ? 'default' : 'pointer',
+            animation: isCoinFlipping ? 'coinToss 1000ms ease-in-out forwards' : undefined,
           }}
+          onClick={() => { if (!isCoinFlipping) setIsCoinFlipping(true); }}
+          onAnimationEnd={() => setIsCoinFlipping(false)}
         >
           <img
-            src="/roadside-coffee-logo.png"
+            src="/roadside-coffee-logo-coin.png"
             alt="Roadside Coffee"
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center',
+              objectFit: 'contain',
               display: 'block',
-              transform: 'scale(1.04)',
-              mixBlendMode: 'multiply',
+              filter: 'drop-shadow(0 8px 24px rgba(45, 30, 23, 0.22)) drop-shadow(0 2px 8px rgba(45, 30, 23, 0.14))',
+              pointerEvents: 'none',
             }}
           />
         </div>

@@ -21,7 +21,7 @@ const updateMenuItemSchema = z.object({
 });
 
 const updateOrderStatusSchema = z.object({
-  status: z.enum(['pending', 'arrived', 'ready', 'completed']),
+  status: z.enum(['pending', 'ready', 'completed', 'cancelled']),
 });
 
 // Menu routes

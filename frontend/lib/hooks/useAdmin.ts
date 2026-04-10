@@ -9,12 +9,14 @@ import type {
 
 // ── Orders ───────────────────────────────────────────────────────────────
 
-export function useAdminOrders(options?: { status?: string; refetchInterval?: number }) {
-  const { status, refetchInterval } = options ?? {};
+export function useAdminOrders(options?: { status?: string; date?: string; refetchInterval?: number }) {
+  const { status, date, refetchInterval } = options ?? {};
   return useQuery({
-    queryKey: ['admin', 'orders', status],
+    queryKey: ['admin', 'orders', status, date],
     queryFn: async () => {
-      const params = status ? { status } : {};
+      const params: Record<string, string> = {};
+      if (status) params.status = status;
+      if (date) params.date = date;
       const { data } = await api.get<AdminOrdersResponse>('/admin/orders', { params });
       return data;
     },
