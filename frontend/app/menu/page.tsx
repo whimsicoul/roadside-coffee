@@ -422,127 +422,127 @@ export default function MenuPage() {
                     )}
                   </div>
                 )}
-              </div>
-            )}
 
-            {/* Food Section */}
-            {foodItems.length > 0 && (
-              <div
-                className="rounded-lg relative"
-                style={{
-                  backgroundColor: '#FEFDFB',
-                  backgroundImage: 'url(/crumpled-paper.svg)',
-                  backgroundSize: '600px 600px',
-                  backgroundPosition: '200px 0',
-                  border: '1px solid rgba(160, 140, 120, 0.4)',
-                  boxShadow: `
-                    0 2px 8px rgba(45, 30, 23, 0.08),
-                    0 12px 32px rgba(45, 30, 23, 0.1),
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.4)
-                  `,
-                  overflow: 'visible',
-                }}
-              >
-                {/* Watercolor Header Section */}
-                <div
-                  style={{
-                    position: 'relative',
-                    backgroundImage: 'url(/watercolor-food.svg)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '3rem',
-                    padding: '2.5rem 4rem 2.5rem 2rem',
-                    borderBottom: '1px solid rgba(120, 100, 80, 0.25)',
-                    minHeight: '180px',
-                    borderRadius: '8px 8px 0 0',
-                    overflow: 'visible',
-                  }}
-                >
-                  {/* Circular food image */}
+                {/* Food Section */}
+                {foodItems.length > 0 && (
                   <div
-                    className="hot-drinks-image"
-                    role="img"
-                    aria-label="food illustration"
+                    className="rounded-lg relative"
                     style={{
-                      flexShrink: 0,
-                      width: '170px',
-                      height: '170px',
-                      borderRadius: '50%',
-                      boxShadow: '0 4px 20px rgba(45,30,23,0.18)',
-                      overflow: 'hidden',
-                      mixBlendMode: 'multiply',
+                      backgroundColor: '#FEFDFB',
+                      backgroundImage: 'url(/crumpled-paper.svg)',
+                      backgroundSize: '600px 600px',
+                      backgroundPosition: '200px 0',
+                      border: '1px solid rgba(160, 140, 120, 0.4)',
+                      boxShadow: `
+                        0 2px 8px rgba(45, 30, 23, 0.08),
+                        0 12px 32px rgba(45, 30, 23, 0.1),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.4)
+                      `,
+                      overflow: 'visible',
                     }}
                   >
-                    <img
-                      src="/food.png"
-                      alt=""
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: '39% 40%',
-                        filter: 'grayscale(100%) contrast(3) brightness(1.15)',
-                      }}
-                    />
-                  </div>
-
-                  {/* Title */}
-                  <div style={{ minWidth: 0, flex: 1 }}>
-                    <h2
-                      className="font-handwritten text-coffee-oil"
-                      style={{
-                        fontSize: '5rem',
-                        fontWeight: '400',
-                        lineHeight: '1.05',
-                        letterSpacing: '-0.01em',
-                        margin: '0 0 1rem 0',
-                        fontStyle: 'italic',
-                        textAlign: 'left',
-                        textShadow: '0 2px 6px rgba(45, 30, 23, 0.2)',
-                        wordSpacing: '0.1em',
-                      }}
-                    >
-                      food
-                    </h2>
+                    {/* Watercolor Header Section */}
                     <div
                       style={{
-                        height: '2px',
-                        width: '120px',
-                        background: 'linear-gradient(90deg, rgba(160, 110, 60, 0.7) 0%, rgba(160, 110, 60, 0.3) 50%, transparent 100%)',
-                        borderRadius: '1px',
+                        position: 'relative',
+                        backgroundImage: 'url(/watercolor-food.svg)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '3rem',
+                        padding: '2.5rem 4rem 2.5rem 2rem',
+                        borderBottom: '1px solid rgba(120, 100, 80, 0.25)',
+                        minHeight: '180px',
+                        borderRadius: '8px 8px 0 0',
+                        overflow: 'visible',
                       }}
-                    />
-                  </div>
-                </div>
+                    >
+                      {/* Circular food image */}
+                      <div
+                        className="hot-drinks-image"
+                        role="img"
+                        aria-label="food illustration"
+                        style={{
+                          flexShrink: 0,
+                          width: '170px',
+                          height: '170px',
+                          borderRadius: '50%',
+                          boxShadow: '0 4px 20px rgba(45,30,23,0.18)',
+                          overflow: 'hidden',
+                          mixBlendMode: 'multiply',
+                        }}
+                      >
+                        <img
+                          src="/food.png"
+                          alt=""
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: '39% 40%',
+                            filter: 'grayscale(100%) contrast(3) brightness(1.15)',
+                          }}
+                        />
+                      </div>
 
-                {/* Items */}
-                <div className="divide-y divide-coffee-oyster/30 relative z-10">
-                  {foodItems.map((item) => {
-                    const cartItem = cart.find((c) => c.menuItem.id === item.id);
-                    return isAdmin ? (
-                      <AdminMenuItemCard
-                        key={item.id}
-                        item={item}
-                        onSave={handleAdminSave}
-                        onDelete={handleAdminDelete}
-                        isSaving={isUpdating}
-                        isDeleting={isDeleting}
-                      />
-                    ) : (
-                      <MenuItemCard
-                        key={item.id}
-                        item={item}
-                        quantity={cartItem?.quantity || 0}
-                        onAdd={handleAddToCart}
-                        onRemove={handleRemoveFromCart}
-                      />
-                    );
-                  })}
-                </div>
-                {isAdmin && (
-                  <AdminAddItemRow onAdd={handleAdminAdd} isAdding={isCreating} />
+                      {/* Title */}
+                      <div style={{ minWidth: 0, flex: 1 }}>
+                        <h2
+                          className="font-handwritten text-coffee-oil"
+                          style={{
+                            fontSize: '5rem',
+                            fontWeight: '400',
+                            lineHeight: '1.05',
+                            letterSpacing: '-0.01em',
+                            margin: '0 0 1rem 0',
+                            fontStyle: 'italic',
+                            textAlign: 'left',
+                            textShadow: '0 2px 6px rgba(45, 30, 23, 0.2)',
+                            wordSpacing: '0.1em',
+                          }}
+                        >
+                          food
+                        </h2>
+                        <div
+                          style={{
+                            height: '2px',
+                            width: '120px',
+                            background: 'linear-gradient(90deg, rgba(160, 110, 60, 0.7) 0%, rgba(160, 110, 60, 0.3) 50%, transparent 100%)',
+                            borderRadius: '1px',
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Items */}
+                    <div className="divide-y divide-coffee-oyster/30 relative z-10">
+                      {foodItems.map((item) => {
+                        const cartItem = cart.find((c) => c.menuItem.id === item.id);
+                        return isAdmin ? (
+                          <AdminMenuItemCard
+                            key={item.id}
+                            item={item}
+                            onSave={handleAdminSave}
+                            onDelete={handleAdminDelete}
+                            isSaving={isUpdating}
+                            isDeleting={isDeleting}
+                          />
+                        ) : (
+                          <MenuItemCard
+                            key={item.id}
+                            item={item}
+                            quantity={cartItem?.quantity || 0}
+                            onAdd={handleAddToCart}
+                            onRemove={handleRemoveFromCart}
+                          />
+                        );
+                      })}
+                    </div>
+                    {isAdmin && (
+                      <AdminAddItemRow onAdd={handleAdminAdd} isAdding={isCreating} />
+                    )}
+                  </div>
                 )}
               </div>
             )}
