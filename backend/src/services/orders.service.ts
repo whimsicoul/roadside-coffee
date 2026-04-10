@@ -138,6 +138,25 @@ export class OrdersService {
     return order;
   }
 
+  async checkInOrder(orderId: number, userId: number) {
+    const order = await prisma.order.findFirst({
+      where: { id: orderId, user_id: userId },
+    });
+
+    if (!order) {
+      throw new Error('Order not found');
+    }
+
+    if (order.status !== 'pending') {
+      throw new Error('Only pending orders can be checked in');
+    }
+
+    return prisma.order.update({
+      where: { id: orderId },
+      data: { status: 'arrived' },
+    });
+  }
+
   async updateOrderStatus(orderId: number, status: string) {
     if (!['pending', 'ready', 'completed', 'cancelled'].includes(status)) {
       throw new Error('Invalid status');

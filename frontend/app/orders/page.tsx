@@ -1,10 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { OrderStatusBadge } from '@/components/OrderStatusBadge';
 import { OrderProgressStepper } from '@/components/OrderProgressStepper';
 import { useOrders, useCheckIn } from '@/lib/hooks/useOrders';
-import { Loader } from 'lucide-react';
+import { useSubscription, useUpdateSubscription } from '@/lib/hooks/useSubscription';
+import { useMenu } from '@/lib/hooks/useMenu';
+import { Loader, Pencil, Check, X, Coffee, UtensilsCrossed, Clock } from 'lucide-react';
+import type { MenuItem } from '@/types';
 
 interface EnrichedOrderItem {
   menu_item_id: number;
@@ -13,6 +17,305 @@ interface EnrichedOrderItem {
   quantity: number;
 }
 
+// ─── Subscription Panel ────────────────────────────────────────────────────────
+function SubscriptionPanel() {
+  const { data: subscription, isLoading: subLoading } = useSubscription();
+  const { data: menuItems, isLoading: menuLoading } = useMenu();
+  const updateSubscription = useUpdateSubscription();
+
+  const [editing, setEditing] = useState(false);
+  const [drinkId, setDrinkId] = useState<number | ''>('');
+  const [foodId, setFoodId] = useState<number | ''>('');
+  const [pickupTime, setPickupTime] = useState('');
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  if (subLoading) return null;
+  if (!subscription) return null;
+
+  const drinkItems = menuItems?.filter((m) => m.category === 'hot' || m.category === 'cold') ?? [];
+  const foodItems = menuItems?.filter((m) => m.category === 'food') ?? [];
+
+  const currentItems: EnrichedOrderItem[] = (subscription.default_items as any[]) ?? [];
+  const currentDrink = currentItems.find((i) =>
+    drinkItems.some((m) => m.id === i.menu_item_id)
+  );
+  const currentFood = currentItems.find((i) =>
+    foodItems.some((m) => m.id === i.menu_item_id)
+  );
+
+  const startEditing = () => {
+    setDrinkId(currentDrink?.menu_item_id ?? '');
+    setFoodId(currentFood?.menu_item_id ?? '');
+    setPickupTime(subscription.pickup_time ?? '');
+    setSaveError(null);
+    setEditing(true);
+  };
+
+  const cancelEditing = () => {
+    setEditing(false);
+    setSaveError(null);
+  };
+
+  const handleSave = async () => {
+    if (!drinkId) {
+      setSaveError('Please select a daily drink.');
+      return;
+    }
+    if (subscription.tier === 'combo' && !foodId) {
+      setSaveError('Please select a food item for your combo.');
+      return;
+    }
+    if (!pickupTime) {
+      setSaveError('Please enter a pickup time.');
+      return;
+    }
+
+    const default_items: { menu_item_id: number; quantity: number }[] = [
+      { menu_item_id: Number(drinkId), quantity: 1 },
+    ];
+    if (subscription.tier === 'combo' && foodId) {
+      default_items.push({ menu_item_id: Number(foodId), quantity: 1 });
+    }
+
+    try {
+      setSaveError(null);
+      await updateSubscription.mutateAsync({ default_items, pickup_time: pickupTime });
+      setEditing(false);
+    } catch (err: any) {
+      setSaveError(
+        err.response?.data?.error || err.response?.data?.message || 'Failed to save changes.'
+      );
+    }
+  };
+
+  const endDate = new Date(subscription.end_date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+  const tierLabel = subscription.tier === 'combo' ? 'Daily Combo' : 'Daily Drink';
+  const tierPrice = subscription.tier === 'combo' ? '$9/day' : '$5/day';
+
+  return (
+    <div
+      className="mb-10 rounded-2xl border border-coffee-oyster overflow-hidden"
+      style={{ boxShadow: '0 4px 24px rgba(45,30,23,0.08), 0 1px 4px rgba(45,30,23,0.06)' }}
+    >
+      {/* Header */}
+      <div className="bg-gradient-to-r from-coffee-parchment via-amber-50 to-coffee-cream px-6 py-5 border-b border-coffee-oyster flex items-start justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span
+              className="text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
+              style={{ background: 'rgba(180,120,60,0.12)', color: '#7c4f2a' }}
+            >
+              Active Subscription
+            </span>
+          </div>
+          <h2 className="font-serif text-xl font-bold text-coffee-oil">{tierLabel}</h2>
+          <p className="text-sm text-coffee-roman mt-0.5">
+            {tierPrice} &middot; Renews through {endDate}
+          </p>
+        </div>
+
+        {!editing && (
+          <button
+            onClick={startEditing}
+            className="flex items-center gap-1.5 text-sm font-semibold text-coffee-judge hover:text-coffee-oil px-3 py-1.5 rounded-lg hover:bg-coffee-oyster/30 shrink-0"
+            style={{ transition: 'color 150ms ease, background-color 150ms ease' }}
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            Edit daily order
+          </button>
+        )}
+      </div>
+
+      {/* Body */}
+      <div className="px-6 py-5 card-paper-bg">
+        {!editing ? (
+          // Read-only view
+          <div className="flex flex-wrap gap-6">
+            {/* Pickup time */}
+            <div className="flex items-start gap-3">
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: 'rgba(180,120,60,0.10)' }}
+              >
+                <Clock className="w-4 h-4 text-coffee-judge" />
+              </div>
+              <div>
+                <p className="text-xs text-coffee-roman font-medium mb-0.5">Daily Pickup</p>
+                <p className="text-sm font-bold text-coffee-oil">
+                  {subscription.pickup_time
+                    ? (() => {
+                        const [h, m] = subscription.pickup_time.split(':');
+                        const d = new Date();
+                        d.setHours(Number(h), Number(m));
+                        return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                      })()
+                    : '—'}
+                </p>
+              </div>
+            </div>
+
+            {/* Drink */}
+            <div className="flex items-start gap-3">
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: 'rgba(180,120,60,0.10)' }}
+              >
+                <Coffee className="w-4 h-4 text-coffee-judge" />
+              </div>
+              <div>
+                <p className="text-xs text-coffee-roman font-medium mb-0.5">Daily Drink</p>
+                <p className="text-sm font-bold text-coffee-oil">
+                  {currentDrink ? currentDrink.name : (
+                    <span className="text-coffee-roman italic font-normal">Not set</span>
+                  )}
+                </p>
+              </div>
+            </div>
+
+            {/* Food (combo only) */}
+            {subscription.tier === 'combo' && (
+              <div className="flex items-start gap-3">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: 'rgba(180,120,60,0.10)' }}
+                >
+                  <UtensilsCrossed className="w-4 h-4 text-coffee-judge" />
+                </div>
+                <div>
+                  <p className="text-xs text-coffee-roman font-medium mb-0.5">Daily Food</p>
+                  <p className="text-sm font-bold text-coffee-oil">
+                    {currentFood ? currentFood.name : (
+                      <span className="text-coffee-roman italic font-normal">Not set</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          // Edit form
+          <div className="space-y-4">
+            {saveError && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-800 text-sm">{saveError}</p>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Pickup time */}
+              <div>
+                <label className="block text-xs font-semibold text-coffee-oil mb-1.5 uppercase tracking-wide">
+                  Pickup Time
+                </label>
+                <select
+                  value={pickupTime}
+                  onChange={(e) => setPickupTime(e.target.value)}
+                  className="w-full px-3 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent text-sm text-coffee-oil bg-white"
+                >
+                  <option value="">Select a time...</option>
+                  {Array.from({ length: (15 - 6) * 4 }, (_, i) => {
+                    const totalMinutes = 6 * 60 + i * 15;
+                    const hour = Math.floor(totalMinutes / 60);
+                    const minute = totalMinutes % 60;
+                    const hh = String(hour).padStart(2, '0');
+                    const mm = String(minute).padStart(2, '0');
+                    const value = `${hh}:${mm}`;
+                    const label = new Date(0, 0, 0, hour, minute).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true,
+                    });
+                    return <option key={value} value={value}>{label}</option>;
+                  })}
+                </select>
+              </div>
+
+              {/* Drink selector */}
+              <div>
+                <label className="block text-xs font-semibold text-coffee-oil mb-1.5 uppercase tracking-wide">
+                  Daily Drink
+                </label>
+                <select
+                  value={drinkId}
+                  onChange={(e) => setDrinkId(Number(e.target.value) || '')}
+                  disabled={menuLoading}
+                  className="w-full px-3 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent text-sm text-coffee-oil bg-white disabled:opacity-50"
+                >
+                  <option value="">Select a drink...</option>
+                  {drinkItems.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name} — ${parseFloat(item.price).toFixed(2)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Food selector (combo only) */}
+              {subscription.tier === 'combo' && (
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-coffee-oil mb-1.5 uppercase tracking-wide">
+                    Daily Food
+                  </label>
+                  <select
+                    value={foodId}
+                    onChange={(e) => setFoodId(Number(e.target.value) || '')}
+                    disabled={menuLoading}
+                    className="w-full px-3 py-2 border border-coffee-roman rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-judge focus:border-transparent text-sm text-coffee-oil bg-white disabled:opacity-50"
+                  >
+                    <option value="">Select a food item...</option>
+                    {foodItems.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name} — ${parseFloat(item.price).toFixed(2)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-2 pt-1">
+              <button
+                onClick={handleSave}
+                disabled={updateSubscription.isPending || menuLoading}
+                className="flex items-center gap-1.5 px-5 py-2 rounded-lg text-sm font-semibold text-white bg-coffee-judge hover:bg-coffee-oil disabled:bg-coffee-oyster disabled:cursor-not-allowed"
+                style={{ transition: 'background-color 150ms ease' }}
+              >
+                {updateSubscription.isPending ? (
+                  <>
+                    <Loader className="w-3.5 h-3.5 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-3.5 h-3.5" />
+                    Save changes
+                  </>
+                )}
+              </button>
+              <button
+                onClick={cancelEditing}
+                disabled={updateSubscription.isPending}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-coffee-oil bg-coffee-oyster/20 hover:bg-coffee-oyster/40 disabled:opacity-50"
+                style={{ transition: 'background-color 150ms ease' }}
+              >
+                <X className="w-3.5 h-3.5" />
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function OrdersPage() {
   const { data: orders, isLoading, error } = useOrders({
     refetchInterval: 15000,
@@ -32,6 +335,9 @@ export default function OrdersPage() {
             <p className="text-coffee-roman">Track and manage your coffee orders</p>
           </div>
 
+          {/* Subscription management panel */}
+          <SubscriptionPanel />
+
           {isLoading && (
             <div className="card-paper-bg rounded-2xl shadow-paper-lg border border-coffee-oyster p-12">
               <div className="flex justify-center items-center gap-4">
@@ -43,7 +349,7 @@ export default function OrdersPage() {
 
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-6 flex items-start gap-4">
-              <span className="text-red-600 text-2xl">⚠</span>
+              <span className="text-red-600 text-2xl">!</span>
               <div>
                 <h3 className="font-semibold text-red-900 mb-1">Error Loading Orders</h3>
                 <p className="text-red-700">Please try again or contact support.</p>
@@ -113,9 +419,7 @@ export default function OrdersPage() {
                                 <span className="text-coffee-roman"> × {item.quantity}</span>
                               </span>
                               <span className="font-semibold text-coffee-oil">
-                                ${(
-                                  parseFloat(item.price) * item.quantity
-                                ).toFixed(2)}
+                                ${(parseFloat(item.price) * item.quantity).toFixed(2)}
                               </span>
                             </div>
                           ))}
@@ -144,7 +448,6 @@ export default function OrdersPage() {
                               </>
                             ) : (
                               <>
-                                <span>✓</span>
                                 <span>I'm Here</span>
                               </>
                             )}

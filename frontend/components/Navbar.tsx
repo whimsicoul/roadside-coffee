@@ -59,6 +59,12 @@ export function Navbar() {
               >
                 Menu
               </Link>
+              <Link
+                href="/plans"
+                className={`text-3xl font-medium transition-colors ${isActive('/plans') ? 'text-coffee-judge border-b-2 border-coffee-roman' : 'text-coffee-oil hover:text-coffee-judge'}`}
+              >
+                Plans
+              </Link>
               {user.role === 'admin' ? (
                 <Link
                   href="/admin"
@@ -143,6 +149,12 @@ export function Navbar() {
                 className={`block text-3xl font-medium transition-colors ${isActive('/menu') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
               >
                 Menu
+              </Link>
+              <Link
+                href="/plans"
+                className={`block text-3xl font-medium transition-colors ${isActive('/plans') ? 'text-coffee-judge' : 'text-coffee-oil hover:text-coffee-judge'}`}
+              >
+                Plans
               </Link>
               {user.role === 'admin' ? (
                 <Link

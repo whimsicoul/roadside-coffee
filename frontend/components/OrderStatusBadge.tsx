@@ -11,6 +11,10 @@ const statusConfig = {
     label: 'Pending',
     className: 'bg-coffee-oyster text-coffee-judge',
   },
+  arrived: {
+    label: 'On My Way',
+    className: 'bg-amber-100 text-amber-800',
+  },
   ready: {
     label: 'Ready for Pickup',
     className: 'bg-green-100 text-green-800',

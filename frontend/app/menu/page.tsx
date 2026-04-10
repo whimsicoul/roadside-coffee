@@ -186,6 +186,7 @@ export default function MenuPage() {
         </div>
       </div>
 
+
       <div className="max-w-7xl mx-auto px-8 pb-12 relative">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 relative z-10">
           {/* Menu items */}

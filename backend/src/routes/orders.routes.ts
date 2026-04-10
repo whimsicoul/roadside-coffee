@@ -32,6 +32,10 @@ router.patch('/:id/status', validate(updateStatusSchema), (req, res) =>
   ordersController.updateOrderStatus(req, res)
 );
 
+router.post('/:id/checkin', (req, res) =>
+  ordersController.checkInOrder(req, res)
+);
+
 router.post('/:id/claim', (req, res) =>
   ordersController.claimGuestOrder(req, res)
 );

@@ -29,7 +29,7 @@ export interface Order {
   user_id: number | null;
   items: OrderItem[];
   total_amount: string;
-  status: 'pending' | 'ready' | 'completed' | 'cancelled';
+  status: 'pending' | 'arrived' | 'ready' | 'completed' | 'cancelled';
   created_at: string;
   ready_time?: string | null;
   guest_first_name?: string | null;

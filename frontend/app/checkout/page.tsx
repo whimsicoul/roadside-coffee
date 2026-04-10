@@ -16,7 +16,10 @@ import Link from 'next/link';
 import { useUser } from '@/lib/hooks/useUser';
 import { useCreateGuestOrder, useClaimGuestOrder } from '@/lib/hooks/useOrders';
 import { useCreatePaymentIntent } from '@/lib/hooks/usePayments';
+import { useSubscription } from '@/lib/hooks/useSubscription';
 import { OrderSummary } from '@/components/OrderSummary';
+import { SubscriptionTierCards } from '@/components/SubscriptionTierCards';
+import { SubscriptionSignupForm } from '@/components/SubscriptionSignupForm';
 import { authStorage } from '@/lib/auth';
 import { getAvailablePickupSlots } from '@/lib/pickupTimes';
 import type { CartItem, GuestInfo } from '@/types';
@@ -176,6 +179,20 @@ function CheckoutContent() {
   const [guestInfo, setGuestInfo] = useState<GuestInfo | null>(null);
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
   const [paymentIntentError, setPaymentIntentError] = useState<string | null>(null);
+  const [bannerDismissed, setBannerDismissed] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('rc_sub_banner_dismissed') === '1';
+  });
+  const [signupTier, setSignupTier] = useState<'drink' | 'combo' | null>(null);
+
+  // Only fetch subscription for logged-in users; guests skip the request
+  const { data: subscription } = useSubscription({ enabled: isLoggedIn });
+  const hasActiveSubscription = !!subscription;
+
+  const dismissBanner = () => {
+    sessionStorage.setItem('rc_sub_banner_dismissed', '1');
+    setBannerDismissed(true);
+  };
 
   const pickupSlots = getAvailablePickupSlots();
 
@@ -261,6 +278,45 @@ function CheckoutContent() {
                     Log in to pre-fill your info →
                   </Link>
                 </div>
+              )}
+
+              {/* Subscription upsell banner */}
+              {!bannerDismissed && !hasActiveSubscription && (
+                <div
+                  className="card-elevated rounded-lg border border-coffee-oyster p-6 relative"
+                  style={{ background: 'linear-gradient(135deg, #FEFDFB 0%, #F5F0E8 100%)' }}
+                >
+                  <button
+                    type="button"
+                    onClick={dismissBanner}
+                    className="absolute top-3 right-4 text-coffee-roman hover:text-coffee-oil text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-coffee-oyster/30"
+                    style={{ transition: 'color 150ms ease, background-color 150ms ease' }}
+                    aria-label="Dismiss subscription offer"
+                  >
+                    ×
+                  </button>
+                  <p className="text-coffee-oil font-semibold text-lg mb-1 pr-8">
+                    Skip the line every day
+                  </p>
+                  <p className="text-coffee-roman text-sm mb-4">
+                    Subscribe and we'll have your order ready at the same time, every morning.
+                  </p>
+                  <SubscriptionTierCards
+                    isLoggedIn={isLoggedIn}
+                    hasActiveSubscription={false}
+                    onSelectTier={setSignupTier}
+                    layout="compact"
+                  />
+                </div>
+              )}
+
+              {/* Subscription signup modal */}
+              {signupTier && (
+                <SubscriptionSignupForm
+                  initialTier={signupTier}
+                  onSuccess={() => setSignupTier(null)}
+                  onClose={() => setSignupTier(null)}
+                />
               )}
 
               {/* Delivery details */}
